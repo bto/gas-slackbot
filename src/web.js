@@ -6,14 +6,10 @@ function doPost(e) {
   }
 
   var params = e.parameter.text.split(/\s+/);
-  switch (params[1]) {
-  case 'tenki':
-    (new PluginTenki()).exec();
-    return;
-
-  default:
+  if (gasbot.plugins.hasOwnProperty(params[1])) {
+    (new gasbot.plugins[params[1]]()).exec(params.slice(2));
+  } else {
     (new Slack()).send('ごめんね。良くわからない。');
-    return;
   }
 }
 

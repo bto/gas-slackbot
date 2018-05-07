@@ -1,4 +1,4 @@
-var PluginTenki = function PluginTenki() {
+var PluginTenki = gasbot.plugins.tenki = function PluginTenki() {
 };
 
 PluginTenki.prototype.exec = function exec() {
