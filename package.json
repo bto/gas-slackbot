@@ -1,0 +1,11 @@
+{
+  "description": "google apps script bot",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:UUUM/gas.git"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  }
+}
