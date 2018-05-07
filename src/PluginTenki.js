@@ -16,6 +16,9 @@ PluginTenki.prototype.exec = function exec() {
     'muteHttpExceptions': true
   };
   var response = UrlFetchApp.fetch(url, urlFetchOption);
+
   var json = JSON.parse(response.getContentText());
-  Logger.log(json);
+
+  var rainFall = json.Feature[0].Property.WeatherList.Weather[0].Rainfall;
+  (new Slack()).send('降水強度: ' + rainFall + 'mm/h');
 };
