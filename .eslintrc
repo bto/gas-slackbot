@@ -1,0 +1,33 @@
+{
+  globals: {
+    // Google Apps Script
+    HtmlService: true,
+    Logger: true,
+    PropertiesService: true,
+    SpreadsheetApp: true,
+    UrlFetchApp: true,
+
+    // External Libraries
+    GasTap: true,
+    OAuth2: true,
+    Underscore: true,
+    _: true,
+
+    // Our classes
+    API: true,
+    APISobjects: true,
+    Client: true,
+    OAuth2Client: true,
+    Obj: true,
+    QueryBuilder: true,
+    Record: true,
+    Records: true,
+    Response: true,
+    ResponseError: true,
+    TestCommon: true,
+
+    // test function
+    testRunner: true,
+  },
+  extends: 'airbnb-es5',
+}
