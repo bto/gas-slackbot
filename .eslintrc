@@ -12,16 +12,7 @@
     SlackApp: true,
 
     // Our classes
-    API: true,
-    APISobjects: true,
-    Client: true,
-    OAuth2Client: true,
-    Obj: true,
-    QueryBuilder: true,
-    Record: true,
-    Records: true,
-    Response: true,
-    ResponseError: true,
+    Slack: true,
     TestCommon: true,
 
     // test function
