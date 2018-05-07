@@ -1,0 +1,7 @@
+*.swp
+*~
+.DS_Store
+
+/client_secret.json
+/node_modules
+/npm-debug.log
