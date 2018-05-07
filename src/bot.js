@@ -1,25 +1,20 @@
-var slack;
+var event;
 
 function doPost(e) {
-  var properties = PropertiesService.getScriptProperties();
-  var token = properties.getProperty('SLACK_VERIFY_TOKEN');
+  event = e;
 
-  if (e.parameter.token !== token) {
+  if (event.parameter.token !== PropertiesService.getScriptProperties().getProperty('SLACK_VERIFY_TOKEN')) {
     throw new Error('invalid token.');
   }
 
-  slack = new Slack();
-  slack.channelId = e.parameter.channel_id;
-  slack.username = 'gasbot';
-
-  var params = e.parameter.text.split(/\s+/);
+  var params = event.parameter.text.split(/\s+/);
   switch (params[1]) {
   case 'tenki':
-    slack.send('tenki');
+    (new Slack()).send('tenki');
     return;
 
   default:
-    slack.send('ごめんね。良くわからない。');
+    (new Slack()).send('ごめんね。良くわからない。');
     return;
   }
 }
