@@ -1,8 +1,10 @@
-var verifyToken = 'W0R0DJRWSURrEmDZF8bU1PZ2';
 var slack;
 
 function doPost(e) {
-  if (e.parameter.token !== verifyToken) {
+  var properties = PropertiesService.getScriptProperties();
+  var token = properties.getProperty('SLACK_VERIFY_TOKEN');
+
+  if (e.parameter.token !== token) {
     throw new Error('invalid token.');
   }
 
