@@ -1,7 +1,7 @@
 var Slack = function Slack() {
   this.app = SlackApp.create(PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN'));
 
-  this.channelId = event.parameter.channel_id;
+  this.channelId = gasbot.event.parameter.channel_id;
   this.username = 'gasbot';
 };
 

@@ -12,6 +12,7 @@
     SlackApp: true,
 
     // Our classes
+    gasbot: true,
     PluginTenki: true,
     Slack: true,
     TestCommon: true,
