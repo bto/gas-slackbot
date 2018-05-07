@@ -10,7 +10,7 @@ function doPost(e) {
   var params = event.parameter.text.split(/\s+/);
   switch (params[1]) {
   case 'tenki':
-    (new Slack()).send('tenki');
+    (new PluginTenki()).exec();
     return;
 
   default:
