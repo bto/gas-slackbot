@@ -16,9 +16,14 @@ PluginTenki.prototype.exec = function exec() {
     'muteHttpExceptions': true
   };
   var response = UrlFetchApp.fetch(url, urlFetchOption);
-
   var json = JSON.parse(response.getContentText());
 
-  var rainFall = json.Feature[0].Property.WeatherList.Weather[0].Rainfall;
-  (new Slack()).send('降水強度: ' + rainFall + 'mm/h');
+  var message = '```\n降水強度\n';
+  var items = json.Feature[0].Property.WeatherList.Weather;
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    message += i * 5 + '分後: ' + item.Rainfall + 'mm/h\n';
+  }
+  message += '```\n';
+  (new Slack()).send(message);
 };
