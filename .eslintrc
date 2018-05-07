@@ -9,9 +9,7 @@
 
     // External Libraries
     GasTap: true,
-    OAuth2: true,
-    Underscore: true,
-    _: true,
+    SlackApp: true,
 
     // Our classes
     API: true,
