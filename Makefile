@@ -36,4 +36,4 @@ deploy:
 init: $(NODE_DIR)
 
 $(NODE_DIR):
-	yarn
+	npm install
