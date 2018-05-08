@@ -11,14 +11,10 @@
     GasTap: true,
     SlackApp: true,
 
-    // Our classes
-    gasbot: true,
-    PluginTenki: true,
-    Slack: true,
-    TestCommon: true,
-
-    // test function
+    // Our globals
+    create: true,
     testRunner: true,
+    TestCommon: true,
   },
   extends: 'airbnb-es5',
 }
