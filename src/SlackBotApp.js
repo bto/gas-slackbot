@@ -13,10 +13,6 @@ function command(commandName, func) {
 }
 
 var SlackBot = function SlackBot() {
-  var properties = PropertiesService.getScriptProperties();
-  this.setAccessToken(properties.getProperty('SLACK_ACCESS_TOKEN'));
-  this.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
-
   this.setUsername('gasbot');
   this.setDefaultMessage('ごめんね。良くわからない。');
 };
@@ -45,7 +41,7 @@ SlackBot.prototype.send = function send(message) {
  * @param {String} accessToken: bot user OAuth access token
  * @return {Object} return itself
  */
-SlackBot.prototype.setAccesssToken = function setAccesssToken(accessToken) {
+SlackBot.prototype.setAccessToken = function setAccessToken(accessToken) {
   this.accessToken = accessToken;
   this.slackApp = SlackApp.create(accessToken);
   return this;
