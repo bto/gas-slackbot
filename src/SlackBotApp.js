@@ -1,7 +1,5 @@
 /**
  * Create a SlackBot object
- * @param {String} bot user OAuth access token
- * @param {String} outgoing webhook's verification token
  * @return {SlackBot} return a SlackBot Object
  */
 function create() {
