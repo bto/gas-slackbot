@@ -11,11 +11,11 @@ function command(commandName, func) {
 }
 
 var SlackBot = function SlackBot() {
-  this.setUsername('gasbot');
-  this.setDefaultMessage('ごめんね。良くわからない。');
 };
 
 SlackBot.prototype.commands = {};
+SlackBot.prototype.username = 'gasbot';
+SlackBot.prototype.defaultMessage = 'ごめんね。良くわからない。';
 
 SlackBot.prototype.execute = function execute(event) {
   this.setRequestParams(event);
@@ -28,6 +28,14 @@ SlackBot.prototype.execute = function execute(event) {
 
   this.send('ごめんね。良くわからない。');
   return this;
+};
+
+SlackBot.prototype.getDefaultMessage = function getDefaultMessage() {
+  return this.defaultMessage;
+};
+
+SlackBot.prototype.getUsername = function getUsername() {
+  return this.username;
 };
 
 SlackBot.prototype.send = function send(message) {

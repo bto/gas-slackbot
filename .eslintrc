@@ -12,9 +12,11 @@
     SlackApp: true,
 
     // Our globals
+    Obj: true,
+    SlackBot: true,
+    TestCommon: true,
     create: true,
     testRunner: true,
-    TestCommon: true,
   },
   extends: 'airbnb-es5',
 }
