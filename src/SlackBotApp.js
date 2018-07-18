@@ -74,6 +74,15 @@ SlackBot.prototype.getEvent = function getEvent() {
 };
 
 /**
+ * Get a request parameter
+ * @param {String} name: a parameter name
+ * @return {String} return a request parameter
+ */
+SlackBot.prototype.getRequestParam = function getRequestParam(name) {
+  return this.event.parameter[name];
+};
+
+/**
  * Get a username
  * @return {String} return a username
  */
@@ -131,7 +140,6 @@ SlackBot.prototype.setChannelId = function setChannelId(channelId) {
  */
 SlackBot.prototype.setEvent = function setEvent(e) {
   this.event = e;
-  this.setChannelId(e.parameter.channel_id);
   return this;
 };
 

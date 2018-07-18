@@ -1,4 +1,10 @@
 testRunner.functions.push(function (test) {
+  var event = {
+    parameter: {
+      channel_id: 'channelId'
+    }
+  };
+
   test('command()', function (assert) {
     var func = function () {};
     command('foo', func);
@@ -45,16 +51,10 @@ testRunner.functions.push(function (test) {
 
   test('SlackBot event object', function (assert) {
     var bot = new SlackBot();
-    var event = {
-      parameter: {
-        channel_id: 'channel_id'
-      }
-    };
 
     var obj = bot.setEvent(event);
     assert.equal(bot, obj, 'returns itself');
     assert.deepEqual(event, bot.getEvent(), 'set an event object');
-    assert.equal('channel_id', bot.getChannelId(), 'set a channel id');
   });
 
   test('SlackBot username', function (assert) {
@@ -75,6 +75,13 @@ testRunner.functions.push(function (test) {
     var obj = bot.setAccessToken('verification token');
     assert.equal(bot, obj, 'returns itself');
     assert.equal('verification token', bot.getAccessToken(), 'set a verification token');
+  });
+
+  test('SlackBot.getRequestParam()', function (assert) {
+    var bot = new SlackBot();
+    bot.setEvent(event);
+
+    assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
   });
 });
 
