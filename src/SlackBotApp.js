@@ -29,10 +29,10 @@ SlackBot.prototype.username = 'gasbot';
  * @return {Object} return itself
  */
 SlackBot.prototype.execute = function execute(e) {
-  this.setRequestParams(e);
+  this.setEvent(e);
   this.verify();
 
-  var params = this.request.parameter.text.split(/\s+/);
+  var params = this.getRequestParam('text').split(/\s+/);
   if (this.commands.hasOwnProperty(params[1])) {
     return this.commands[params[1]](this);
   }
@@ -99,7 +99,7 @@ SlackBot.prototype.getVerificationToken = function getVerificationToken() {
 };
 
 SlackBot.prototype.send = function send(message) {
-  this.slackApp.chatPostMessage(this.channelId, message, {username: this.username});
+  this.slackApp.chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
 };
 
 /**
@@ -168,7 +168,7 @@ SlackBot.prototype.setVerificationToken = function setVerificationToken(verifica
  * @return {boolean} return true or false
  */
 SlackBot.prototype.verify = function verify() {
-  if (this.request.parameter.token !== this.verificationToken) {
+  if (this.getRequestParam('token') !== this.getVerificationToken()) {
     throw new Error('invalid token.');
   }
 
