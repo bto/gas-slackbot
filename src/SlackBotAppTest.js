@@ -1,4 +1,10 @@
 testRunner.functions.push(function (test) {
+  test('command()', function (assert) {
+    var func = function () {};
+    command('foo', func);
+    assert.equal(SlackBot.prototype.commands.foo, func, 'register a command function');
+  });
+
   test('create()', function (assert) {
     var bot = create();
     assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
