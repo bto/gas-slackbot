@@ -3,11 +3,13 @@ testRunner.functions.push(function (test) {
     var bot = new SlackBot();
     assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
 
-    assert.ok(Obj.isString(bot.getDefaultMessage()));
-    assert.notEqual(bot.getDefaultMessage().length, 0);
+    var str = bot.getDefaultMessage();
+    assert.ok(typeof str === 'string', 'if message was a string');
+    assert.notEqual(str.length, 0, 'if message was not an empty string');
 
-    assert.ok(Obj.isString(bot.getUsername()));
-    assert.notEqual(bot.getUsername().length, 0);
+    str = bot.getUsername();
+    assert.ok(typeof str === 'string', 'if username was a string');
+    assert.notEqual(str.length, 0, 'if username was not an empty string');
   });
 });
 

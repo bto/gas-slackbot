@@ -12,7 +12,6 @@
     SlackApp: true,
 
     // Our globals
-    Obj: true,
     SlackBot: true,
     TestCommon: true,
     create: true,
