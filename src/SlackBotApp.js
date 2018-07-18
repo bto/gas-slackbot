@@ -30,12 +30,44 @@ SlackBot.prototype.execute = function execute(event) {
   return this;
 };
 
+/**
+ * Get an access token
+ * @return {String} return an access token
+ */
+SlackBot.prototype.getAccessToken = function getAccessToken() {
+  return this.accessToken;
+};
+
+/**
+ * Get a default message
+ * @return {String} return a default message
+ */
 SlackBot.prototype.getDefaultMessage = function getDefaultMessage() {
   return this.defaultMessage;
 };
 
+/**
+ * Get a request object
+ * @return {Object} return a request object
+ */
+SlackBot.prototype.getRequest = function getRequest() {
+  return this.request;
+};
+
+/**
+ * Get a username
+ * @return {String} return a username
+ */
 SlackBot.prototype.getUsername = function getUsername() {
   return this.username;
+};
+
+/**
+ * Get a verification token
+ * @return {String} return a verification token
+ */
+SlackBot.prototype.getVerificationToken = function getVerificationToken() {
+  return this.verificationToken;
 };
 
 SlackBot.prototype.send = function send(message) {
@@ -54,7 +86,7 @@ SlackBot.prototype.setAccessToken = function setAccessToken(accessToken) {
 };
 
 /**
- * Set default message
+ * Set a default message
  * @param {String} defaultMessage: default message
  * @return {Object} return itself
  */
@@ -64,11 +96,11 @@ SlackBot.prototype.setDefaultMessage = function setDefaultMessage(defaultMessage
 };
 
 /**
- * Set request parameters
- * @param {Object} request: web app request parameters
+ * Set a request object
+ * @param {Object} request object
  * @return {Object} return itself
  */
-SlackBot.prototype.setRequestParams = function setRequestParams(request) {
+SlackBot.prototype.setRequest = function setRequest(request) {
   this.request = request;
   this.channelId = request.parameter.channel_id;
 
@@ -76,7 +108,7 @@ SlackBot.prototype.setRequestParams = function setRequestParams(request) {
 };
 
 /**
- * Set username
+ * Set an username
  * @param {String} username: bot user name
  * @return {Object} return itself
  */
