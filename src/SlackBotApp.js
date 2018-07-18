@@ -39,6 +39,14 @@ SlackBot.prototype.getAccessToken = function getAccessToken() {
 };
 
 /**
+ * Get a channel id
+ * @return {String} return a channel id
+ */
+SlackBot.prototype.getChannelId = function getChannelId() {
+  return this.channelId;
+};
+
+/**
  * Get a default message
  * @return {String} return a default message
  */
@@ -96,14 +104,23 @@ SlackBot.prototype.setDefaultMessage = function setDefaultMessage(defaultMessage
 };
 
 /**
+ * Set a channel id
+ * @param {String} channelId: channel id
+ * @return {Object} return itself
+ */
+SlackBot.prototype.setChannelId = function setChannelId(channelId) {
+  this.channelId = channelId;
+  return this;
+};
+
+/**
  * Set a request object
  * @param {Object} request object
  * @return {Object} return itself
  */
 SlackBot.prototype.setRequest = function setRequest(request) {
   this.request = request;
-  this.channelId = request.parameter.channel_id;
-
+  this.setChannelId(request.parameter.channel_id);
   return this;
 };
 

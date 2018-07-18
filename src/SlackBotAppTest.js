@@ -24,6 +24,14 @@ testRunner.functions.push(function (test) {
     assert.equal('default message', bot.getDefaultMessage(), 'set a default message');
   });
 
+  test('SlackBot channel id', function (assert) {
+    var bot = new SlackBot();
+
+    var obj = bot.setChannelId('channel id');
+    assert.equal(bot, obj, 'returns itself');
+    assert.equal('channel id', bot.getChannelId(), 'set a channel id');
+  });
+
   test('SlackBot request object', function (assert) {
     var bot = new SlackBot();
     var request = {
@@ -35,6 +43,7 @@ testRunner.functions.push(function (test) {
     var obj = bot.setRequest(request);
     assert.equal(bot, obj, 'returns itself');
     assert.deepEqual(request, bot.getRequest(), 'set a request object');
+    assert.equal('channel_id', bot.getChannelId(), 'set a channel id');
   });
 
   test('SlackBot username', function (assert) {
