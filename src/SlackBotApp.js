@@ -34,7 +34,9 @@ SlackBot.prototype.username = 'gasbot';
  */
 SlackBot.prototype.execute = function execute(e) {
   this.setEvent(e);
-  this.verify();
+  if (!this.verify()) {
+    throw new Error('invalid token.');
+  }
 
   var params = this.getRequestParam('text').split(/\s+/);
   if (this.commands.hasOwnProperty(params[1])) {
@@ -172,11 +174,7 @@ SlackBot.prototype.setVerificationToken = function setVerificationToken(verifica
  * @return {boolean} return true or false
  */
 SlackBot.prototype.verify = function verify() {
-  if (this.getRequestParam('token') !== this.getVerificationToken()) {
-    throw new Error('invalid token.');
-  }
-
-  return true;
+  return this.getRequestParam('token') === this.getVerificationToken();
 };
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^create|command$" }] */

@@ -1,7 +1,8 @@
 testRunner.functions.push(function (test) {
   var event = {
     parameter: {
-      channel_id: 'channelId'
+      channel_id: 'channelId',
+      token: 'verification token'
     }
   };
 
@@ -73,14 +74,24 @@ testRunner.functions.push(function (test) {
   test('SlackBot verification token', function (assert) {
     var bot = new SlackBot(event);
 
-    var obj = bot.setAccessToken('verification token');
+    var obj = bot.setVerificationToken('verification token');
     assert.equal(bot, obj, 'returns itself');
-    assert.equal('verification token', bot.getAccessToken(), 'set a verification token');
+    assert.equal('verification token', bot.getVerificationToken(), 'set a verification token');
   });
 
   test('SlackBot.getRequestParam()', function (assert) {
     var bot = new SlackBot(event);
     assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
+  });
+
+  test('SlackBot.verify()', function (assert) {
+    var bot = new SlackBot(event);
+
+    bot.setVerificationToken('token');
+    assert.notOk(bot.verify(), 'return false for an invalid verification token');
+
+    bot.setVerificationToken('verification token');
+    assert.ok(bot.verify(), 'return true for a valid verification token');
   });
 });
 
