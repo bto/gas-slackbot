@@ -1,4 +1,14 @@
 /**
+ * Register a SlackBot command
+ * @param {String} commandName: a command name
+ * @param {Object} func: a function object to process a command
+ * @return {null} return nothing
+ */
+function command(commandName, func) {
+  SlackBot.prototype.commands[commandName] = func;
+}
+
+/**
  * Create a SlackBot object
  * @return {SlackBot} return a SlackBot Object
  */
@@ -6,19 +16,20 @@ function create() {
   return new SlackBot();
 }
 
-function command(commandName, func) {
-  SlackBot.prototype.commands[commandName] = func;
-}
-
 var SlackBot = function SlackBot() {
 };
 
 SlackBot.prototype.commands = {};
-SlackBot.prototype.username = 'gasbot';
 SlackBot.prototype.defaultMessage = 'ごめんね。良くわからない。';
+SlackBot.prototype.username = 'gasbot';
 
-SlackBot.prototype.execute = function execute(event) {
-  this.setRequestParams(event);
+/**
+ * Execute from a web request
+ * @param {Object} e: an event object
+ * @return {Object} return itself
+ */
+SlackBot.prototype.execute = function execute(e) {
+  this.setRequestParams(e);
   this.verify();
 
   var params = this.request.parameter.text.split(/\s+/);
@@ -55,11 +66,11 @@ SlackBot.prototype.getDefaultMessage = function getDefaultMessage() {
 };
 
 /**
- * Get a request object
- * @return {Object} return a request object
+ * Get an event object
+ * @return {Object} return an event object
  */
-SlackBot.prototype.getRequest = function getRequest() {
-  return this.request;
+SlackBot.prototype.getEvent = function getEvent() {
+  return this.event;
 };
 
 /**
@@ -114,13 +125,13 @@ SlackBot.prototype.setChannelId = function setChannelId(channelId) {
 };
 
 /**
- * Set a request object
- * @param {Object} request object
+ * Set an event object
+ * @param {Object} e: event object
  * @return {Object} return itself
  */
-SlackBot.prototype.setRequest = function setRequest(request) {
-  this.request = request;
-  this.setChannelId(request.parameter.channel_id);
+SlackBot.prototype.setEvent = function setEvent(e) {
+  this.event = e;
+  this.setChannelId(e.parameter.channel_id);
   return this;
 };
 
