@@ -12,17 +12,18 @@ testRunner.functions.push(function (test) {
   });
 
   test('create()', function (assert) {
-    var bot = create();
+    var bot = create(event);
     assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
+    assert.equal(event, bot.getEvent(), 'set an event object');
   });
 
   test('new SlackBot()', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
     assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
   });
 
   test('SlackBot access token', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var obj = bot.setAccessToken('access token');
     assert.equal(bot, obj, 'returns itself');
@@ -30,7 +31,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot default message', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var message = bot.getDefaultMessage();
     assert.ok(typeof message === 'string', 'if message was a string');
@@ -42,7 +43,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot channel id', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var obj = bot.setChannelId('channel id');
     assert.equal(bot, obj, 'returns itself');
@@ -50,7 +51,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot event object', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var obj = bot.setEvent(event);
     assert.equal(bot, obj, 'returns itself');
@@ -58,7 +59,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot username', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var username = bot.getUsername();
     assert.ok(typeof username === 'string', 'if username was a string');
@@ -70,7 +71,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot verification token', function (assert) {
-    var bot = new SlackBot();
+    var bot = new SlackBot(event);
 
     var obj = bot.setAccessToken('verification token');
     assert.equal(bot, obj, 'returns itself');
@@ -78,9 +79,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('SlackBot.getRequestParam()', function (assert) {
-    var bot = new SlackBot();
-    bot.setEvent(event);
-
+    var bot = new SlackBot(event);
     assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
   });
 });

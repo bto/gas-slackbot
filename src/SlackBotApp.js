@@ -10,13 +10,17 @@ function command(commandName, func) {
 
 /**
  * Create a SlackBot object
+ * @param {Object} e: an event object
  * @return {SlackBot} return a SlackBot Object
  */
-function create() {
-  return new SlackBot();
+function create(e) {
+  return new SlackBot(e);
 }
 
-var SlackBot = function SlackBot() {
+var SlackBot = function SlackBot(e) {
+  if (e) {
+    this.setEvent(e);
+  }
 };
 
 SlackBot.prototype.commands = {};
