@@ -89,6 +89,24 @@ SlackBot.prototype.getRequestParam = function getRequestParam(name) {
 };
 
 /**
+ * Get an api object
+ * @return {Object} return an api object
+ */
+SlackBot.prototype.getApi = function getApi() {
+  if (this.api) {
+    return this.api;
+  }
+
+  var accessToken = this.getAccessToken();
+  if (!accessToken) {
+    throw new Error('invalid access token.');
+  }
+
+  this.api = SlackApp.create(accessToken);
+  return this.api;
+};
+
+/**
  * Get a username
  * @return {String} return a username
  */
@@ -104,8 +122,13 @@ SlackBot.prototype.getVerificationToken = function getVerificationToken() {
   return this.verificationToken;
 };
 
+/**
+ * Send a message
+ * @param {String} message: a message string
+ * @return {null} return nothing
+ */
 SlackBot.prototype.send = function send(message) {
-  this.slackApp.chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
+  this.getSlackApi().chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
 };
 
 /**
@@ -115,7 +138,7 @@ SlackBot.prototype.send = function send(message) {
  */
 SlackBot.prototype.setAccessToken = function setAccessToken(accessToken) {
   this.accessToken = accessToken;
-  this.slackApp = SlackApp.create(accessToken);
+  this.slackApi = null;
   return this;
 };
 

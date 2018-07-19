@@ -79,6 +79,21 @@ testRunner.functions.push(function (test) {
     assert.equal('verification token', bot.getVerificationToken(), 'set a verification token');
   });
 
+  test('SlackBot.getApi()', function (assert) {
+    var bot = new SlackBot(event);
+
+    assert.throws(
+      function () {
+        bot.getApi();
+      },
+      'throws an exception if access token was not provided'
+    );
+
+    bot.setAccessToken('access token');
+    var api = bot.getApi();
+    assert.ok(api instanceof SlackApp.SlackApp, 'return SlackApp object');
+  });
+
   test('SlackBot.getRequestParam()', function (assert) {
     var bot = new SlackBot(event);
     assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
