@@ -1,0 +1,4 @@
+var properties = PropertiesService.getUserProperties();
+properties.setProperty('TEST_SLACK_ACCESS_TOKEN', 'xxx');
+properties.setProperty('TEST_SLACK_CHANNEL_ID', 'xxx');
+properties.setProperty('TEST_SLACK_VERIFICATION_TOKEN', 'xxx');

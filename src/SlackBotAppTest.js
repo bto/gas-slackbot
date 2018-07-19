@@ -103,6 +103,14 @@ testRunner.functions.push(function (test) {
     assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
   });
 
+  test('SlackBot.send()', function () {
+    var bot = createBot();
+    var properties = PropertiesService.getUserProperties();
+    bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
+    bot.setChannelId(properties.getProperty('TEST_SLACK_CHANNEL_ID'));
+    bot.send('Test: SlackBot.send()');
+  });
+
   test('SlackBot.verify()', function (assert) {
     var bot = createBot();
 

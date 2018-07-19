@@ -128,7 +128,7 @@ SlackBot.prototype.getVerificationToken = function getVerificationToken() {
  * @return {null} return nothing
  */
 SlackBot.prototype.send = function send(message) {
-  this.getSlackApi().chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
+  this.getApi().chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
 };
 
 /**

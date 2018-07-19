@@ -6,3 +6,4 @@
 /gapps.config.json
 /node_modules
 /npm-debug.log
+/src/init.js
