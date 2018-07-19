@@ -7,27 +7,27 @@ testRunner.functions.push(function (test) {
   };
 
   function createBot() {
-    return new SlackBot(event);
+    return new Bot(event);
   }
 
   test('command()', function (assert) {
     var func = function () {};
     command('foo', func);
-    assert.equal(SlackBot.prototype.commands.foo, func, 'register a command function');
+    assert.equal(Bot.prototype.commands.foo, func, 'register a command function');
   });
 
   test('create()', function (assert) {
     var bot = create(event);
-    assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
+    assert.ok(bot instanceof Bot, 'creates Bot object');
     assert.equal(event, bot.getEvent(), 'set an event object');
   });
 
-  test('new SlackBot()', function (assert) {
+  test('new Bot()', function (assert) {
     var bot = createBot();
-    assert.ok(bot instanceof SlackBot, 'creates SlackBot object');
+    assert.ok(bot instanceof Bot, 'creates Bot object');
   });
 
-  test('SlackBot access token', function (assert) {
+  test('Bot access token', function (assert) {
     var bot = createBot();
 
     var obj = bot.setAccessToken('access token');
@@ -35,7 +35,7 @@ testRunner.functions.push(function (test) {
     assert.equal('access token', bot.getAccessToken(), 'set an access token');
   });
 
-  test('SlackBot default message', function (assert) {
+  test('Bot default message', function (assert) {
     var bot = createBot();
 
     var message = bot.getDefaultMessage();
@@ -47,7 +47,7 @@ testRunner.functions.push(function (test) {
     assert.equal('default message', bot.getDefaultMessage(), 'set a default message');
   });
 
-  test('SlackBot channel id', function (assert) {
+  test('Bot channel id', function (assert) {
     var bot = createBot();
 
     var obj = bot.setChannelId('channel id');
@@ -55,7 +55,7 @@ testRunner.functions.push(function (test) {
     assert.equal('channel id', bot.getChannelId(), 'set a channel id');
   });
 
-  test('SlackBot event object', function (assert) {
+  test('Bot event object', function (assert) {
     var bot = createBot();
 
     var obj = bot.setEvent(event);
@@ -63,7 +63,7 @@ testRunner.functions.push(function (test) {
     assert.deepEqual(event, bot.getEvent(), 'set an event object');
   });
 
-  test('SlackBot username', function (assert) {
+  test('Bot username', function (assert) {
     var bot = createBot();
 
     var username = bot.getUsername();
@@ -75,7 +75,7 @@ testRunner.functions.push(function (test) {
     assert.equal('username', bot.getUsername(), 'set a username');
   });
 
-  test('SlackBot verification token', function (assert) {
+  test('Bot verification token', function (assert) {
     var bot = createBot();
 
     var obj = bot.setVerificationToken('verification token');
@@ -83,7 +83,7 @@ testRunner.functions.push(function (test) {
     assert.equal('verification token', bot.getVerificationToken(), 'set a verification token');
   });
 
-  test('SlackBot.getApi()', function (assert) {
+  test('Bot.getApi()', function (assert) {
     var bot = createBot();
 
     assert.throws(
@@ -98,20 +98,20 @@ testRunner.functions.push(function (test) {
     assert.ok(api instanceof SlackApp.SlackApp, 'return SlackApp object');
   });
 
-  test('SlackBot.getRequestParam()', function (assert) {
+  test('Bot.getRequestParam()', function (assert) {
     var bot = createBot();
     assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
   });
 
-  test('SlackBot.send()', function () {
+  test('Bot.send()', function () {
     var bot = createBot();
     var properties = PropertiesService.getUserProperties();
     bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
     bot.setChannelId(properties.getProperty('TEST_SLACK_CHANNEL_ID'));
-    bot.send('Test: SlackBot.send()');
+    bot.send('Test: Bot.send()');
   });
 
-  test('SlackBot.verify()', function (assert) {
+  test('Bot.verify()', function (assert) {
     var bot = createBot();
 
     bot.setVerificationToken('token');

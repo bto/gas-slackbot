@@ -12,7 +12,7 @@
     SlackApp: true,
 
     // Our globals
-    SlackBot: true,
+    Bot: true,
     TestCommon: true,
     command: true,
     create: true,
