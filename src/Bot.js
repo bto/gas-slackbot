@@ -34,6 +34,7 @@ Bot.prototype.username = 'gasbot';
 Bot.prototype.execute = function execute() {
   if (!this.verify()) {
     this.send('invalid verification token.');
+    return this;
   }
 
   var params = this.getRequestParam('text').split(/\s+/);
@@ -167,6 +168,7 @@ Bot.prototype.setChannelId = function setChannelId(channelId) {
  */
 Bot.prototype.setEvent = function setEvent(e) {
   this.event = e;
+  this.setChannelId(this.getRequestParam('channel_id'));
   return this;
 };
 

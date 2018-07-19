@@ -9,6 +9,7 @@ testRunner.functions.push(function (test, common) {
     return {
       parameter: {
         channel_id: common.getProperty('SLACK_CHANNEL_ID'),
+        text: '',
         token: common.getProperty('SLACK_VERIFICATION_TOKEN')
       }
     };
@@ -87,6 +88,11 @@ testRunner.functions.push(function (test, common) {
     var obj = bot.setVerificationToken('verification token');
     assert.equal(bot, obj, 'returns itself');
     assert.equal('verification token', bot.getVerificationToken(), 'set a verification token');
+  });
+
+  test('Bot.execute()', function () {
+    var bot = createBot();
+    bot.execute();
   });
 
   test('Bot.getApi()', function (assert) {
