@@ -1,19 +1,15 @@
-testRunner.functions.push(function (test) {
+testRunner.functions.push(function (test, common) {
   function createBot() {
     var bot = new Bot(createEvent());
-
-    var properties = PropertiesService.getUserProperties();
-    bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
-
+    bot.setAccessToken(common.getProperty('SLACK_ACCESS_TOKEN'));
     return bot;
   }
 
   function createEvent() {
-    var properties = PropertiesService.getUserProperties();
     return {
       parameter: {
-        channel_id: properties.getProperty('TEST_SLACK_CHANNEL_ID'),
-        token: properties.getProperty('TEST_SLACK_VERIFICATION_TOKEN')
+        channel_id: common.getProperty('SLACK_CHANNEL_ID'),
+        token: common.getProperty('SLACK_VERIFICATION_TOKEN')
       }
     };
   }
@@ -112,16 +108,15 @@ testRunner.functions.push(function (test) {
   test('Bot.getRequestParam()', function (assert) {
     var bot = createBot();
 
-    var channelId = PropertiesService.getUserProperties().getProperty('TEST_SLACK_CHANNEL_ID');
+    var channelId = common.getProperty('SLACK_CHANNEL_ID');
     assert.equal(bot.getRequestParam('channel_id'), channelId, 'return a request parameter');
   });
 
   test('Bot.send()', function () {
     var bot = createBot();
 
-    var properties = PropertiesService.getUserProperties();
-    bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
-    bot.setChannelId(properties.getProperty('TEST_SLACK_CHANNEL_ID'));
+    bot.setAccessToken(common.getProperty('SLACK_ACCESS_TOKEN'));
+    bot.setChannelId(common.getProperty('SLACK_CHANNEL_ID'));
 
     bot.send('Test: Bot.send()');
   });
@@ -132,7 +127,7 @@ testRunner.functions.push(function (test) {
     bot.setVerificationToken('token');
     assert.notOk(bot.verify(), 'return false for an invalid verification token');
 
-    var token = PropertiesService.getUserProperties().getProperty('TEST_SLACK_VERIFICATION_TOKEN');
+    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
     bot.setVerificationToken(token);
     assert.ok(bot.verify(), 'return true for a valid verification token');
   });

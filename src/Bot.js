@@ -29,11 +29,9 @@ Bot.prototype.username = 'gasbot';
 
 /**
  * Execute from a web request
- * @param {Object} e: an event object
  * @return {Object} return itself
  */
-Bot.prototype.execute = function execute(e) {
-  this.setEvent(e);
+Bot.prototype.execute = function execute() {
   if (!this.verify()) {
     this.send('invalid verification token.');
   }
