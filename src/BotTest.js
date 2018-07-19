@@ -1,13 +1,21 @@
 testRunner.functions.push(function (test) {
-  var event = {
-    parameter: {
-      channel_id: 'channelId',
-      token: 'verification token'
-    }
-  };
-
   function createBot() {
-    return new Bot(event);
+    var bot = new Bot(createEvent());
+
+    var properties = PropertiesService.getUserProperties();
+    bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
+
+    return bot;
+  }
+
+  function createEvent() {
+    var properties = PropertiesService.getUserProperties();
+    return {
+      parameter: {
+        channel_id: properties.getProperty('TEST_SLACK_CHANNEL_ID'),
+        token: properties.getProperty('TEST_SLACK_VERIFICATION_TOKEN')
+      }
+    };
   }
 
   test('command()', function (assert) {
@@ -17,6 +25,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('create()', function (assert) {
+    var event = createEvent();
     var bot = create(event);
     assert.ok(bot instanceof Bot, 'creates Bot object');
     assert.equal(event, bot.getEvent(), 'set an event object');
@@ -58,6 +67,7 @@ testRunner.functions.push(function (test) {
   test('Bot event object', function (assert) {
     var bot = createBot();
 
+    var event = createEvent();
     var obj = bot.setEvent(event);
     assert.equal(bot, obj, 'returns itself');
     assert.deepEqual(event, bot.getEvent(), 'set an event object');
@@ -88,6 +98,7 @@ testRunner.functions.push(function (test) {
 
     assert.throws(
       function () {
+        bot.setAccessToken(null);
         bot.getApi();
       },
       'throws an exception if access token was not provided'
@@ -100,14 +111,18 @@ testRunner.functions.push(function (test) {
 
   test('Bot.getRequestParam()', function (assert) {
     var bot = createBot();
-    assert.equal(bot.getRequestParam('channel_id'), 'channelId', 'return a request parameter');
+
+    var channelId = PropertiesService.getUserProperties().getProperty('TEST_SLACK_CHANNEL_ID');
+    assert.equal(bot.getRequestParam('channel_id'), channelId, 'return a request parameter');
   });
 
   test('Bot.send()', function () {
     var bot = createBot();
+
     var properties = PropertiesService.getUserProperties();
     bot.setAccessToken(properties.getProperty('TEST_SLACK_ACCESS_TOKEN'));
     bot.setChannelId(properties.getProperty('TEST_SLACK_CHANNEL_ID'));
+
     bot.send('Test: Bot.send()');
   });
 
@@ -117,7 +132,8 @@ testRunner.functions.push(function (test) {
     bot.setVerificationToken('token');
     assert.notOk(bot.verify(), 'return false for an invalid verification token');
 
-    bot.setVerificationToken('verification token');
+    var token = PropertiesService.getUserProperties().getProperty('TEST_SLACK_VERIFICATION_TOKEN');
+    bot.setVerificationToken(token);
     assert.ok(bot.verify(), 'return true for a valid verification token');
   });
 });
