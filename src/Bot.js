@@ -32,7 +32,8 @@ Bot.prototype.username = 'gasbot';
  * @return {Object} return itself
  */
 Bot.prototype.execute = function execute() {
-  if (!this.verify()) {
+  var token = this.getVerificationToken();
+  if (token && !this.verify(token)) {
     this.send('invalid verification token.');
     return this;
   }
@@ -194,10 +195,11 @@ Bot.prototype.setVerificationToken = function setVerificationToken(verificationT
 
 /**
  * Verify if a token is valid
+ * @param {String} token: verification token
  * @return {boolean} return true or false
  */
-Bot.prototype.verify = function verify() {
-  return this.getRequestParam('token') === this.getVerificationToken();
+Bot.prototype.verify = function verify(token) {
+  return this.getRequestParam('token') === token;
 };
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^create|command$" }] */

@@ -130,12 +130,10 @@ testRunner.functions.push(function (test, common) {
   test('Bot.verify()', function (assert) {
     var bot = createBot();
 
-    bot.setVerificationToken('token');
-    assert.notOk(bot.verify(), 'return false for an invalid verification token');
+    assert.notOk(bot.verify('token'), 'return false for an invalid verification token');
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    bot.setVerificationToken(token);
-    assert.ok(bot.verify(), 'return true for a valid verification token');
+    assert.ok(bot.verify(token), 'return true for a valid verification token');
   });
 });
 
