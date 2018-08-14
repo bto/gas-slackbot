@@ -1,11 +1,9 @@
 {
   globals: {
     // Google Apps Script
-    HtmlService: true,
+    ContentService: true,
     Logger: true,
     PropertiesService: true,
-    SpreadsheetApp: true,
-    UrlFetchApp: true,
 
     // External Libraries
     GasTap: true,
@@ -13,6 +11,7 @@
 
     // Our globals
     Bot: true,
+    EventsApi: true,
     TestCommon: true,
     command: true,
     create: true,
