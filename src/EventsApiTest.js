@@ -9,7 +9,7 @@ testRunner.functions.push(function (test, common) {
 
     return {
       postData: {
-        value: JSON.stringify(body)
+        contents: JSON.stringify(body)
       }
     };
   }

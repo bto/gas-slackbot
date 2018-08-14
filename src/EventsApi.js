@@ -43,7 +43,7 @@ EventsApi.prototype.getParams = function getParams() {
     return this.params;
   }
 
-  this.params = JSON.parse(this.getEvent().postData.value);
+  this.params = JSON.parse(this.getEvent().postData.contents);
   return this.params;
 };
 
