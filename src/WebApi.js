@@ -2,17 +2,17 @@ var WebApi = function WebApi(token) {
   this.token = token;
 };
 
-WebApi.prototype.callChatPostMessage = function callChatPostMessage(channelId, message, options) {
-  options.channel = channelId;
-  options.text = message;
-  return this._fetch('chat.postMessage', options, 'post', {json: true});
+WebApi.prototype.callChatPostMessage = function callChatPostMessage(channelId, message, params) {
+  params.channel = channelId;
+  params.text = message;
+  return this._fetch('chat.postMessage', 'post', params, {json: true});
 };
 
 WebApi.prototype._createApiUrl = function _createApiUrl(method) {
   return 'https://slack.com/api/' + method;
 };
 
-WebApi.prototype._createFetchOptions = function _createFetchOptions(params, httpMethod, json) {
+WebApi.prototype._createFetchOptions = function _createFetchOptions(httpMethod, params, json) {
   var options = {
     headers: {
       Authorization: 'Bearer ' + this.token
@@ -37,7 +37,7 @@ WebApi.prototype._createFetchParams = function _createFetchParams(params) {
   return params;
 };
 
-WebApi.prototype._fetch = function _fetch(method, params, httpMethod, options) {
+WebApi.prototype._fetch = function _fetch(method, httpMethod, params, options) {
   if (httpMethod === 'get') {
     throw new Error('HTTP GET method is currently not supported');
   }
@@ -47,7 +47,7 @@ WebApi.prototype._fetch = function _fetch(method, params, httpMethod, options) {
   }
 
   var url = this._createApiUrl(method);
-  var opts = this._createFetchOptions(this._createFetchParams(params), httpMethod, options.json);
+  var opts = this._createFetchOptions(httpMethod, this._createFetchParams(params), options.json);
   return this._fetchUrl(url, opts);
 };
 
