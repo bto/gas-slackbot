@@ -102,7 +102,7 @@ Bot.prototype.getApi = function getApi() {
     throw new Error('invalid access token.');
   }
 
-  this.api = SlackApp.create(accessToken);
+  this.api = new WebApi(accessToken);
   return this.api;
 };
 
@@ -128,7 +128,7 @@ Bot.prototype.getVerificationToken = function getVerificationToken() {
  * @return {null} return nothing
  */
 Bot.prototype.send = function send(message) {
-  this.getApi().chatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
+  this.getApi().callChatPostMessage(this.getChannelId(), message, {username: this.getUsername()});
 };
 
 /**

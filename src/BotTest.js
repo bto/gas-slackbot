@@ -108,7 +108,7 @@ testRunner.functions.push(function (test, common) {
 
     bot.setAccessToken('access token');
     var api = bot.getApi();
-    assert.ok(api instanceof SlackApp.SlackApp, 'return SlackApp object');
+    assert.ok(api instanceof WebApi, 'return WebApi object');
   });
 
   test('Bot.getRequestParam()', function (assert) {

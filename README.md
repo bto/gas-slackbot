@@ -26,7 +26,3 @@ Skip this step if you already have a google developer project which enables Goog
 - run `make auth`
 - remove `client_secret.json`
   - client_secret.json is no longer needed once you are authenticated.
-
-## Add dependent libraries
-
-- SlackApp: M3W5Ut3Q39AaIwLquryEPMwV62A3znfOO
