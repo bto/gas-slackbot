@@ -22,6 +22,33 @@ EventsApi.registerHandler = function registerHandler(eventType, func) {
 };
 
 /**
+ * Call event handlers
+ * @param {Object} params: request parameters
+ * @return {null} return null
+ */
+EventsApi.prototype.callEventCallback = function callEventCallback(params) {
+  var handlers = this.handlers[params.event.type];
+  if (!handlers) {
+    return;
+  }
+
+  for (var i; i < handlers.length; i++) {
+    handlers[i](params.event, params);
+  }
+};
+
+/**
+ * Verify url
+ * @param {Object} params: request parameters
+ * @return {Object} return TextOutput object
+ */
+EventsApi.prototype.callUrlVerification = function callUrlVerification(params) {
+  var output = ContentService.createTextOutput(params.challenge);
+  output.setMimeType(ContentService.MimeType.TEXT);
+  return output;
+};
+
+/**
  * Execute from a web request
  * @return {Object} return itself
  */
@@ -31,7 +58,15 @@ EventsApi.prototype.execute = function execute() {
     throw new Error('invalid verification token');
   }
 
-  return this._call(this.getParams());
+  var params = this.getParams();
+  switch (params.type) {
+  case 'event_callback':
+    return this.callEventCallback(params);
+  case 'url_verification':
+    return this.callUrlVerification(params);
+  default:
+    throw new Error('not supported api callback');
+  }
 };
 
 /**
@@ -100,30 +135,6 @@ EventsApi.prototype.setVerificationToken = function setVerificationToken(verific
  */
 EventsApi.prototype.verify = function verify(token) {
   return this.getParam('token') === token;
-};
-
-EventsApi.prototype._call = function _call(params) {
-  var method = '_call_' + params.type;
-  if (!(this[method] instanceof Function)) {
-    throw new Error('not supported event type: ' + params.type);
-  }
-
-  var content = this[method].call(this, params);
-
-  var output = ContentService.createTextOutput();
-  if (typeof content === 'string') {
-    output.setMimeType(ContentService.MimeType.TEXT);
-  } else {
-    content = JSON.stringify(content);
-    output.setMimeType(ContentService.MimeType.JSON);
-  }
-  output.setContent(content);
-
-  return output;
-};
-
-EventsApi.prototype._call_url_verification = function _call_url_verification(params) {
-  return params.challenge;
 };
 
 /* eslint camelcase: 0 */
