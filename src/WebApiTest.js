@@ -60,6 +60,20 @@ testRunner.functions.push(function (test, common) {
       'returns a valid options for POST json'
     );
   });
+
+  test('WebApi._createFetchParams()', function (assert) {
+    var api = createApi();
+
+    var params = api._createFetchParams({foo: 'bar'});
+    assert.deepEqual(
+      params,
+      {
+        foo: 'bar',
+        token: api.token
+      },
+      'returns valid parameters'
+    );
+  });
 });
 
 /* eslint func-names: ["error", "never"] */
