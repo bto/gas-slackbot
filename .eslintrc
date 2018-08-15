@@ -4,6 +4,7 @@
     ContentService: true,
     Logger: true,
     PropertiesService: true,
+    UrlFetchApp: true,
 
     // External Libraries
     GasTap: true,
@@ -13,6 +14,7 @@
     Bot: true,
     EventsApi: true,
     TestCommon: true,
+    WebApi: true,
     command: true,
     create: true,
     testRunner: true,
