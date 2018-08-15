@@ -77,24 +77,25 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('EventsApi._call()', function (assert) {
-    var api = createApi({ challenge: 'challenge code' });
+    var api = createApi();
 
     assert.throws(
       function () {
-        api._call('foo');
+        api._call({type: 'foo'});
       },
       'throws an exception if an invalid event type was called'
     );
 
-    var output = api._call('url_verification');
+    var output = api._call({type: 'url_verification', challenge: 'challenge code'});
     assert.equal(typeof output, 'object', 'returns a ContentService object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), 'challenge code', 'has a valid content');
   });
 
   test('EventsApi._call_url_verification()', function (assert) {
-    var api = createApi({ challenge: 'challenge code' });
-    assert.equal(api._call_url_verification(), 'challenge code', 'returns a challenge code');
+    var api = createApi();
+    var params = {challenge: 'challenge code'};
+    assert.equal(api._call_url_verification(params), 'challenge code', 'returns a challenge code');
   });
 });
 

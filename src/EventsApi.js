@@ -14,7 +14,7 @@ EventsApi.prototype.execute = function execute() {
     throw new Error('invalid verification token');
   }
 
-  return this._call(this.getParam('type'));
+  return this._call(this.getParams());
 };
 
 /**
@@ -82,16 +82,16 @@ EventsApi.prototype.setVerificationToken = function setVerificationToken(verific
  * @return {boolean} return true or false
  */
 EventsApi.prototype.verify = function verify(token) {
-  return this.getParams().token === token;
+  return this.getParam('token') === token;
 };
 
-EventsApi.prototype._call = function _call(type) {
-  var method = '_call_' + type;
+EventsApi.prototype._call = function _call(params) {
+  var method = '_call_' + params.type;
   if (!(this[method] instanceof Function)) {
-    throw new Error('not supported event type: ' + type);
+    throw new Error('not supported event type: ' + params.type);
   }
 
-  var content = this[method].call(this);
+  var content = this[method].call(this, params);
 
   var output = ContentService.createTextOutput();
   if (typeof content === 'string') {
@@ -105,8 +105,8 @@ EventsApi.prototype._call = function _call(type) {
   return output;
 };
 
-EventsApi.prototype._call_url_verification = function _call_url_verification() {
-  return this.getParam('challenge');
+EventsApi.prototype._call_url_verification = function _call_url_verification(params) {
+  return params.challenge;
 };
 
 /* eslint camelcase: 0 */
