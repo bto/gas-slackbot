@@ -23,6 +23,7 @@ WebApi.prototype._createFetchOptions = function _createFetchOptions(httpMethod, 
 
   if (httpMethod === 'post') {
     if (json) {
+      options.contentType = 'application/json; charset=utf-8';
       options.payload = JSON.stringify(params);
     } else {
       options.payload = params;
@@ -53,7 +54,7 @@ WebApi.prototype._fetch = function _fetch(method, httpMethod, params, options) {
 
 WebApi.prototype._fetchUrl = function _fetchUrl(url, options) {
   try {
-    var response = UrlFetchApp.fetch(url, options);
+    var response = this.response = UrlFetchApp.fetch(url, options);
   } catch (error) {
     return {
       ok: false,

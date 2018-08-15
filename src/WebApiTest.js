@@ -50,6 +50,7 @@ testRunner.functions.push(function (test, common) {
     assert.deepEqual(
       options,
       {
+        contentType: 'application/json; charset=utf-8',
         headers: {
           Authorization: 'Bearer ' + api.token
         },
@@ -72,6 +73,69 @@ testRunner.functions.push(function (test, common) {
         token: api.token
       },
       'returns valid parameters'
+    );
+  });
+
+  test('WebApi._fetchUrl()', function (assert) {
+    var api = createApi();
+    var url = api._createApiUrl('api.test');
+    var params = api._createFetchParams({foo: 'bar'});
+
+    var options = api._createFetchOptions('post', params);
+    var response = api._fetchUrl(url, options);
+    assert.deepEqual(
+      response,
+      {
+        ok: true,
+        args: {
+          foo: 'bar',
+          token: api.token
+        }
+      },
+      'successes api.test by POST form'
+    );
+
+    options = api._createFetchOptions('post', params, true);
+    response = api._fetchUrl(url, options);
+    assert.deepEqual(
+      response,
+      {
+        ok: true,
+        args: {
+          foo: 'bar',
+          token: api.token
+        }
+      },
+      'successes api.test by POST json'
+    );
+
+    params = api._createFetchParams({error: 'error message'});
+    options = api._createFetchOptions('post', params);
+    response = api._fetchUrl(url, options);
+    assert.deepEqual(
+      response,
+      {
+        ok: false,
+        error: 'error message',
+        args: {
+          error: 'error message',
+          token: api.token
+        }
+      },
+      'fails api.test with an error arugment'
+    );
+
+    api.token = null;
+    params = api._createFetchParams({foo: 'bar'});
+    options = api._createFetchOptions('post', params);
+    response = api._fetchUrl(url, options);
+    assert.deepEqual(
+      response,
+      {
+        ok: false,
+        error: 'invalid_auth'
+      },
+      'fails api.test with an error arugment'
     );
   });
 });
