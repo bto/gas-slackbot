@@ -2,7 +2,8 @@ var WebApi = function WebApi(token) {
   this.token = token;
 };
 
-WebApi.prototype.callChatPostMessage = function callChatPostMessage(channelId, message, params) {
+WebApi.prototype.callChatPostMessage = function callChatPostMessage(channelId, message, options) {
+  var params = options ? options : {};
   params.channel = channelId;
   params.text = message;
   return this._fetch('chat.postMessage', 'post', params, {json: true});

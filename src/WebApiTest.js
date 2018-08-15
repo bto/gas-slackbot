@@ -9,6 +9,16 @@ testRunner.functions.push(function (test, common) {
     assert.equal(api.token, 'access token', 'sets an access token');
   });
 
+  test('WebApi.callChatPostMessage()', function (assert) {
+    var api = createApi();
+    var channelId = common.getProperty('SLACK_CHANNEL_ID');
+
+    var response = api.callChatPostMessage(channelId, 'Test: WebApi.callChatPostMessage()');
+    assert.ok(response.ok, 'successes chat.postMessage method');
+    assert.equal(response.channel, channelId, 'returns a channel id');
+    assert.equal(response.message.text, 'Test: WebApi.callChatPostMessage()', 'returns a text message');
+  });
+
   test('WebApi._createApiUrl()', function (assert) {
     var api = createApi();
 
