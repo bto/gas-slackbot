@@ -4,6 +4,23 @@ var EventsApi = function EventsApi(e) {
   }
 };
 
+EventsApi.prototype.handlers = {};
+
+/**
+ * Register an event handler
+ * @param {String} eventType: an event type
+ * @param {Function} func: an event handler
+ * @return {Object} return itself
+ */
+EventsApi.registerHandler = function registerHandler(eventType, func) {
+  if (!EventsApi.prototype.handlers[eventType]) {
+    EventsApi.prototype.handlers[eventType] = [];
+  }
+
+  EventsApi.prototype.handlers[eventType].push(func);
+  return true;
+};
+
 /**
  * Execute from a web request
  * @return {Object} return itself
