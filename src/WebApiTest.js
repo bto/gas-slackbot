@@ -65,7 +65,16 @@ testRunner.functions.push(function (test, common) {
   test('WebApi._createFetchParams()', function (assert) {
     var api = createApi();
 
-    var params = api._createFetchParams({foo: 'bar'});
+    var params = api._createFetchParams();
+    assert.deepEqual(
+      params,
+      {
+        token: api.token
+      },
+      'returns valid parameters without parameters'
+    );
+
+    params = api._createFetchParams({foo: 'bar'});
     assert.deepEqual(
       params,
       {
@@ -73,6 +82,49 @@ testRunner.functions.push(function (test, common) {
         token: api.token
       },
       'returns valid parameters'
+    );
+  });
+
+  test('WebApi._fetch()', function (assert) {
+    var api = createApi();
+
+    assert.throws(
+      function () {
+        api._fetch('api.test', 'get');
+      },
+      'throws an exception if HTTP GET method was passed'
+    );
+
+    assert.throws(
+      function () {
+        api._fetch('api.test', 'foo');
+      },
+      'throws an exception if an invalid HTTP method was passed'
+    );
+
+    var response = api._fetch('api.test', 'post');
+    assert.deepEqual(
+      response,
+      {
+        ok: true,
+        args: {
+          token: api.token
+        }
+      },
+      'successes api.test without paremeters'
+    );
+
+    response = api._fetch('api.test', 'post', {foo: 'bar'});
+    assert.deepEqual(
+      response,
+      {
+        ok: true,
+        args: {
+          foo: 'bar',
+          token: api.token
+        }
+      },
+      'successes api.test'
     );
   });
 

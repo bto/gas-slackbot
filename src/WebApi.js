@@ -34,8 +34,9 @@ WebApi.prototype._createFetchOptions = function _createFetchOptions(httpMethod, 
 };
 
 WebApi.prototype._createFetchParams = function _createFetchParams(params) {
-  params.token = this.token;
-  return params;
+  var newParams = params ? params : {};
+  newParams.token = this.token;
+  return newParams;
 };
 
 WebApi.prototype._fetch = function _fetch(method, httpMethod, params, options) {
@@ -47,9 +48,11 @@ WebApi.prototype._fetch = function _fetch(method, httpMethod, params, options) {
     throw new Error('invalid HTTP method');
   }
 
+  var opts = options ? options : {};
+
   var url = this._createApiUrl(method);
-  var opts = this._createFetchOptions(httpMethod, this._createFetchParams(params), options.json);
-  return this._fetchUrl(url, opts);
+  var fetchOpts = this._createFetchOptions(httpMethod, this._createFetchParams(params), opts.json);
+  return this._fetchUrl(url, fetchOpts);
 };
 
 WebApi.prototype._fetchUrl = function _fetchUrl(url, options) {
