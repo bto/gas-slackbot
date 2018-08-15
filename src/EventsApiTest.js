@@ -21,6 +21,23 @@ testRunner.functions.push(function (test, common) {
     assert.deepEqual(event, api.getEvent(), 'set an event object');
   });
 
+  test('EventsApi.registerHandler()', function (assert) {
+    assert.deepEqual(EventsApi.prototype.handlers, {}, 'no handler was registered first');
+
+    EventsApi.registerHandler('app_mention', function () {});
+    var handlers = EventsApi.prototype.handlers.app_mention;
+    assert.equal(handlers.length, 1, 'one handler was registered');
+    assert.equal(typeof handlers[0], 'function', 'registered handler was a function');
+
+    EventsApi.registerHandler('app_mention', function () {});
+    handlers = EventsApi.prototype.handlers.app_mention;
+    assert.equal(handlers.length, 2, 'two handlers was registered');
+    assert.equal(typeof handlers[0], 'function', 'first handler was a function');
+    assert.equal(typeof handlers[1], 'function', 'second handler was a function');
+
+    EventsApi.prototype.handlers = {};
+  });
+
   test('EventsApi event object', function (assert) {
     var api = createApi();
 
@@ -36,6 +53,46 @@ testRunner.functions.push(function (test, common) {
     var obj = api.setVerificationToken('verification token');
     assert.equal(api, obj, 'returns itself');
     assert.equal('verification token', api.getVerificationToken(), 'set a verification token');
+  });
+
+  test('EventsApi.callEventCallback()', function (assert) {
+    EventsApi.prototype.handlers = {};
+    var api = createApi();
+    var f1Called = 0;
+    var f2Called = 0;
+    var params = {event: {type: 'app_mention'}};
+
+    api.callEventCallback(params);
+    assert.equal(f1Called, 0, 'first function was not called');
+    assert.equal(f2Called, 0, 'second function was not called');
+
+    EventsApi.registerHandler(
+      'app_mention',
+      function () {
+        f1Called++;
+      }
+    );
+    api.callEventCallback(params);
+    assert.equal(f1Called, 1, 'first function was called');
+    assert.equal(f2Called, 0, 'second function was not called');
+
+    EventsApi.registerHandler(
+      'app_mention',
+      function () {
+        f2Called++;
+      }
+    );
+    api.callEventCallback(params);
+    assert.equal(f1Called, 2, 'first function was called');
+    assert.equal(f2Called, 1, 'second function was not called');
+  });
+
+  test('EventsApi.callUrlVerification()', function (assert) {
+    var api = createApi();
+    var output = api.callUrlVerification({challenge: 'challenge code'});
+    assert.equal(typeof output, 'object', 'returns a ContentService object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'challenge code', 'has a valid content');
   });
 
   test('EventsApi.getParam()', function (assert) {
@@ -74,14 +131,6 @@ testRunner.functions.push(function (test, common) {
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
     assert.ok(api.verify(token), 'returns true for a valid verification token');
-  });
-
-  test('EventsApi.callUrlVerification()', function (assert) {
-    var api = createApi();
-    var output = api.callUrlVerification({challenge: 'challenge code'});
-    assert.equal(typeof output, 'object', 'returns a ContentService object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'challenge code', 'has a valid content');
   });
 });
 

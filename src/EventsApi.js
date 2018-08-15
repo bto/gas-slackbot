@@ -32,7 +32,7 @@ EventsApi.prototype.callEventCallback = function callEventCallback(params) {
     return;
   }
 
-  for (var i; i < handlers.length; i++) {
+  for (var i = 0; i < handlers.length; i++) {
     handlers[i](params.event, params);
   }
 };
