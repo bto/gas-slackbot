@@ -36,8 +36,9 @@
 
 ## Google Developer Project とのひも付け
 
-GAS 用の Google Developer Project を用意しているので、それとひも付けします。
+GAS 用の [Google Developer Project](https://console.developers.google.com/apis/dashboard?project=apps-script-160201) を用意しているので、それとひも付けします。
 自分で新しく Project を作成しても良いですが大変です。
+プロジェクトへのアクセス権がない場合は管理者に相談してください。
 
 - GAS Project -> Resources -> Cloud Platform project
 - Project Number に `56602297590` を入力
@@ -47,7 +48,7 @@ GAS 用の Google Developer Project を用意しているので、それとひ�
 ひも付けした Google Developer Project の Credential file をダウンロードします。
 この Credential file を使って、認証したり権限の付与を行います。
 
-- [Project の Credentials](https://console.developers.google.com/apis/credentials?project=apps-script-160201) にアクセス
+- [Google Developer Project の Credentials](https://console.developers.google.com/apis/credentials?project=apps-script-160201) にアクセス
 - `cli` の credential をダウンロード
 - `creds.json` というファイル名で保存
 
