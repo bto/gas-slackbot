@@ -2,8 +2,10 @@
 *~
 .DS_Store
 
+/.clasp.json
+/.clasprc.json
 /client_secret.json
+/creds.json
 /gapps.config.json
 /node_modules
 /npm-debug.log
-/src/init.js
