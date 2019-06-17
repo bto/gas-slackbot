@@ -1,28 +1,91 @@
-# Preparation for development
+# 開発環境構築
 
-## Create a Google Apps Script project
+## ローカル環境の初期化
 
-- Log in to Google Drive
-- Create a new Google Apps Script project
+注) この操作はプロジェクト内のファイルにしか影響しないので安心
 
-## Install npm modules
+- `make init` を実行
 
-- run `make init`
+## clasp を使えるようにするための認証
 
-## Create gapps.config.json
+[clasp](https://github.com/google/clasp) を使えるようにするために Google 認証をします。
+これは Global に設定される認証なので、既に他のプロジェクトで実行していれば作業は不要です。
 
-- create a gapps.config.json file from a sample file
-  - cp gapps.config.json.sample gapps.config.json
-- change `fileId` to an exact one that you created
+- `make login` を実行
+- ブラウザが開くので認証する
+- うまくいけば `$HOME/.clasprc.json` ができているはず
 
-## Authenticate your Google account
+## Standalone Google Apps Script の作成
 
-Skip this step if you already have a google developer project which enables Google Drive API
+[Googleのマニュアル](https://developers.google.com/apps-script/guides/standalone)に作り方が書いてある。
+おすすめは [Google Drive](https://drive.google.com) にアクセスして作る方法。[Developer Hub](https://script.google.com)から作ると `My Drive` に作成されてしまう。
 
-- Create a new project on [Google Developer Console](https://console.developers.google.com/)
-- Enable `Google Drive API`
-- Create a credential
-- Download `client_secret.json`
-- run `make auth`
-- remove `client_secret.json`
-  - client_secret.json is no longer needed once you are authenticated.
+- [Google Drive](https://drive.google.com) にアクセス
+- Google Drive に Google Apps Script を追加してない場合
+  - New -> More -> Connect more apps
+  - `script` で検索
+  - `Google Apps Script` を追加
+- 好きなフォルダに `Google Apps Script` を追加
+  - おすすめのプロジェクト名: `<MyName>DevSlackBotApp`
+- 以下これを `GAS Project` と表記
+
+## Script Id の登録
+
+- GAS Project -> File -> Project properties -> Script Id
+- .clasp.json -> `scriptId` を変更
+
+## Google Developer Project とのひも付け
+
+GAS 用の Google Developer Project を用意しているので、それとひも付けします。
+自分で新しく Project を作成しても良いですが大変です。
+
+- GAS Project -> Resources -> Cloud Platform project
+- Project Number に `56602297590` を入力
+
+## Credential file のダウンロード
+
+ひも付けした Google Developer Project の Credential file をダウンロードします。
+この Credential file を使って、認証したり権限の付与を行います。
+
+- [Project の Credentials](https://console.developers.google.com/apis/credentials?project=apps-script-160201) にアクセス
+- `cli` の credential をダウンロード
+- `creds.json` というファイル名で保存
+
+## Credential を使った認証
+
+先程ダウンロードした Credential ファイルを使って認証します。これで認証したアカウントの権限を使って GAS Project を操作できるようになります。
+
+- `make login-creds` を実行
+- ブラウザが開くので認証する
+- うまくいけば `.clasprc.json` ができているはず
+
+## ソースコードを push する
+
+- `make push` を実行
+- `Manifest` を更新するか聞かれるので、勇気をもって `y` を選択
+- うまくいけば `GAS Project` のソースコードが更新されているはず
+
+# 開発の進め方
+
+## ソースコードの変更
+
+好きなエディタを使ってソースコードを変更してください。
+
+## ソースコードのチェック
+
+`eslint` を使ってソースコードのチェックができます。
+
+- `make check` を実行
+- エラー箇所を修正する
+
+## ソースコードを GAS Project に push
+
+- `make push` を実行
+
+## テストを実行
+
+- `make test` を実行
+
+## ログを表示
+
+- `make logs` を実行
