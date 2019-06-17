@@ -29,6 +29,17 @@
   - おすすめのプロジェクト名: `<MyName>DevSlackBotApp`
 - 以下これを `GAS Project` と表記
 
+## GAS Project に開発用の slack の設定
+
+[開発用の SlackApp](https://api.slack.com/apps/AC92PKXST) を作ってあるので、そちらを登録します。
+もちろん自分で SlackApp を作って、それを登録しても構いません。
+アクセス権がない場合は、管理者に相談して collaborator に追加してもらってください。
+
+- GAS Project -> File -> Project properties -> Script properties
+- TEST_SLACK_ACCESS_TOKEN: SlackApp -> Install App -> Bot User OAuth Access Token
+- TEST_SLACK_CHANNEL_ID: C070J8TDK
+- TEST_SLACK_VERIFICATION_TOKEN: SlackApp -> Basic Information -> App Credentials -> Verification Token
+
 ## Script Id の登録
 
 - GAS Project -> File -> Project properties -> Script Id
