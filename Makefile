@@ -8,11 +8,6 @@ GAST_DIR=$(VENDOR_DIR)/gast
 all: init check
 
 
-.PHONY: auth
-auth:
-	$(NODE_BIN_DIR)/gapps auth client_secret.json
-
-
 .PHONY: clean
 clean:
 
@@ -28,11 +23,6 @@ check: check-lint
 .PHONY: check-lint
 check-lint:
 	$(NODE_BIN_DIR)/eslint src
-
-
-.PHONY: deploy
-deploy:
-	$(NODE_BIN_DIR)/gapps upload
 
 
 .PHONY: init
@@ -57,3 +47,28 @@ $(GAST_DIR)/README.md:
 init-node: $(NODE_DIR)
 $(NODE_DIR):
 	npm install
+
+
+.PHONY: login
+login:
+	$(NODE_BIN_DIR)/clasp login
+
+
+.PHONY: login-creds
+login-creds:
+	$(NODE_BIN_DIR)/clasp login --creds creds.json
+
+
+.PHONY: logs
+logs:
+	$(NODE_BIN_DIR)/clasp logs
+
+
+.PHONY: push
+push:
+	$(NODE_BIN_DIR)/clasp push
+
+
+.PHONY: test
+test:
+	$(NODE_BIN_DIR)/clasp run testRunner
