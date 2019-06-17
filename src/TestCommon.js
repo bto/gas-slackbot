@@ -1,4 +1,5 @@
 var TestCommon = function TestCommon() {
+  Bot.prototype.username = 'gasbot-test';
 };
 
 TestCommon.prototype.getProperty = function getProperty(key) {
