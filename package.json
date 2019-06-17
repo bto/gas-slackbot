@@ -6,6 +6,7 @@
   },
   "license": "UNLICENSED",
   "devDependencies": {
+    "@google/clasp": "^2.1.0",
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-es5": "^1.2.0",
