@@ -26,7 +26,7 @@
   - `script` で検索
   - `Google Apps Script` を追加
 - 好きなフォルダに `Google Apps Script` を追加
-  - おすすめのプロジェクト名: `<MyName>DevSlackBotApp`
+  - おすすめのプロジェクト名: `<MyName>SlackBotApp`
 - 以下これを `GAS Project` と表記
 
 ## GAS Project に開発用の slack の設定
