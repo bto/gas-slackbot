@@ -77,6 +77,12 @@ GAS 用の [Google Developer Project](https://console.developers.google.com/apis
 - `Manifest` を更新するか聞かれるので、勇気をもって `y` を選択
 - うまくいけば `GAS Project` のソースコードが更新されているはず
 
+## test を実行する
+
+- `make test` を実行
+- うまくいけば実行に成功するはず
+- `make logs` でログが確認できます
+
 # 開発の進め方
 
 ## ソースコードの変更
