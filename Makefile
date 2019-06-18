@@ -22,7 +22,8 @@ check: check-lint
 
 .PHONY: check-lint
 check-lint:
-	$(NODE_BIN_DIR)/eslint src test
+	$(NODE_BIN_DIR)/eslint -c src/eslintrc src
+	$(NODE_BIN_DIR)/eslint -c test/eslintrc test
 
 
 .PHONY: init
