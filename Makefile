@@ -22,7 +22,7 @@ check: check-lint
 
 .PHONY: check-lint
 check-lint:
-	$(NODE_BIN_DIR)/eslint src
+	$(NODE_BIN_DIR)/eslint src test
 
 
 .PHONY: init
@@ -70,5 +70,12 @@ push:
 
 
 .PHONY: test
-test:
+test: test-gas test-js
+
+.PHONY: test-gas
+test-gas:
 	$(NODE_BIN_DIR)/clasp run testRunner
+
+.PHONY: test-js
+test-js:
+	NODE_ENV=test $(NODE_BIN_DIR)/mocha
