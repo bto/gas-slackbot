@@ -1,6 +1,6 @@
 function testRunner() {
   var test = new GasTap({
-    logger: function (msg) { console.log(msg); }
+    logger: function logger(msg) { console.log(msg); }
   });
   var common = new TestCommon();
 
