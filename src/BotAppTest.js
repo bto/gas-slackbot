@@ -22,9 +22,20 @@ testRunner.functions.push(function (test, common) {
     assert.equal(event, botApp.getEvent(), 'set an event object');
   });
 
+  test('registerCommand()', function (assert) {
+    var func = function () {};
+    registerCommand('foo', func);
+    assert.equal(BotApp.prototype.commands.foo, func, 'register a command function');
+  });
+
   test('new BotApp()', function (assert) {
     var botApp = createObj();
     assert.ok(botApp instanceof BotApp, 'creates BotApp object');
+  });
+
+  test('BotApp.execute()', function () {
+    var bot = createObj();
+    bot.execute();
   });
 });
 

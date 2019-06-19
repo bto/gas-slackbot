@@ -23,6 +23,8 @@ var BotApp = function BotApp(e) {
   }
 };
 
+BotApp.prototype.commands = {};
+
 /**
  * Execute from a web request
  * @return {Object} return itself

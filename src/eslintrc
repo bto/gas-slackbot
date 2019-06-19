@@ -20,6 +20,7 @@
     create: true,
     createApp: true,
     testRunner: true,
+    registerCommand: true,
   },
   extends: 'airbnb-es5',
   rules: {
