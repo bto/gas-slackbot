@@ -12,11 +12,13 @@
 
     // Our globals
     Bot: true,
+    BotApp: true,
     EventsApi: true,
     TestCommon: true,
     WebApi: true,
     command: true,
     create: true,
+    createApp: true,
     testRunner: true,
   },
   extends: 'airbnb-es5',
