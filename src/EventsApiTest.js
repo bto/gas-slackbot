@@ -130,7 +130,8 @@ testRunner.functions.push(function (test, common) {
     assert.notOk(api.verify('token'), 'returns false for an invalid verification token');
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(api.verify(token), 'returns true for a valid verification token');
+    api.setVerificationToken(token);
+    assert.ok(api.verify(), 'returns true for a valid verification token');
   });
 });
 

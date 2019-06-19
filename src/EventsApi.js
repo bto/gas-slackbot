@@ -53,8 +53,7 @@ EventsApi.prototype.callUrlVerification = function callUrlVerification(params) {
  * @return {Object} return itself
  */
 EventsApi.prototype.execute = function execute() {
-  var token = this.getVerificationToken();
-  if (token && !this.verify()) {
+  if (!this.verify()) {
     throw new Error('invalid verification token');
   }
 
@@ -130,11 +129,10 @@ EventsApi.prototype.setVerificationToken = function setVerificationToken(verific
 
 /**
  * Verify if a token is valid
- * @param {String} token: verification token
  * @return {boolean} return true or false
  */
-EventsApi.prototype.verify = function verify(token) {
-  return this.getParam('token') === token;
+EventsApi.prototype.verify = function verify() {
+  return this.getParam('token') === this.getVerificationToken();
 };
 
 /* eslint camelcase: 0 */
