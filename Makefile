@@ -30,12 +30,14 @@ check-lint:
 init: init-sample init-submodule init-node
 
 .PHONY: init-sample
-init-sample: .clasp.json gapps.config.json src/appsscript.json
+init-sample: .clasp.json gapps.config.json src/appsscript.json test/config.js
 .clasp.json: .clasp.json.sample
 	cp $< $@
 gapps.config.json: gapps.config.json.sample
 	cp $< $@
 src/appsscript.json: src/appsscript.json.sample
+	cp $< $@
+test/config.js: test/config.js.sample
 	cp $< $@
 
 .PHONY: init-submodule

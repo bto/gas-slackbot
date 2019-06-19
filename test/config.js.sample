@@ -1,0 +1,4 @@
+module.exports = {
+  'url': 'https://script.google.com/a/uuum.jp/macros/s/xxx/exec',
+  'verificationToken': 'xxx',
+};
