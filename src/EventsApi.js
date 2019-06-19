@@ -24,17 +24,29 @@ EventsApi.registerHandler = function registerHandler(eventType, func) {
 /**
  * Call event handlers
  * @param {Object} params: request parameters
- * @return {null} return null
+ * @return {Object} return TextOutput object
  */
 EventsApi.prototype.callEventCallback = function callEventCallback(params) {
   var handlers = this.handlers[params.event.type];
   if (!handlers) {
-    return;
+    return null;
   }
 
+  var message = '';
   for (var i = 0; i < handlers.length; i++) {
-    handlers[i](params.event, params);
+    var result = handlers[i](params.event, params);
+    if (typeof result === 'string') {
+      message += result;
+    }
   }
+
+  if (message.length) {
+    var output = ContentService.createTextOutput(message);
+    output.setMimeType(ContentService.MimeType.TEXT);
+    return output;
+  }
+
+  return null;
 };
 
 /**
