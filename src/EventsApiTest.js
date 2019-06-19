@@ -21,23 +21,6 @@ testRunner.functions.push(function (test, common) {
     assert.deepEqual(event, api.getEvent(), 'set an event object');
   });
 
-  test('EventsApi.registerHandler()', function (assert) {
-    assert.deepEqual(EventsApi.prototype.handlers, {}, 'no handler was registered first');
-
-    EventsApi.registerHandler('app_mention', function () {});
-    var handlers = EventsApi.prototype.handlers.app_mention;
-    assert.equal(handlers.length, 1, 'one handler was registered');
-    assert.equal(typeof handlers[0], 'function', 'registered handler was a function');
-
-    EventsApi.registerHandler('app_mention', function () {});
-    handlers = EventsApi.prototype.handlers.app_mention;
-    assert.equal(handlers.length, 2, 'two handlers was registered');
-    assert.equal(typeof handlers[0], 'function', 'first handler was a function');
-    assert.equal(typeof handlers[1], 'function', 'second handler was a function');
-
-    EventsApi.prototype.handlers = {};
-  });
-
   test('EventsApi event object', function (assert) {
     var api = createApi();
 
@@ -56,7 +39,6 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('EventsApi.callEventCallback()', function (assert) {
-    EventsApi.prototype.handlers = {};
     var api = createApi();
     var f1Called = 0;
     var f2Called = 0;
@@ -67,7 +49,7 @@ testRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    EventsApi.registerHandler(
+    api.registerHandler(
       'app_mention',
       function () {
         f1Called++;
@@ -78,7 +60,7 @@ testRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    EventsApi.registerHandler(
+    api.registerHandler(
       'app_mention',
       function () {
         f2Called++;
@@ -128,6 +110,23 @@ testRunner.functions.push(function (test, common) {
       },
       'throws an exception if an event object was not provided'
     );
+  });
+
+  test('EventsApi.registerHandler()', function (assert) {
+    var api = createApi();
+
+    assert.deepEqual(api.handlers, {}, 'no handler was registered first');
+
+    api.registerHandler('app_mention', function () {});
+    var handlers = api.handlers.app_mention;
+    assert.equal(handlers.length, 1, 'one handler was registered');
+    assert.equal(typeof handlers[0], 'function', 'registered handler was a function');
+
+    api.registerHandler('app_mention', function () {});
+    handlers = api.handlers.app_mention;
+    assert.equal(handlers.length, 2, 'two handlers was registered');
+    assert.equal(typeof handlers[0], 'function', 'first handler was a function');
+    assert.equal(typeof handlers[1], 'function', 'second handler was a function');
   });
 
   test('EventsApi.verify()', function (assert) {

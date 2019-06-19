@@ -2,23 +2,8 @@ var EventsApi = function EventsApi(e) {
   if (e) {
     this.setEvent(e);
   }
-};
 
-EventsApi.prototype.handlers = {};
-
-/**
- * Register an event handler
- * @param {String} eventType: an event type
- * @param {Function} func: an event handler
- * @return {Object} return itself
- */
-EventsApi.registerHandler = function registerHandler(eventType, func) {
-  if (!EventsApi.prototype.handlers[eventType]) {
-    EventsApi.prototype.handlers[eventType] = [];
-  }
-
-  EventsApi.prototype.handlers[eventType].push(func);
-  return true;
+  this.handlers = {};
 };
 
 /**
@@ -116,6 +101,21 @@ EventsApi.prototype.getParams = function getParams() {
  */
 EventsApi.prototype.getVerificationToken = function getVerificationToken() {
   return this.verificationToken;
+};
+
+/**
+ * Register an event handler
+ * @param {String} eventType: an event type
+ * @param {Function} func: an event handler
+ * @return {Object} return itself
+ */
+EventsApi.prototype.registerHandler = function registerHandler(eventType, func) {
+  if (!this.handlers[eventType]) {
+    this.handlers[eventType] = [];
+  }
+
+  this.handlers[eventType].push(func);
+  return this;
 };
 
 /**
