@@ -19,7 +19,7 @@ EventsApi.prototype.callEventCallback = function callEventCallback(params) {
 
   var message = '';
   for (var i = 0; i < handlers.length; i++) {
-    var result = handlers[i](params.event, params);
+    var result = handlers[i](params);
     if (typeof result === 'string') {
       message += result;
     }
