@@ -4,7 +4,7 @@ function doPost(e) {
   var properties = PropertiesService.getScriptProperties();
   botApp.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
 
-  botApp.execute();
+  return botApp.execute();
 }
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^doPost$" }] */
