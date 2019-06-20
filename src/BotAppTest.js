@@ -1,15 +1,16 @@
 testRunner.functions.push(function (test, common) {
-  function createObj() {
-    var botApp = new BotApp(createEvent());
+  function createObj(eventParams, params) {
+    var botApp = new BotApp(createEvent(eventParams, params));
     botApp.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
     return botApp;
   }
 
   function createEvent(eventParams, params) {
-    var body = params ? params : {};
-    body.event = eventParams ? eventParams : {};
-    body.token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    body.type = 'event_callback';
+    var body = Obj.merge({
+      event: eventParams ? eventParams : {},
+      token: common.getProperty('SLACK_VERIFICATION_TOKEN'),
+      type: 'event_callback'
+    }, params ? params : {});
 
     return {
       postData: {
@@ -36,9 +37,12 @@ testRunner.functions.push(function (test, common) {
     assert.ok(botApp instanceof BotApp, 'creates BotApp object');
   });
 
-  test('BotApp.execute()', function () {
-    var bot = createObj();
-    bot.execute();
+  test('BotApp.execute()', function (assert) {
+    var botApp = createObj({}, {challenge: 'foo', type: 'url_verification'});
+    var output = botApp.execute();
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'foo', 'has a valid content');
   });
 });
 
