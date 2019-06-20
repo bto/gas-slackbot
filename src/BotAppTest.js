@@ -37,7 +37,40 @@ testRunner.functions.push(function (test, common) {
     assert.ok(botApp instanceof BotApp, 'creates BotApp object');
   });
 
-  test('BotApp.execute()', function (assert) {
+  test('BotApp.execute(): app_mention', function (assert) {
+    var botApp = createObj({
+      type: 'app_mention',
+      text: ''
+    });
+    var output = botApp.execute();
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'そんなコマンドはないよ。', 'has a valid content');
+  });
+
+  test('BotApp.execute(): app_mention', function (assert) {
+    var botApp = createObj({
+      type: 'app_mention',
+      text: '<@Uxxx> help'
+    });
+    var output = botApp.execute();
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
+  });
+
+  test('BotApp.execute(): app_mention', function (assert) {
+    var botApp = createObj({
+      type: 'app_mention',
+      text: '<@Uxxx> ping'
+    });
+    var output = botApp.execute();
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'PONG', 'has a valid content');
+  });
+
+  test('BotApp.execute(): url_verification', function (assert) {
     var botApp = createObj({}, {challenge: 'foo', type: 'url_verification'});
     var output = botApp.execute();
     assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');

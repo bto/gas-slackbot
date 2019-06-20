@@ -23,7 +23,15 @@ var BotApp = function BotApp(e) {
   }
 };
 
-BotApp.prototype.commands = {};
+BotApp.prototype.commands = {
+  help: function commandPing() {
+    return '吾輩はBotである。ヘルプはまだない。';
+  },
+  ping: function commandPing() {
+    return 'PONG';
+  }
+};
+BotApp.prototype.defaultMessage = 'そんなコマンドはないよ。';
 
 /**
  * Execute from a web request
@@ -43,6 +51,14 @@ BotApp.prototype.execute = function execute() {
 
   this.eventsApi = eventsApi;
   return eventsApi.execute();
+};
+
+/**
+ * Get a default message
+ * @return {String} return a default message
+ */
+BotApp.prototype.getDefaultMessage = function getDefaultMessage() {
+  return this.defaultMessage;
 };
 
 /**
