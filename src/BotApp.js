@@ -30,9 +30,10 @@ BotApp.prototype.commands = {};
  * @return {Object} return itself
  */
 BotApp.prototype.execute = function execute() {
-  this.eventsApi = new EventsApi(this.getEvent());
+  var eventsApi = new EventsApi(this.getEvent());
+  eventsApi.setVerificationToken(this.getVerificationToken());
 
-  this.eventsApi.registerHandler('app_mention', function funcAppMention(params) {
+  eventsApi.registerHandler('app_mention', function funcAppMention(params) {
     var command = params.event.text.split(/\s+/)[1];
     if (this.commands.hasOwnProperty(command)) {
       return this.commands[command](this, params);
@@ -40,7 +41,8 @@ BotApp.prototype.execute = function execute() {
     return this.getDefaultMessage();
   }.bind(this));
 
-  return this.eventsApi.execute();
+  this.eventsApi = eventsApi;
+  return eventsApi.execute();
 };
 
 /**
@@ -52,12 +54,30 @@ BotApp.prototype.getEvent = function getEvent() {
 };
 
 /**
+ * Get a verification token
+ * @return {String} return a verification token
+ */
+BotApp.prototype.getVerificationToken = function getVerificationToken() {
+  return this.verificationToken;
+};
+
+/**
  * Set an event object
  * @param {Object} e: event object
  * @return {Object} return itself
  */
 BotApp.prototype.setEvent = function setEvent(e) {
   this.event = e;
+  return this;
+};
+
+/**
+ * Set a verification token
+ * @param {String} verificationToken: outgoing webhook's verification token
+ * @return {Object} return itself
+ */
+BotApp.prototype.setVerificationToken = function setVerificationToken(verificationToken) {
+  this.verificationToken = verificationToken;
   return this;
 };
 

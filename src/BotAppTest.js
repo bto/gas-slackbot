@@ -1,6 +1,8 @@
 testRunner.functions.push(function (test, common) {
   function createObj() {
-    return new BotApp(createEvent());
+    var botApp = new BotApp(createEvent());
+    botApp.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
+    return botApp;
   }
 
   function createEvent(eventParams, params) {
