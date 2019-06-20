@@ -9,6 +9,7 @@ testRunner.functions.push(function (test, common) {
     var body = params ? params : {};
     body.event = eventParams ? eventParams : {};
     body.token = common.getProperty('SLACK_VERIFICATION_TOKEN');
+    body.type = 'event_callback';
 
     return {
       postData: {
