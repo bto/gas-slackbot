@@ -1,5 +1,10 @@
 function doPost(e) {
-  return (new EventsApi(e)).execute();
+  var botApp = new BotApp(e);
+
+  var properties = PropertiesService.getScriptProperties();
+  botApp.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
+
+  botApp.execute();
 }
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^doPost$" }] */
