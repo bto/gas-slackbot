@@ -23,7 +23,4 @@
     registerCommand: true,
   },
   extends: 'airbnb-es5',
-  rules: {
-    no-console: 'off',
-  },
 }
