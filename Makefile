@@ -1,5 +1,4 @@
 NODE_DIR=node_modules
-NODE_BIN_DIR=$(NODE_DIR)/.bin
 VENDOR_DIR=vendor
 GAST_DIR=$(VENDOR_DIR)/gast
 
@@ -22,8 +21,8 @@ check: check-lint
 
 .PHONY: check-lint
 check-lint:
-	$(NODE_BIN_DIR)/eslint -c src/eslintrc src
-	$(NODE_BIN_DIR)/eslint -c test/eslintrc test
+	npx eslint -c src/eslintrc src
+	npx eslint -c test/eslintrc test
 
 
 .PHONY: init
@@ -54,22 +53,22 @@ $(NODE_DIR):
 
 .PHONY: login
 login:
-	$(NODE_BIN_DIR)/clasp login
+	npx clasp login
 
 
 .PHONY: login-creds
 login-creds:
-	$(NODE_BIN_DIR)/clasp login --creds creds.json
+	npx clasp login --creds creds.json
 
 
 .PHONY: logs
 logs:
-	$(NODE_BIN_DIR)/clasp logs
+	npx clasp logs
 
 
 .PHONY: push
 push:
-	$(NODE_BIN_DIR)/clasp push
+	npx clasp push
 
 
 .PHONY: test
@@ -77,8 +76,8 @@ test: test-gas test-js
 
 .PHONY: test-gas
 test-gas:
-	$(NODE_BIN_DIR)/clasp run testRunner
+	npx clasp run testRunner
 
 .PHONY: test-js
 test-js:
-	NODE_ENV=test $(NODE_BIN_DIR)/mocha
+	NODE_ENV=test npx mocha
