@@ -1,8 +1,46 @@
 version: 2
+
+references:
+  node_modules_cache: &node_modules_cache
+    key: npm-{{ checksum "package-lock.json" }}
+    paths:
+      - node_modules
+
 jobs:
   build:
+    working_directory: ~/app
     docker:
       - image: circleci/node:12.4.0
     steps:
       - checkout
-      - run: echo "Hello world!!"
+
+      - run:
+          name: Set up config files
+          command: |
+            cp .circleci/dev/clasp.json      .clasp.json
+            cp .circleci/dev/appsscript.json src/appsscript.json
+            echo $HOME_CLASPRC_JSON         > ~/.clasprc.json
+            echo $DEV_SLACKBOT_CLASPRC_JSON > .clasprc.json
+            echo $DEV_CONFIG_JS             > test/config.js
+
+      - restore_cache:
+          name: Restore node_modules
+          <<: *node_modules_cache
+      - run:
+          name: Set up
+          command: make init
+      - save_cache:
+          name: Cache node_modules
+          <<: *node_modules_cache
+
+      - run:
+          name: Check code
+          command: make check
+
+      - run:
+          name: Deploy
+          command: make push
+
+      - run:
+          name: Run test
+          command: make test
