@@ -29,10 +29,8 @@ check-lint:
 init: init-sample init-submodule init-node
 
 .PHONY: init-sample
-init-sample: .clasp.json src/appsscript.json test/config.js
+init-sample: .clasp.json test/config.js
 .clasp.json: .clasp.json.sample
-	cp $< $@
-src/appsscript.json: src/appsscript.json.sample
 	cp $< $@
 test/config.js: test/config.js.sample
 	cp $< $@
