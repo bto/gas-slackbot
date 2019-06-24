@@ -20,8 +20,8 @@ jobs:
             cp .circleci/dev/clasp.json      .clasp.json
             cp .circleci/dev/appsscript.json src/appsscript.json
             echo $HOME_CLASPRC_JSON         > ~/.clasprc.json
-            echo $DEV_SLACKBOT_CLASPRC_JSON > .clasprc.json
-            echo $DEV_CONFIG_JS             > test/config.js
+            echo $SLACKBOT_DEV_CLASPRC_JSON > .clasprc.json
+            echo $SLACKBOT_DEV_CONFIG_JS    > test/config.js
 
       - restore_cache:
           name: Restore node_modules
