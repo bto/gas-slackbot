@@ -11,6 +11,7 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb-es5": "^1.2.0",
     "eslint-plugin-react": "^7.13.0",
+    "intelli-espower-loader": "^1.0.1",
     "mocha": "^6.1.4",
     "power-assert": "^1.6.1",
     "supertest": "^4.0.2"

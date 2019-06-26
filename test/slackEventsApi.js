@@ -1,4 +1,4 @@
-var assert = require('power-assert');
+var assert = require('assert');
 var supertest = require('supertest');
 
 var config = require('./config');
