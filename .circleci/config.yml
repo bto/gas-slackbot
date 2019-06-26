@@ -1,41 +1,77 @@
-version: 2
+version: 2.1
 
 references:
   node_modules_cache: &node_modules_cache
-    key: npm-{{ checksum "package-lock.json" }}
+    key: node_modules-{{ checksum "package-lock.json" }}
     paths:
       - node_modules
+  vendor_cache: &vendor_cache
+    key: vendor-{{ checksum ".gitmodules" }}
+    paths:
+      - vendor
 
-jobs:
-  build:
+executors:
+  default:
     working_directory: ~/app
     docker:
       - image: circleci/node:12.4.0
+
+commands:
+  initialize:
     steps:
       - checkout
-
-      - run:
-          name: Set up config files
-          command: |
-            cp config/dev/appsscript.json src/appsscript.json
-            cp config/dev/clasp.json      .clasp.json
-            sed s/%VERIFICATION_TOKEN%/$SLACKBOT_DEV_VERIFICATION_TOKEN/ config/dev/config.js > test/config.js
-            echo $HOME_CLASPRC_JSON         > ~/.clasprc.json
-            echo $SLACKBOT_DEV_CLASPRC_JSON > .clasprc.json
-
       - restore_cache:
           name: Restore node_modules
           <<: *node_modules_cache
+      - restore_cache:
+          name: Restore vendor
+          <<: *vendor_cache
+
+jobs:
+  setup:
+    executor: default
+    steps:
+      - initialize
       - run:
           name: Set up
           command: make init
       - save_cache:
           name: Cache node_modules
           <<: *node_modules_cache
+      - save_cache:
+          name: Cache vendor
+          <<: *vendor_cache
 
+  check:
+    executor: default
+    steps:
+      - initialize
       - run:
           name: Check code
           command: make check
+
+  deploy:
+    parameters:
+      env:
+        type: enum
+        enum: ["dev", "stg", "prod"]
+        default: dev
+      ENV:
+        type: enum
+        enum: ["DEV", "STG", "PROD"]
+        default: DEV
+    executor: default
+    steps:
+      - initialize
+
+      - run:
+          name: Set up config files
+          command: |
+            cp config/<< parameters.env >>/appsscript.json src/appsscript.json
+            cp config/<< parameters.env >>/clasp.json      .clasp.json
+            sed s/%VERIFICATION_TOKEN%/$SLACKBOT_<< parameters.ENV >>_VERIFICATION_TOKEN/ config/dev/config.js > test/config.js
+            echo $HOME_CLASPRC_JSON                          > ~/.clasprc.json
+            echo $SLACKBOT_<< parameters.ENV >>_CLASPRC_JSON > .clasprc.json
 
       - run:
           name: Deploy
@@ -44,3 +80,32 @@ jobs:
       - run:
           name: Run test
           command: make test
+
+workflows:
+  setup_and_deploy:
+    jobs:
+      - setup
+      - check:
+          requires:
+            - setup
+      - deploy:
+          name: deploy_dev
+          env: dev
+          ENV: DEV
+          requires:
+            - check
+          filters:
+            branches:
+              ignore:
+                - slack-bot-stg
+                - slack-bot-prod
+      - deploy:
+          name: deploy_prod
+          env: prod
+          ENV: PROD
+          requires:
+            - check
+          filters:
+            branches:
+              only:
+                - slack-bot-prod
