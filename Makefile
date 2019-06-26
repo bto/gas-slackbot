@@ -72,7 +72,7 @@ test: test-gas test-js
 
 .PHONY: test-gas
 test-gas:
-	npx clasp run testRunner
+	npx clasp run testCliRunner
 
 .PHONY: test-js
 test-js:

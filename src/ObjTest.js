@@ -1,4 +1,4 @@
-testRunner.functions.push(function (test) {
+TestRunner.functions.push(function (test) {
   test('Obj.isArray()', function (assert) {
     assert.ok(Obj.isArray([]), 'returns true if an argument is an array');
     assert.notOk(Obj.isArray(1), 'returns false if an argument is a number');

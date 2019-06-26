@@ -1,4 +1,4 @@
-testRunner.functions.push(function (test, common) {
+TestRunner.functions.push(function (test, common) {
   function createApi(params) {
     return new EventsApi(createEvent(params));
   }
