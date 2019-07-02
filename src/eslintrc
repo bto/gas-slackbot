@@ -23,5 +23,8 @@
     createApp: true,
     registerCommand: true,
   },
+  rules: {
+    no-console: off,
+  },
   extends: 'airbnb-es5',
 }
