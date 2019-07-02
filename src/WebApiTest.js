@@ -1,6 +1,6 @@
 TestRunner.functions.push(function (test, common) {
   function createApi() {
-    return new WebApi(common.getProperty('SLACK_ACCESS_TOKEN'));
+    return new WebApi(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
   }
 
   test('new WebApi()', function (assert) {
