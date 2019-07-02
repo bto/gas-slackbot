@@ -66,6 +66,14 @@ EventsApi.prototype.execute = function execute() {
 };
 
 /**
+ * Get a bot access token
+ * @return {String} return a bot access token
+ */
+EventsApi.prototype.getBotAccessToken = function getBotAccessToken() {
+  return this.botAccessToken;
+};
+
+/**
  * Get an event object
  * @return {Object} return an event object
  */
@@ -119,6 +127,16 @@ EventsApi.prototype.registerHandler = function registerHandler(eventType, func) 
 };
 
 /**
+ * Set a bot access token
+ * @param {String} botAccessToken: bot access token
+ * @return {Object} return itself
+ */
+EventsApi.prototype.setBotAccessToken = function setBotAccessToken(botAccessToken) {
+  this.botAccessToken = botAccessToken;
+  return this;
+};
+
+/**
  * Set an event object
  * @param {Object} e: event object
  * @return {Object} return itself
@@ -131,7 +149,7 @@ EventsApi.prototype.setEvent = function setEvent(e) {
 
 /**
  * Set a verification token
- * @param {String} verificationToken: outgoing webhook's verification token
+ * @param {String} verificationToken: verification token
  * @return {Object} return itself
  */
 EventsApi.prototype.setVerificationToken = function setVerificationToken(verificationToken) {

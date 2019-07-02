@@ -21,6 +21,14 @@ TestRunner.functions.push(function (test, common) {
     assert.deepEqual(event, api.getEvent(), 'set an event object');
   });
 
+  test('EventsApi bot access token', function (assert) {
+    var api = createApi();
+
+    var obj = api.setBotAccessToken('bot access token');
+    assert.equal(api, obj, 'returns itself');
+    assert.equal('bot access token', api.getBotAccessToken(), 'set a bot access token');
+  });
+
   test('EventsApi event object', function (assert) {
     var api = createApi();
 
