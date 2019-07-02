@@ -83,6 +83,7 @@ BotApp.prototype.getVerificationToken = function getVerificationToken() {
  * @return {Object} return itself
  */
 BotApp.prototype.setEvent = function setEvent(e) {
+  console.info(JSON.stringify(e));
   this.event = e;
   return this;
 };
