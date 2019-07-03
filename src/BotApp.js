@@ -39,6 +39,7 @@ BotApp.prototype.defaultMessage = 'そんなコマンドはないよ。';
  */
 BotApp.prototype.execute = function execute() {
   var eventsApi = new EventsApi(this.getEvent());
+  eventsApi.setBotAccessToken(this.getBotAccessToken());
   eventsApi.setVerificationToken(this.getVerificationToken());
 
   eventsApi.registerHandler('app_mention', function funcAppMention(params) {
