@@ -29,10 +29,16 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(event, botApp.getEvent(), 'set an event object');
   });
 
-  test('registerCommand()', function (assert) {
+  test('registerBotCommand()', function (assert) {
     var func = function () {};
-    registerCommand('foo', func);
-    assert.equal(BotApp.prototype.commands.foo, func, 'register a command function');
+    registerBotCommand('foo', func);
+    assert.equal(BotApp.prototype.botCommands.foo, func, 'register a command function');
+  });
+
+  test('registerEventHandler()', function (assert) {
+    var func = function () {};
+    registerEventHandler('foo', func);
+    assert.equal(BotApp.prototype.eventHandlers.foo[0], func, 'register a event function');
   });
 
   test('new BotApp()', function (assert) {
@@ -65,31 +71,36 @@ TestRunner.functions.push(function (test, common) {
     assert.equal('verification token', botApp.getVerificationToken(), 'set a verification token');
   });
 
-  test('BotApp.execute(): app_mention', function (assert) {
+  test('BotApp.actAsEventsApi(): app_mention', function (assert) {
     var botApp = createObj({
       type: 'app_mention',
       text: ''
     });
-    assert.equal(botApp.execute(), 'そんなコマンドはないよ。', 'has a valid content');
+    assert.equal(botApp.actAsEventsApi(), 'そんなコマンドはないよ。', 'has a valid content');
   });
 
-  test('BotApp.execute(): app_mention', function (assert) {
+  test('BotApp.actAsEventsApi(): app_mention', function (assert) {
     var botApp = createObj({
       type: 'app_mention',
       text: '<@Uxxx> help'
     });
-    assert.equal(botApp.execute(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
+    assert.equal(botApp.actAsEventsApi(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
   });
 
-  test('BotApp.execute(): app_mention', function (assert) {
+  test('BotApp.actAsEventsApi(): app_mention', function (assert) {
     var botApp = createObj({
       type: 'app_mention',
       text: '<@Uxxx> ping'
     });
-    assert.equal(botApp.execute(), 'PONG', 'has a valid content');
+    assert.equal(botApp.actAsEventsApi(), 'PONG', 'has a valid content');
   });
 
-  test('BotApp.execute(): url_verification', function (assert) {
+  test('BotApp.actAsEventsApi(): url_verification', function (assert) {
+    var botApp = createObj({}, {challenge: 'foo', type: 'url_verification'});
+    assert.equal(botApp.actAsEventsApi(), 'foo', 'has a valid content');
+  });
+
+  test('BotApp.exeute(): url_verification', function (assert) {
     var botApp = createObj({}, {challenge: 'foo', type: 'url_verification'});
     var output = botApp.execute();
     assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');

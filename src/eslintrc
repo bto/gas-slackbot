@@ -21,7 +21,8 @@
     command: true,
     create: true,
     createApp: true,
-    registerCommand: true,
+    registerBotCommand: true,
+    registerEventHandler: true,
   },
   rules: {
     no-console: off,

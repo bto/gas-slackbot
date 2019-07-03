@@ -13,8 +13,22 @@ function createApp(e) {
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-function registerCommand(name, func) {
-  BotApp.prototype.commands[name] = func;
+function registerBotCommand(name, func) {
+  BotApp.prototype.botCommands[name] = func;
+}
+
+/**
+ * Register an event handler
+ * @param {String} eventType: an event type
+ * @param {Function} func: an event handler
+ * @return {Object} return itself
+ */
+function registerEventHandler(eventType, func) {
+  if (!BotApp.prototype.eventHandlers[eventType]) {
+    BotApp.prototype.eventHandlers[eventType] = [];
+  }
+
+  BotApp.prototype.eventHandlers[eventType].push(func);
 }
 
 var BotApp = function BotApp(e) {
@@ -23,35 +37,66 @@ var BotApp = function BotApp(e) {
   }
 };
 
-BotApp.prototype.commands = {
-  help: function commandPing() {
-    return '吾輩はBotである。ヘルプはまだない。';
-  },
-  ping: function commandPing() {
-    return 'PONG';
+BotApp.prototype.botCommands = {};
+BotApp.prototype.defaultMessage = 'そんなコマンドはないよ。';
+BotApp.prototype.eventHandlers = {};
+
+/**
+ * Execute for Events API
+ * @return {Object} return mixed value
+ */
+BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
+  var eventsApi = new EventsApi(this.getEvent());
+  eventsApi.setVerificationToken(this.getVerificationToken());
+
+  if (!eventsApi.verifyToken()) {
+    throw new Error('invalid verification token');
+  }
+
+  switch (eventsApi.getCallbackType()) {
+  case 'event_callback':
+    return this.callEventHandlers(eventsApi);
+  case 'url_verification':
+    return eventsApi.getChallengeCode();
+  default:
+    throw new Error('not supported events api');
   }
 };
-BotApp.prototype.defaultMessage = 'そんなコマンドはないよ。';
+
+/**
+ * Call event handlers
+ * @param {Object} eventsApi: EventsApi object
+ * @return {Object} return mixed value
+ */
+BotApp.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
+  var handlers = this.eventHandlers[eventsApi.getEventType()];
+  if (!handlers) {
+    return null;
+  }
+
+  var output = null;
+  var params = eventsApi.getParams();
+  for (var i = 0; i < handlers.length; i++) {
+    output = handlers[i](this, params);
+  }
+
+  return output;
+};
 
 /**
  * Execute from a web request
- * @return {Object} return itself
+ * @return {Object} return ContentService object
  */
 BotApp.prototype.execute = function execute() {
-  var eventsApi = new EventsApi(this.getEvent());
-  eventsApi.setBotAccessToken(this.getBotAccessToken());
-  eventsApi.setVerificationToken(this.getVerificationToken());
+  var output = this.actAsEventsApi();
 
-  eventsApi.registerHandler('app_mention', function funcAppMention(params) {
-    var command = params.event.text.split(/\s+/)[1];
-    if (this.commands.hasOwnProperty(command)) {
-      return this.commands[command](this, params);
-    }
-    return this.getDefaultMessage();
-  }.bind(this));
+  if (typeof output === 'string') {
+    output = ContentService.createTextOutput(output);
+    output.setMimeType(ContentService.MimeType.TEXT);
+    return output;
+  }
 
-  this.eventsApi = eventsApi;
-  return eventsApi.execute();
+  return null;
 };
 
 /**
@@ -118,4 +163,28 @@ BotApp.prototype.setVerificationToken = function setVerificationToken(verificati
   return this;
 };
 
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^createApp|registerCommand$" }] */
+
+registerBotCommand('help', function commandPing() {
+  return '吾輩はBotである。ヘルプはまだない。';
+});
+
+registerBotCommand('ping', function commandPing() {
+  return 'PONG';
+});
+
+registerEventHandler('app_mention', function eventAppMention(botApp, params) {
+  var command = params.event.text.split(/\s+/)[1];
+  var message;
+  if (botApp.botCommands.hasOwnProperty(command)) {
+    message = botApp.botCommands[command](botApp, params);
+  } else {
+    message = botApp.getDefaultMessage();
+  }
+
+  var webApi = new WebApi(botApp.getBotAccessToken());
+  webApi.callChatPostMessage(params.event.channel, message);
+
+  return message;
+});
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^createApp|registerBotCommand|registerEventHandler$" }] */
