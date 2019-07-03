@@ -48,17 +48,23 @@ BotApp.prototype.eventHandlers = {};
 BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
   var eventsApi = new EventsApi(this.getEvent());
 
-  if (!eventsApi.verifyToken(this.getVerificationToken())) {
-    throw new Error('invalid verification token');
+  var token = this.getVerificationToken();
+  if (!eventsApi.verifyToken(token)) {
+    var message = 'invalid verification token: ' + token;
+    console.error(message);
+    throw new Error(message);
   }
 
-  switch (eventsApi.getCallbackType()) {
+  var type = eventsApi.getCallbackType();
+  switch (type) {
   case 'event_callback':
     return this.callEventHandlers(eventsApi);
   case 'url_verification':
     return eventsApi.getChallengeCode();
   default:
-    throw new Error('not supported events api');
+    message = 'not supported events api: ' + type;
+    console.error(message);
+    throw new Error(message);
   }
 };
 
@@ -68,14 +74,18 @@ BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
  * @return {Object} return mixed value
  */
 BotApp.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
-  var handlers = this.eventHandlers[eventsApi.getEventType()];
+  var type = eventsApi.getEventType();
+  var handlers = this.eventHandlers[type];
   if (!handlers) {
+    console.error('does not have any event handler for ' + type);
     return null;
   }
 
+  console.info('call event handlers for ' + type);
   var output = null;
   for (var i = 0; i < handlers.length; i++) {
     output = handlers[i](this, eventsApi.params);
+    console.info('output of handler: ' + output);
   }
 
   return output;
@@ -89,6 +99,7 @@ BotApp.prototype.execute = function execute() {
   var output = this.actAsEventsApi();
 
   if (typeof output === 'string') {
+    console.info('output text/plain: ' + output);
     output = ContentService.createTextOutput(output);
     output.setMimeType(ContentService.MimeType.TEXT);
     return output;
@@ -132,11 +143,12 @@ BotApp.prototype.getVerificationToken = function getVerificationToken() {
 
 /**
  * Set a bot access token
- * @param {String} botAccessToken: bot access token
+ * @param {String} token: bot access token
  * @return {Object} return itself
  */
-BotApp.prototype.setBotAccessToken = function setBotAccessToken(botAccessToken) {
-  this.botAccessToken = botAccessToken;
+BotApp.prototype.setBotAccessToken = function setBotAccessToken(token) {
+  console.info('set a bot access token: ' + token);
+  this.botAccessToken = token;
   return this;
 };
 
@@ -153,34 +165,42 @@ BotApp.prototype.setEvent = function setEvent(e) {
 
 /**
  * Set a verification token
- * @param {String} verificationToken: outgoing webhook's verification token
+ * @param {String} token: verification token
  * @return {Object} return itself
  */
-BotApp.prototype.setVerificationToken = function setVerificationToken(verificationToken) {
-  this.verificationToken = verificationToken;
+BotApp.prototype.setVerificationToken = function setVerificationToken(token) {
+  console.info('set a verification token: ' + token);
+  this.verificationToken = token;
   return this;
 };
 
 
 registerBotCommand('help', function commandPing() {
+  console.info('help command was called');
   return '吾輩はBotである。ヘルプはまだない。';
 });
 
 registerBotCommand('ping', function commandPing() {
+  console.info('ping command was called');
   return 'PONG';
 });
 
 registerEventHandler('app_mention', function eventAppMention(botApp, params) {
   var command = params.event.text.split(/\s+/)[1];
+  console.info('bot command: ' + command);
   var message;
   if (botApp.botCommands.hasOwnProperty(command)) {
+    console.info('call command handler for ' + command);
     message = botApp.botCommands[command](botApp, params);
   } else {
+    console.info('does not have any command handler for ' + command);
     message = botApp.getDefaultMessage();
   }
+  console.info('output of command handler: ' + message);
 
   var webApi = new WebApi(botApp.getBotAccessToken());
   webApi.callChatPostMessage(params.event.channel, message);
+  console.info('send message to ' + params.event.channel);
 
   return message;
 });
