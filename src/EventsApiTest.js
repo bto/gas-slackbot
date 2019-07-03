@@ -52,8 +52,8 @@ TestRunner.functions.push(function (test, common) {
     var f2Called = 0;
     var params = {event: {type: 'app_mention'}};
 
-    var obj = api.callEventCallback(params);
-    assert.equal(obj, null, 'return null');
+    var output = api.callEventCallback(params);
+    assert.equal(output, null, 'return null');
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
 
@@ -63,8 +63,8 @@ TestRunner.functions.push(function (test, common) {
         f1Called++;
       }
     );
-    obj = api.callEventCallback(params);
-    assert.equal(obj, null, 'return null');
+    output = api.callEventCallback(params);
+    assert.equal(output, null, 'return null');
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
 
@@ -75,10 +75,8 @@ TestRunner.functions.push(function (test, common) {
         return 'f2';
       }
     );
-    obj = api.callEventCallback(params);
-    assert.equal(typeof obj, 'object', 'returns a ContentService object');
-    assert.equal(obj.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(obj.getContent(), 'f2', 'has a valid content');
+    output = api.callEventCallback(params);
+    assert.equal(output, 'f2', 'return a valid string');
     assert.equal(f1Called, 2, 'first function was called');
     assert.equal(f2Called, 1, 'second function was not called');
   });

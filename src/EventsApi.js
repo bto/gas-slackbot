@@ -26,9 +26,10 @@ EventsApi.prototype.callEventCallback = function callEventCallback(params) {
   }
 
   if (message.length) {
-    var output = ContentService.createTextOutput(message);
-    output.setMimeType(ContentService.MimeType.TEXT);
-    return output;
+    var channelId = params.event.channel;
+    var webApi = new WebApi(this.getBotAccessToken());
+    webApi.callChatPostMessage(channelId, message);
+    return message;
   }
 
   return null;

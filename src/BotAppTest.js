@@ -1,13 +1,16 @@
 TestRunner.functions.push(function (test, common) {
   function createObj(eventParams, params) {
     var botApp = new BotApp(createEvent(eventParams, params));
+    botApp.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
     botApp.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
     return botApp;
   }
 
   function createEvent(eventParams, params) {
     var body = Obj.merge({
-      event: eventParams ? eventParams : {},
+      event: Obj.merge({
+        channel: common.getProperty('SLACK_CHANNEL_ID')
+      }, eventParams ? eventParams : {}),
       token: common.getProperty('SLACK_VERIFICATION_TOKEN'),
       type: 'event_callback'
     }, params ? params : {});
@@ -67,10 +70,7 @@ TestRunner.functions.push(function (test, common) {
       type: 'app_mention',
       text: ''
     });
-    var output = botApp.execute();
-    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'そんなコマンドはないよ。', 'has a valid content');
+    assert.equal(botApp.execute(), 'そんなコマンドはないよ。', 'has a valid content');
   });
 
   test('BotApp.execute(): app_mention', function (assert) {
@@ -78,10 +78,7 @@ TestRunner.functions.push(function (test, common) {
       type: 'app_mention',
       text: '<@Uxxx> help'
     });
-    var output = botApp.execute();
-    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
+    assert.equal(botApp.execute(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
   });
 
   test('BotApp.execute(): app_mention', function (assert) {
@@ -89,10 +86,7 @@ TestRunner.functions.push(function (test, common) {
       type: 'app_mention',
       text: '<@Uxxx> ping'
     });
-    var output = botApp.execute();
-    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'PONG', 'has a valid content');
+    assert.equal(botApp.execute(), 'PONG', 'has a valid content');
   });
 
   test('BotApp.execute(): url_verification', function (assert) {
