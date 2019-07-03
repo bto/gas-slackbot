@@ -11,15 +11,12 @@
     SlackApp: true,
 
     // Our globals
-    Bot: true,
     BotApp: true,
     EventsApi: true,
     Obj: true,
     TestCommon: true,
     TestRunner: true,
     WebApi: true,
-    command: true,
-    create: true,
     createApp: true,
     registerBotCommand: true,
     registerEventHandler: true,
