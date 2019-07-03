@@ -198,9 +198,11 @@ registerEventHandler('app_mention', function eventAppMention(botApp, params) {
   }
   console.info('output of command handler: ' + message);
 
-  var webApi = new WebApi(botApp.getBotAccessToken());
-  webApi.callChatPostMessage(params.event.channel, message);
-  console.info('send message to ' + params.event.channel);
+  var token = botApp.getBotAccessToken();
+  var channelId = params.event.channel;
+  var webApi = new WebApi(token);
+  webApi.callChatPostMessage(channelId, message);
+  console.info('chat.postMessage(): message: ' + message + ', channelId: ' + channelId + ', botAccessToken: ' + token);
 
   return message;
 });
