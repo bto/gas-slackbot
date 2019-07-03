@@ -51,7 +51,7 @@ EventsApi.prototype.callUrlVerification = function callUrlVerification(params) {
  * @return {Object} return itself
  */
 EventsApi.prototype.execute = function execute() {
-  if (!this.verify()) {
+  if (!this.verifyToken()) {
     throw new Error('invalid verification token');
   }
 
@@ -75,11 +75,35 @@ EventsApi.prototype.getBotAccessToken = function getBotAccessToken() {
 };
 
 /**
+ * Get a callback type
+ * @return {String} return a callback type
+ */
+EventsApi.prototype.getCallbackType = function getCallbackType() {
+  return this.getParam('type');
+};
+
+/**
+ * Get a challenge code
+ * @return {String} return a challenge code
+ */
+EventsApi.prototype.getChallengeCode = function getChallengeCode() {
+  return this.getParam('challenge');
+};
+
+/**
  * Get an event object
  * @return {Object} return an event object
  */
 EventsApi.prototype.getEvent = function getEvent() {
   return this.event;
+};
+
+/**
+ * Get an event type
+ * @return {String} return an event type
+ */
+EventsApi.prototype.getEventType = function getEventType() {
+  return this.getParam('event').type;
 };
 
 /**
@@ -162,7 +186,7 @@ EventsApi.prototype.setVerificationToken = function setVerificationToken(verific
  * Verify if a token is valid
  * @return {boolean} return true or false
  */
-EventsApi.prototype.verify = function verify() {
+EventsApi.prototype.verifyToken = function verifyToken() {
   return this.getParam('token') === this.getVerificationToken();
 };
 

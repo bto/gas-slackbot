@@ -4,8 +4,14 @@ TestRunner.functions.push(function (test, common) {
   }
 
   function createEvent(params) {
-    var body = params ? params : {};
-    body.token = common.getProperty('SLACK_VERIFICATION_TOKEN');
+    var body = Obj.merge({
+      challenge: 'challenge code',
+      event: {
+        type: 'app_mention'
+      },
+      token: common.getProperty('SLACK_VERIFICATION_TOKEN'),
+      type: 'event_callback'
+    }, params ? params : {});
 
     return {
       postData: {
@@ -89,6 +95,27 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(output.getContent(), 'challenge code', 'has a valid content');
   });
 
+  test('EventsApi.getCallbackType()', function (assert) {
+    var api = createApi({type: 'url_verification'});
+    assert.equal(api.getCallbackType(), 'url_verification', 'returns url_verification');
+
+    api = createApi({type: 'event_callback'});
+    assert.equal(api.getCallbackType(), 'event_callback', 'returns event_callback');
+  });
+
+  test('EventsApi.getCallbackType()', function (assert) {
+    var api = createApi({challenge: 'challenge code'});
+    assert.equal(api.getChallengeCode(), 'challenge code', 'returns challenge code');
+  });
+
+  test('EventsApi.getEventType()', function (assert) {
+    var api = createApi({event: {type: 'app_mention'}});
+    assert.equal(api.getEventType(), 'app_mention', 'returns app_mention');
+
+    api = createApi({type: 'event_callback'});
+    assert.equal(api.getCallbackType(), 'event_callback', 'returns event_callback');
+  });
+
   test('EventsApi.getParam()', function (assert) {
     var api = createApi();
 
@@ -135,14 +162,14 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(typeof handlers[1], 'function', 'second handler was a function');
   });
 
-  test('EventsApi.verify()', function (assert) {
+  test('EventsApi.verifyToken()', function (assert) {
     var api = createApi();
 
-    assert.notOk(api.verify('token'), 'returns false for an invalid verification token');
+    assert.notOk(api.verifyToken('token'), 'returns false for an invalid verification token');
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
     api.setVerificationToken(token);
-    assert.ok(api.verify(), 'returns true for a valid verification token');
+    assert.ok(api.verifyToken(), 'returns true for a valid verification token');
   });
 });
 
