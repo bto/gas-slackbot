@@ -54,6 +54,15 @@ BotApp.prototype.execute = function execute() {
 };
 
 /**
+ * Get a bot access token
+ * @return {String} return a bot access token
+ */
+BotApp.prototype.getBotAccessToken = function getBotAccessToken() {
+  return this.botAccessToken;
+};
+
+
+/**
  * Get a default message
  * @return {String} return a default message
  */
@@ -75,6 +84,16 @@ BotApp.prototype.getEvent = function getEvent() {
  */
 BotApp.prototype.getVerificationToken = function getVerificationToken() {
   return this.verificationToken;
+};
+
+/**
+ * Set a bot access token
+ * @param {String} botAccessToken: bot access token
+ * @return {Object} return itself
+ */
+BotApp.prototype.setBotAccessToken = function setBotAccessToken(botAccessToken) {
+  this.botAccessToken = botAccessToken;
+  return this;
 };
 
 /**

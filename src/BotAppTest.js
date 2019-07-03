@@ -37,6 +37,31 @@ TestRunner.functions.push(function (test, common) {
     assert.ok(botApp instanceof BotApp, 'creates BotApp object');
   });
 
+  test('BotApp bot access token', function (assert) {
+    var botApp = createObj();
+
+    var obj = botApp.setBotAccessToken('bot access token');
+    assert.equal(botApp, obj, 'returns itself');
+    assert.equal('bot access token', botApp.getBotAccessToken(), 'set a bot access token');
+  });
+
+  test('BotApp event object', function (assert) {
+    var botApp = createObj();
+
+    var event = createEvent();
+    var obj = botApp.setEvent(event);
+    assert.equal(botApp, obj, 'returns itself');
+    assert.deepEqual(event, botApp.getEvent(), 'set an event object');
+  });
+
+  test('BotApp verification token', function (assert) {
+    var botApp = createObj();
+
+    var obj = botApp.setVerificationToken('verification token');
+    assert.equal(botApp, obj, 'returns itself');
+    assert.equal('verification token', botApp.getVerificationToken(), 'set a verification token');
+  });
+
   test('BotApp.execute(): app_mention', function (assert) {
     var botApp = createObj({
       type: 'app_mention',
