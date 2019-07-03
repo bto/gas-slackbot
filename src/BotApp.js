@@ -187,4 +187,4 @@ registerEventHandler('app_mention', function eventAppMention(botApp, params) {
   return message;
 });
 
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^createApp|registerBotCommand|registerEventHandler$" }] */
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^createApp$" }] */

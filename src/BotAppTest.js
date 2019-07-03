@@ -100,6 +100,41 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(botApp.actAsEventsApi(), 'foo', 'has a valid content');
   });
 
+  test('BotApp.callEventHandlers()', function (assert) {
+    var api = createObj({type: 'foo_event'});
+    var f1Called = 0;
+    var f2Called = 0;
+    var eventsApi = new EventsApi(api.getEvent());
+
+    var output = api.callEventHandlers(eventsApi);
+    assert.equal(output, null, 'return null');
+    assert.equal(f1Called, 0, 'first function was not called');
+    assert.equal(f2Called, 0, 'second function was not called');
+
+    registerEventHandler(
+      'foo_event',
+      function () {
+        f1Called++;
+      }
+    );
+    output = api.callEventHandlers(eventsApi);
+    assert.equal(output, null, 'return null');
+    assert.equal(f1Called, 1, 'first function was called');
+    assert.equal(f2Called, 0, 'second function was not called');
+
+    registerEventHandler(
+      'foo_event',
+      function () {
+        f2Called++;
+        return 'f2';
+      }
+    );
+    output = api.callEventHandlers(eventsApi);
+    assert.equal(output, 'f2', 'return a valid string');
+    assert.equal(f1Called, 2, 'first function was called');
+    assert.equal(f2Called, 1, 'second function was not called');
+  });
+
   test('BotApp.exeute(): url_verification', function (assert) {
     var botApp = createObj({}, {challenge: 'foo', type: 'url_verification'});
     var output = botApp.execute();
