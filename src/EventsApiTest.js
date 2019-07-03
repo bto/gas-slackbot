@@ -27,14 +27,6 @@ TestRunner.functions.push(function (test, common) {
     assert.deepEqual(event, api.getEvent(), 'set an event object');
   });
 
-  test('EventsApi bot access token', function (assert) {
-    var api = createApi();
-
-    var obj = api.setBotAccessToken('bot access token');
-    assert.equal(api, obj, 'returns itself');
-    assert.equal('bot access token', api.getBotAccessToken(), 'set a bot access token');
-  });
-
   test('EventsApi event object', function (assert) {
     var api = createApi();
 
@@ -50,49 +42,6 @@ TestRunner.functions.push(function (test, common) {
     var obj = api.setVerificationToken('verification token');
     assert.equal(api, obj, 'returns itself');
     assert.equal('verification token', api.getVerificationToken(), 'set a verification token');
-  });
-
-  test('EventsApi.callEventCallback()', function (assert) {
-    var api = createApi();
-    var f1Called = 0;
-    var f2Called = 0;
-    var params = {event: {type: 'app_mention'}};
-
-    var output = api.callEventCallback(params);
-    assert.equal(output, null, 'return null');
-    assert.equal(f1Called, 0, 'first function was not called');
-    assert.equal(f2Called, 0, 'second function was not called');
-
-    api.registerHandler(
-      'app_mention',
-      function () {
-        f1Called++;
-      }
-    );
-    output = api.callEventCallback(params);
-    assert.equal(output, null, 'return null');
-    assert.equal(f1Called, 1, 'first function was called');
-    assert.equal(f2Called, 0, 'second function was not called');
-
-    api.registerHandler(
-      'app_mention',
-      function () {
-        f2Called++;
-        return 'f2';
-      }
-    );
-    output = api.callEventCallback(params);
-    assert.equal(output, 'f2', 'return a valid string');
-    assert.equal(f1Called, 2, 'first function was called');
-    assert.equal(f2Called, 1, 'second function was not called');
-  });
-
-  test('EventsApi.callUrlVerification()', function (assert) {
-    var api = createApi();
-    var output = api.callUrlVerification({challenge: 'challenge code'});
-    assert.equal(typeof output, 'object', 'returns a ContentService object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'challenge code', 'has a valid content');
   });
 
   test('EventsApi.getCallbackType()', function (assert) {
