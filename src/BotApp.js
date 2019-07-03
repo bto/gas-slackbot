@@ -47,9 +47,8 @@ BotApp.prototype.eventHandlers = {};
  */
 BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
   var eventsApi = new EventsApi(this.getEvent());
-  eventsApi.setVerificationToken(this.getVerificationToken());
 
-  if (!eventsApi.verifyToken()) {
+  if (!eventsApi.verifyToken(this.getVerificationToken())) {
     throw new Error('invalid verification token');
   }
 
@@ -75,9 +74,8 @@ BotApp.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
   }
 
   var output = null;
-  var params = eventsApi.getParams();
   for (var i = 0; i < handlers.length; i++) {
-    output = handlers[i](this, params);
+    output = handlers[i](this, eventsApi.params);
   }
 
   return output;

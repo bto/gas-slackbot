@@ -21,27 +21,15 @@ TestRunner.functions.push(function (test, common) {
   }
 
   test('new EventsApi()', function (assert) {
-    var event = createEvent();
-    var api = new EventsApi(event);
+    var api = new EventsApi(createEvent());
     assert.ok(api instanceof EventsApi, 'creates EventsApi object');
-    assert.deepEqual(event, api.getEvent(), 'set an event object');
-  });
 
-  test('EventsApi event object', function (assert) {
-    var api = createApi();
-
-    var event = createEvent();
-    var obj = api.setEvent(event);
-    assert.equal(api, obj, 'returns itself');
-    assert.deepEqual(event, api.getEvent(), 'set an event object');
-  });
-
-  test('EventsApi verification token', function (assert) {
-    var api = createApi();
-
-    var obj = api.setVerificationToken('verification token');
-    assert.equal(api, obj, 'returns itself');
-    assert.equal('verification token', api.getVerificationToken(), 'set a verification token');
+    assert.throws(
+      function () {
+        api = new EventsApi(null);
+      },
+      'throws an exception if an event object was not provided'
+    );
   });
 
   test('EventsApi.getCallbackType()', function (assert) {
@@ -65,60 +53,13 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(api.getCallbackType(), 'event_callback', 'returns event_callback');
   });
 
-  test('EventsApi.getParam()', function (assert) {
-    var api = createApi();
-
-    var token = api.getParam('token');
-    assert.equal(token, common.getProperty('SLACK_VERIFICATION_TOKEN'), 'returns a valid parameter');
-
-    assert.throws(
-      function () {
-        api.setEvent(null);
-        api.getParam('foo');
-      },
-      'throws an exception if an event object was not provided'
-    );
-  });
-
-  test('EventsApi.getParams()', function (assert) {
-    var api = createApi();
-
-    assert.equal(typeof api.getParams(), 'object', 'returns parameters');
-
-    assert.throws(
-      function () {
-        api.setEvent(null);
-        api.getParams();
-      },
-      'throws an exception if an event object was not provided'
-    );
-  });
-
-  test('EventsApi.registerHandler()', function (assert) {
-    var api = createApi();
-
-    assert.deepEqual(api.handlers, {}, 'no handler was registered first');
-
-    api.registerHandler('app_mention', function () {});
-    var handlers = api.handlers.app_mention;
-    assert.equal(handlers.length, 1, 'one handler was registered');
-    assert.equal(typeof handlers[0], 'function', 'registered handler was a function');
-
-    api.registerHandler('app_mention', function () {});
-    handlers = api.handlers.app_mention;
-    assert.equal(handlers.length, 2, 'two handlers was registered');
-    assert.equal(typeof handlers[0], 'function', 'first handler was a function');
-    assert.equal(typeof handlers[1], 'function', 'second handler was a function');
-  });
-
   test('EventsApi.verifyToken()', function (assert) {
     var api = createApi();
 
     assert.notOk(api.verifyToken('token'), 'returns false for an invalid verification token');
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    api.setVerificationToken(token);
-    assert.ok(api.verifyToken(), 'returns true for a valid verification token');
+    assert.ok(api.verifyToken(token), 'returns true for a valid verification token');
   });
 });
 
