@@ -1,10 +1,10 @@
 /**
- * Create a BotApp object
+ * Create a Bot object
  * @param {Object} e: an event object
- * @return {BotApp} return a BotApp Object
+ * @return {Bot} return a Bot Object
  */
-function createApp(e) {
-  return new BotApp(e);
+function create(e) {
+  return new Bot(e);
 }
 
 /**
@@ -14,7 +14,7 @@ function createApp(e) {
  * @return {null} return nothing
  */
 function registerBotCommand(name, func) {
-  BotApp.prototype.botCommands[name] = func;
+  Bot.prototype.botCommands[name] = func;
 }
 
 /**
@@ -24,28 +24,28 @@ function registerBotCommand(name, func) {
  * @return {Object} return itself
  */
 function registerEventHandler(eventType, func) {
-  if (!BotApp.prototype.eventHandlers[eventType]) {
-    BotApp.prototype.eventHandlers[eventType] = [];
+  if (!Bot.prototype.eventHandlers[eventType]) {
+    Bot.prototype.eventHandlers[eventType] = [];
   }
 
-  BotApp.prototype.eventHandlers[eventType].push(func);
+  Bot.prototype.eventHandlers[eventType].push(func);
 }
 
-var BotApp = function BotApp(e) {
+var Bot = function Bot(e) {
   if (e) {
     this.setEvent(e);
   }
 };
 
-BotApp.prototype.botCommands = {};
-BotApp.prototype.defaultMessage = 'そんなコマンドはないよ。';
-BotApp.prototype.eventHandlers = {};
+Bot.prototype.botCommands = {};
+Bot.prototype.defaultMessage = 'そんなコマンドはないよ。';
+Bot.prototype.eventHandlers = {};
 
 /**
  * Execute for Events API
  * @return {Object} return mixed value
  */
-BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
+Bot.prototype.actAsEventsApi = function actAsEventsApi() {
   var eventsApi = new EventsApi(this.getEvent());
 
   var token = this.getVerificationToken();
@@ -73,7 +73,7 @@ BotApp.prototype.actAsEventsApi = function actAsEventsApi() {
  * @param {Object} eventsApi: EventsApi object
  * @return {Object} return mixed value
  */
-BotApp.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
+Bot.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
   var type = eventsApi.getEventType();
   var handlers = this.eventHandlers[type];
   if (!handlers) {
@@ -95,7 +95,7 @@ BotApp.prototype.callEventHandlers = function callEventHandlers(eventsApi) {
  * Execute from a web request
  * @return {Object} return ContentService object
  */
-BotApp.prototype.execute = function execute() {
+Bot.prototype.execute = function execute() {
   var output = this.actAsEventsApi();
 
   if (typeof output === 'string') {
@@ -112,7 +112,7 @@ BotApp.prototype.execute = function execute() {
  * Get a bot access token
  * @return {String} return a bot access token
  */
-BotApp.prototype.getBotAccessToken = function getBotAccessToken() {
+Bot.prototype.getBotAccessToken = function getBotAccessToken() {
   return this.botAccessToken;
 };
 
@@ -121,7 +121,7 @@ BotApp.prototype.getBotAccessToken = function getBotAccessToken() {
  * Get a default message
  * @return {String} return a default message
  */
-BotApp.prototype.getDefaultMessage = function getDefaultMessage() {
+Bot.prototype.getDefaultMessage = function getDefaultMessage() {
   return this.defaultMessage;
 };
 
@@ -129,7 +129,7 @@ BotApp.prototype.getDefaultMessage = function getDefaultMessage() {
  * Get an event object
  * @return {Object} return an event object
  */
-BotApp.prototype.getEvent = function getEvent() {
+Bot.prototype.getEvent = function getEvent() {
   return this.event;
 };
 
@@ -137,7 +137,7 @@ BotApp.prototype.getEvent = function getEvent() {
  * Get a verification token
  * @return {String} return a verification token
  */
-BotApp.prototype.getVerificationToken = function getVerificationToken() {
+Bot.prototype.getVerificationToken = function getVerificationToken() {
   return this.verificationToken;
 };
 
@@ -146,7 +146,7 @@ BotApp.prototype.getVerificationToken = function getVerificationToken() {
  * @param {String} token: bot access token
  * @return {Object} return itself
  */
-BotApp.prototype.setBotAccessToken = function setBotAccessToken(token) {
+Bot.prototype.setBotAccessToken = function setBotAccessToken(token) {
   console.info('set a bot access token: ' + token);
   this.botAccessToken = token;
   return this;
@@ -157,7 +157,7 @@ BotApp.prototype.setBotAccessToken = function setBotAccessToken(token) {
  * @param {Object} e: event object
  * @return {Object} return itself
  */
-BotApp.prototype.setEvent = function setEvent(e) {
+Bot.prototype.setEvent = function setEvent(e) {
   console.info(JSON.stringify(e));
   this.event = e;
   return this;
@@ -168,7 +168,7 @@ BotApp.prototype.setEvent = function setEvent(e) {
  * @param {String} token: verification token
  * @return {Object} return itself
  */
-BotApp.prototype.setVerificationToken = function setVerificationToken(token) {
+Bot.prototype.setVerificationToken = function setVerificationToken(token) {
   console.info('set a verification token: ' + token);
   this.verificationToken = token;
   return this;
@@ -185,20 +185,20 @@ registerBotCommand('ping', function commandPing() {
   return 'PONG';
 });
 
-registerEventHandler('app_mention', function eventAppMention(botApp, params) {
+registerEventHandler('app_mention', function eventAppMention(bot, params) {
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);
   var message;
-  if (botApp.botCommands.hasOwnProperty(command)) {
+  if (bot.botCommands.hasOwnProperty(command)) {
     console.info('call command handler for ' + command);
-    message = botApp.botCommands[command](botApp, params);
+    message = bot.botCommands[command](bot, params);
   } else {
     console.info('does not have any command handler for ' + command);
-    message = botApp.getDefaultMessage();
+    message = bot.getDefaultMessage();
   }
   console.info('output of command handler: ' + message);
 
-  var token = botApp.getBotAccessToken();
+  var token = bot.getBotAccessToken();
   var channelId = params.event.channel;
   var webApi = new WebApi(token);
   webApi.callChatPostMessage(channelId, message);
@@ -207,4 +207,4 @@ registerEventHandler('app_mention', function eventAppMention(botApp, params) {
   return message;
 });
 
-/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^createApp$" }] */
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^create$" }] */

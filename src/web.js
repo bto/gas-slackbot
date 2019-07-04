@@ -1,11 +1,11 @@
 function doPost(e) {
-  var botApp = new BotApp(e);
+  var bot = new Bot(e);
 
   var properties = PropertiesService.getScriptProperties();
-  botApp.setBotAccessToken(properties.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-  botApp.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
+  bot.setBotAccessToken(properties.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+  bot.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
 
-  return botApp.execute();
+  return bot.execute();
 }
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^doPost$" }] */
