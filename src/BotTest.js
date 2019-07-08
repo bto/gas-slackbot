@@ -22,13 +22,6 @@ TestRunner.functions.push(function (test, common) {
     };
   }
 
-  test('create()', function (assert) {
-    var event = createEvent();
-    var bot = create(event);
-    assert.ok(bot instanceof Bot, 'creates Bot object');
-    assert.equal(event, bot.event, 'set an event object');
-  });
-
   test('new Bot()', function (assert) {
     var bot = createObj();
     assert.ok(bot instanceof Bot, 'creates Bot object');

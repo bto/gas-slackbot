@@ -17,7 +17,6 @@
     TestCommon: true,
     TestRunner: true,
     WebApi: true,
-    create: true,
     registerBotCommand: true,
     registerEventHandler: true,
   },

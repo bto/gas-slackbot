@@ -1,12 +1,3 @@
-/**
- * Create a Bot object
- * @param {Object} e: an event object
- * @return {Bot} return a Bot Object
- */
-function create(e) {
-  return new Bot(e);
-}
-
 var Bot = function Bot(e) {
   console.info(JSON.stringify(e));
   this.event = e;
