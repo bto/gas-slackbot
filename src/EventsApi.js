@@ -4,7 +4,7 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-function registerBotCommand2(name, func) {
+function registerBotCommand(name, func) {
   EventsApi.prototype.botCommands[name] = func;
 }
 
@@ -14,7 +14,7 @@ function registerBotCommand2(name, func) {
  * @param {Function} func: an event handler
  * @return {Object} return itself
  */
-function registerEventHandler2(eventType, func) {
+function registerEventHandler(eventType, func) {
   if (!EventsApi.prototype.eventHandlers[eventType]) {
     EventsApi.prototype.eventHandlers[eventType] = [];
   }
@@ -122,17 +122,17 @@ EventsApi.prototype.verifyToken = function verifyToken(token) {
 };
 
 
-registerBotCommand2('help', function commandPing() {
+registerBotCommand('help', function commandPing() {
   console.info('help command was called');
   return '吾輩はBotである。ヘルプはまだない。';
 });
 
-registerBotCommand2('ping', function commandPing() {
+registerBotCommand('ping', function commandPing() {
   console.info('ping command was called');
   return 'PONG';
 });
 
-registerEventHandler2('app_mention', function eventAppMention(bot, params) {
+registerEventHandler('app_mention', function eventAppMention(bot, params) {
   var eventsApi = bot.eventsApi;
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);

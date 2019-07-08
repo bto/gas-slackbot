@@ -30,13 +30,13 @@ TestRunner.functions.push(function (test, common) {
 
   test('registerBotCommand()', function (assert) {
     var func = function () {};
-    registerBotCommand2('foo', func);
+    registerBotCommand('foo', func);
     assert.equal(EventsApi.prototype.botCommands.foo, func, 'register a command function');
   });
 
   test('registerEventHandler()', function (assert) {
     var func = function () {};
-    registerEventHandler2('foo', func);
+    registerEventHandler('foo', func);
     assert.equal(EventsApi.prototype.eventHandlers.foo[0], func, 'register a event function');
   });
 
@@ -62,7 +62,7 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    registerEventHandler2(
+    registerEventHandler(
       'foo_event',
       function () {
         f1Called++;
@@ -73,7 +73,7 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    registerEventHandler2(
+    registerEventHandler(
       'foo_event',
       function () {
         f2Called++;

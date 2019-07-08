@@ -19,9 +19,7 @@
     WebApi: true,
     create: true,
     registerBotCommand: true,
-    registerBotCommand2: true,
     registerEventHandler: true,
-    registerEventHandler2: true,
   },
   rules: {
     no-console: off,

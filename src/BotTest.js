@@ -29,18 +29,6 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(event, bot.getEvent(), 'set an event object');
   });
 
-  test('registerBotCommand()', function (assert) {
-    var func = function () {};
-    registerBotCommand('foo', func);
-    assert.equal(Bot.prototype.botCommands.foo, func, 'register a command function');
-  });
-
-  test('registerEventHandler()', function (assert) {
-    var func = function () {};
-    registerEventHandler('foo', func);
-    assert.equal(Bot.prototype.eventHandlers.foo[0], func, 'register a event function');
-  });
-
   test('new Bot()', function (assert) {
     var bot = createObj();
     assert.ok(bot instanceof Bot, 'creates Bot object');
@@ -69,70 +57,6 @@ TestRunner.functions.push(function (test, common) {
     var obj = bot.setVerificationToken('verification token');
     assert.equal(bot, obj, 'returns itself');
     assert.equal('verification token', bot.getVerificationToken(), 'set a verification token');
-  });
-
-  test('Bot.actAsEventsApi(): app_mention', function (assert) {
-    var bot = createObj({
-      type: 'app_mention',
-      text: ''
-    });
-    assert.equal(bot.actAsEventsApi(), 'そんなコマンドはないよ。', 'has a valid content');
-  });
-
-  test('Bot.actAsEventsApi(): app_mention', function (assert) {
-    var bot = createObj({
-      type: 'app_mention',
-      text: '<@Uxxx> help'
-    });
-    assert.equal(bot.actAsEventsApi(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
-  });
-
-  test('Bot.actAsEventsApi(): app_mention', function (assert) {
-    var bot = createObj({
-      type: 'app_mention',
-      text: '<@Uxxx> ping'
-    });
-    assert.equal(bot.actAsEventsApi(), 'PONG', 'has a valid content');
-  });
-
-  test('Bot.actAsEventsApi(): url_verification', function (assert) {
-    var bot = createObj({}, {challenge: 'foo', type: 'url_verification'});
-    assert.equal(bot.actAsEventsApi(), 'foo', 'has a valid content');
-  });
-
-  test('Bot.callEventHandlers()', function (assert) {
-    var bot = createObj({type: 'foo_event'});
-    var f1Called = 0;
-    var f2Called = 0;
-    var eventsApi = new EventsApi(bot);
-
-    var output = bot.callEventHandlers(eventsApi);
-    assert.equal(output, null, 'return null');
-    assert.equal(f1Called, 0, 'first function was not called');
-    assert.equal(f2Called, 0, 'second function was not called');
-
-    registerEventHandler(
-      'foo_event',
-      function () {
-        f1Called++;
-      }
-    );
-    output = bot.callEventHandlers(eventsApi);
-    assert.equal(output, null, 'return null');
-    assert.equal(f1Called, 1, 'first function was called');
-    assert.equal(f2Called, 0, 'second function was not called');
-
-    registerEventHandler(
-      'foo_event',
-      function () {
-        f2Called++;
-        return 'f2';
-      }
-    );
-    output = bot.callEventHandlers(eventsApi);
-    assert.equal(output, 'f2', 'return a valid string');
-    assert.equal(f1Called, 2, 'first function was called');
-    assert.equal(f2Called, 1, 'second function was not called');
   });
 
   test('Bot.exeute(): url_verification', function (assert) {
