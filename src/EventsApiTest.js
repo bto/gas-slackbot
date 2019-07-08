@@ -115,24 +115,6 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(api.execute(), 'foo', 'has a valid content');
   });
 
-  test('EventsApi.getCallbackType()', function (assert) {
-    var api = createApi(null, {type: 'url_verification'});
-    assert.equal(api.getCallbackType(), 'url_verification', 'returns url_verification');
-
-    api = createApi(null, {type: 'event_callback'});
-    assert.equal(api.getCallbackType(), 'event_callback', 'returns event_callback');
-  });
-
-  test('EventsApi.getCallbackType()', function (assert) {
-    var api = createApi(null, {challenge: 'challenge code'});
-    assert.equal(api.getChallengeCode(), 'challenge code', 'returns challenge code');
-  });
-
-  test('EventsApi.getEventType()', function (assert) {
-    var api = createApi({type: 'foo_bar'});
-    assert.equal(api.getEventType(), 'foo_bar', 'returns foo_bar');
-  });
-
   test('EventsApi.verifyToken()', function (assert) {
     var api = createApi();
 

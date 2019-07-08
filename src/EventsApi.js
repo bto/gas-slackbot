@@ -38,7 +38,7 @@ EventsApi.prototype.eventHandlers = {};
  * @return {Object} return output value
  */
 EventsApi.prototype.callEventHandlers = function callEventHandlers() {
-  var type = this.getEventType();
+  var type = this.params.event.type;
   var handlers = this.eventHandlers[type];
   if (!handlers) {
     console.error('does not have any event handler for ' + type);
@@ -67,12 +67,12 @@ EventsApi.prototype.execute = function execute() {
     throw new Error(message);
   }
 
-  var type = this.getCallbackType();
+  var type = this.params.type;
   switch (type) {
   case 'event_callback':
     return this.callEventHandlers();
   case 'url_verification':
-    return this.getChallengeCode();
+    return this.params.challenge;
   default:
     message = 'not supported events api: ' + type;
     console.error(message);
@@ -81,35 +81,11 @@ EventsApi.prototype.execute = function execute() {
 };
 
 /**
- * Get a callback type
- * @return {String} return a callback type
- */
-EventsApi.prototype.getCallbackType = function getCallbackType() {
-  return this.params.type;
-};
-
-/**
- * Get a challenge code
- * @return {String} return a challenge code
- */
-EventsApi.prototype.getChallengeCode = function getChallengeCode() {
-  return this.params.challenge;
-};
-
-/**
  * Get a default message
  * @return {String} return a default message
  */
 EventsApi.prototype.getDefaultMessage = function getDefaultMessage() {
   return this.defaultMessage;
-};
-
-/**
- * Get an event type
- * @return {String} return an event type
- */
-EventsApi.prototype.getEventType = function getEventType() {
-  return this.params.event.type;
 };
 
 /**
