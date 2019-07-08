@@ -8,9 +8,8 @@ function create(e) {
 }
 
 var Bot = function Bot(e) {
-  if (e) {
-    this.setEvent(e);
-  }
+  console.info(JSON.stringify(e));
+  this.event = e;
 };
 
 /**
@@ -39,14 +38,6 @@ Bot.prototype.getBotAccessToken = function getBotAccessToken() {
 };
 
 /**
- * Get an event object
- * @return {Object} return an event object
- */
-Bot.prototype.getEvent = function getEvent() {
-  return this.event;
-};
-
-/**
  * Get a verification token
  * @return {String} return a verification token
  */
@@ -62,17 +53,6 @@ Bot.prototype.getVerificationToken = function getVerificationToken() {
 Bot.prototype.setBotAccessToken = function setBotAccessToken(token) {
   console.info('set a bot access token: ' + token);
   this.botAccessToken = token;
-  return this;
-};
-
-/**
- * Set an event object
- * @param {Object} e: event object
- * @return {Object} return itself
- */
-Bot.prototype.setEvent = function setEvent(e) {
-  console.info(JSON.stringify(e));
-  this.event = e;
   return this;
 };
 

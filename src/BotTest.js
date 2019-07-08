@@ -26,7 +26,7 @@ TestRunner.functions.push(function (test, common) {
     var event = createEvent();
     var bot = create(event);
     assert.ok(bot instanceof Bot, 'creates Bot object');
-    assert.equal(event, bot.getEvent(), 'set an event object');
+    assert.equal(event, bot.event, 'set an event object');
   });
 
   test('new Bot()', function (assert) {
@@ -40,15 +40,6 @@ TestRunner.functions.push(function (test, common) {
     var obj = bot.setBotAccessToken('bot access token');
     assert.equal(bot, obj, 'returns itself');
     assert.equal('bot access token', bot.getBotAccessToken(), 'set a bot access token');
-  });
-
-  test('Bot event object', function (assert) {
-    var bot = createObj();
-
-    var event = createEvent();
-    var obj = bot.setEvent(event);
-    assert.equal(bot, obj, 'returns itself');
-    assert.deepEqual(event, bot.getEvent(), 'set an event object');
   });
 
   test('Bot verification token', function (assert) {
