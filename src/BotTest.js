@@ -101,12 +101,12 @@ TestRunner.functions.push(function (test, common) {
   });
 
   test('Bot.callEventHandlers()', function (assert) {
-    var api = createObj({type: 'foo_event'});
+    var bot = createObj({type: 'foo_event'});
     var f1Called = 0;
     var f2Called = 0;
-    var eventsApi = new EventsApi(api.getEvent());
+    var eventsApi = new EventsApi(bot.getEvent());
 
-    var output = api.callEventHandlers(eventsApi);
+    var output = bot.callEventHandlers(eventsApi);
     assert.equal(output, null, 'return null');
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
@@ -117,7 +117,7 @@ TestRunner.functions.push(function (test, common) {
         f1Called++;
       }
     );
-    output = api.callEventHandlers(eventsApi);
+    output = bot.callEventHandlers(eventsApi);
     assert.equal(output, null, 'return null');
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
@@ -129,7 +129,7 @@ TestRunner.functions.push(function (test, common) {
         return 'f2';
       }
     );
-    output = api.callEventHandlers(eventsApi);
+    output = bot.callEventHandlers(eventsApi);
     assert.equal(output, 'f2', 'return a valid string');
     assert.equal(f1Called, 2, 'first function was called');
     assert.equal(f2Called, 1, 'second function was not called');
