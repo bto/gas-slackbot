@@ -1,5 +1,6 @@
-var EventsApi = function EventsApi(e) {
-  this.params = JSON.parse(e.postData.contents);
+var EventsApi = function EventsApi(bot) {
+  this.bot = bot;
+  this.params = JSON.parse(bot.event.postData.contents);
 };
 
 /**

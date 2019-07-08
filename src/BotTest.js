@@ -104,7 +104,7 @@ TestRunner.functions.push(function (test, common) {
     var bot = createObj({type: 'foo_event'});
     var f1Called = 0;
     var f2Called = 0;
-    var eventsApi = new EventsApi(bot.getEvent());
+    var eventsApi = new EventsApi(bot);
 
     var output = bot.callEventHandlers(eventsApi);
     assert.equal(output, null, 'return null');

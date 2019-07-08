@@ -46,7 +46,7 @@ Bot.prototype.eventHandlers = {};
  * @return {Object} return mixed value
  */
 Bot.prototype.actAsEventsApi = function actAsEventsApi() {
-  var eventsApi = new EventsApi(this.getEvent());
+  var eventsApi = new EventsApi(this);
 
   var token = this.getVerificationToken();
   if (!eventsApi.verifyToken(token)) {
