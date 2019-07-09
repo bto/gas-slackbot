@@ -19,7 +19,7 @@
     TestRunner: true,
     WebApi: true,
     registerBotCommand: true,
-    registerEventHandler: true,
+    registerEvent: true,
     registerSlashCommand: true,
   },
   rules: {

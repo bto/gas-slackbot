@@ -14,12 +14,12 @@ function registerBotCommand(name, func) {
  * @param {Function} func: an event handler
  * @return {Object} return itself
  */
-function registerEventHandler(eventType, func) {
-  if (!EventsApi.prototype.eventHandlers[eventType]) {
-    EventsApi.prototype.eventHandlers[eventType] = [];
+function registerEvent(eventType, func) {
+  if (!EventsApi.prototype.handlers[eventType]) {
+    EventsApi.prototype.handlers[eventType] = [];
   }
 
-  EventsApi.prototype.eventHandlers[eventType].push(func);
+  EventsApi.prototype.handlers[eventType].push(func);
 }
 
 
@@ -31,7 +31,7 @@ var EventsApi = function EventsApi(bot) {
 
 EventsApi.prototype.botCommands = {};
 EventsApi.prototype.defaultMessage = 'そんなコマンドはないよ。';
-EventsApi.prototype.eventHandlers = {};
+EventsApi.prototype.handlers = {};
 
 /**
  * Call event handlers
@@ -39,7 +39,7 @@ EventsApi.prototype.eventHandlers = {};
  */
 EventsApi.prototype.callEventHandlers = function callEventHandlers() {
   var type = this.params.event.type;
-  var handlers = this.eventHandlers[type];
+  var handlers = this.handlers[type];
   if (!handlers) {
     console.error('does not have any event handler for ' + type);
     return null;
@@ -108,7 +108,7 @@ registerBotCommand('ping', function commandPing() {
   return 'PONG';
 });
 
-registerEventHandler('app_mention', function eventAppMention(bot, params) {
+registerEvent('app_mention', function eventAppMention(bot, params) {
   var eventsApi = bot.eventsApi;
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);
