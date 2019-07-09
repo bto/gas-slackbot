@@ -1,21 +1,6 @@
 TestRunner.functions.push(function (test, common) {
-  function createBot(params) {
-    var bot = new Bot(createEvent(params));
-    bot.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-    bot.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
-    return bot;
-  }
-
   function createSlashCommands(params) {
-    return new SlashCommands(createBot(params));
-  }
-
-  function createEvent(params) {
-    return {
-      parameter: Obj.merge({
-        token: common.getProperty('SLACK_VERIFICATION_TOKEN')
-      }, params ? params : {})
-    };
+    return new SlashCommands(common.createBot(params));
   }
 
   test('registerSlashCommand()', function (assert) {
@@ -25,7 +10,7 @@ TestRunner.functions.push(function (test, common) {
   });
 
   test('new SlashCommands()', function (assert) {
-    var slashCommands = new SlashCommands(createBot());
+    var slashCommands = new SlashCommands(common.createBot());
     assert.ok(slashCommands instanceof SlashCommands, 'creates SlashCommands object');
 
     assert.throws(

@@ -1,31 +1,6 @@
 TestRunner.functions.push(function (test, common) {
-  function createApi(eventParams, params) {
-    return new EventsApi(createBot(eventParams, params));
-  }
-
-  function createBot(eventParams, params) {
-    var bot = new Bot(createEvent(eventParams, params));
-    bot.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-    bot.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
-    return bot;
-  }
-
-  function createEvent(eventParams, params) {
-    var body = Obj.merge({
-      challenge: 'challenge code',
-      event: Obj.merge({
-        channel: common.getProperty('SLACK_CHANNEL_ID'),
-        type: 'app_mention'
-      }, eventParams ? eventParams : {}),
-      token: common.getProperty('SLACK_VERIFICATION_TOKEN'),
-      type: 'event_callback'
-    }, params ? params : {});
-
-    return {
-      postData: {
-        contents: JSON.stringify(body)
-      }
-    };
+  function createEventsApi(params, eventParams) {
+    return new EventsApi(common.createBot(params, eventParams));
   }
 
   test('registerBotCommand()', function (assert) {
@@ -41,23 +16,23 @@ TestRunner.functions.push(function (test, common) {
   });
 
   test('new EventsApi()', function (assert) {
-    var api = new EventsApi(createBot());
-    assert.ok(api instanceof EventsApi, 'creates EventsApi object');
+    var eventsApi = new EventsApi(common.createBot());
+    assert.ok(eventsApi instanceof EventsApi, 'creates EventsApi object');
 
     assert.throws(
       function () {
-        api = new EventsApi(null);
+        eventsApi = new EventsApi(null);
       },
       'throws an exception if a bot object was not provided'
     );
   });
 
   test('EventsApi.callEventHandlers()', function (assert) {
-    var api = createApi({type: 'foo_event'});
+    var eventsApi = createEventsApi(null, {type: 'foo_event'});
     var f1Called = 0;
     var f2Called = 0;
 
-    var output = api.callEventHandlers();
+    var output = eventsApi.callEventHandlers();
     assert.equal(output, null, 'return null');
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
@@ -68,7 +43,7 @@ TestRunner.functions.push(function (test, common) {
         f1Called++;
       }
     );
-    output = api.callEventHandlers();
+    output = eventsApi.callEventHandlers();
     assert.equal(output, null, 'return null');
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
@@ -80,48 +55,48 @@ TestRunner.functions.push(function (test, common) {
         return 'f2';
       }
     );
-    output = api.callEventHandlers();
+    output = eventsApi.callEventHandlers();
     assert.equal(output, 'f2', 'return a valid string');
     assert.equal(f1Called, 2, 'first function was called');
     assert.equal(f2Called, 1, 'second function was not called');
   });
 
   test('EventsApi.execute(): app_mention', function (assert) {
-    var api = createApi({
+    var eventsApi = createEventsApi(null, {
       type: 'app_mention',
       text: ''
     });
-    assert.equal(api.execute(), 'そんなコマンドはないよ。', 'has a valid content');
+    assert.equal(eventsApi.execute(), 'そんなコマンドはないよ。', 'has a valid content');
   });
 
   test('EventsApi.execute(): app_mention', function (assert) {
-    var api = createApi({
+    var eventsApi = createEventsApi(null, {
       type: 'app_mention',
       text: '<@Uxxx> help'
     });
-    assert.equal(api.execute(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
+    assert.equal(eventsApi.execute(), '吾輩はBotである。ヘルプはまだない。', 'has a valid content');
   });
 
   test('EventsApi.execute(): app_mention', function (assert) {
-    var api = createApi({
+    var eventsApi = createEventsApi(null, {
       type: 'app_mention',
       text: '<@Uxxx> ping'
     });
-    assert.equal(api.execute(), 'PONG', 'has a valid content');
+    assert.equal(eventsApi.execute(), 'PONG', 'has a valid content');
   });
 
   test('EventsApi.execute(): url_verification', function (assert) {
-    var api = createApi({}, {challenge: 'foo', type: 'url_verification'});
-    assert.equal(api.execute(), 'foo', 'has a valid content');
+    var eventsApi = createEventsApi({challenge: 'foo', type: 'url_verification'});
+    assert.equal(eventsApi.execute(), 'foo', 'has a valid content');
   });
 
   test('EventsApi.verifyToken()', function (assert) {
-    var api = createApi();
+    var eventsApi = createEventsApi();
 
-    assert.notOk(api.verifyToken('token'), 'returns false for an invalid verification token');
+    assert.notOk(eventsApi.verifyToken('token'), 'returns false for an invalid verification token');
 
     var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(api.verifyToken(token), 'returns true for a valid verification token');
+    assert.ok(eventsApi.verifyToken(token), 'returns true for a valid verification token');
   });
 });
 
