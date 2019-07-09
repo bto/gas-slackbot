@@ -38,6 +38,14 @@ SlashCommands.prototype.execute = function execute() {
   console.info('call slash command handler for ' + command);
   var output = handler(this.bot, this.params);
   console.info('output of slash command handler: ' + output);
+
+  if (typeof output === 'string') {
+    return {
+      response_type: 'in_channel',
+      text: 'PONG'
+    };
+  }
+
   return output;
 };
 
@@ -53,8 +61,5 @@ SlashCommands.prototype.verifyToken = function verifyToken(token) {
 
 registerSlashCommand('/ping', function slashCommandPing() {
   console.info('ping slash command was called');
-  return {
-    response_type: 'in_channel',
-    text: 'PONG'
-  };
+  return 'PONG';
 });
