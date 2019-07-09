@@ -14,11 +14,13 @@
     Bot: true,
     EventsApi: true,
     Obj: true,
+    SlashCommands: true,
     TestCommon: true,
     TestRunner: true,
     WebApi: true,
     registerBotCommand: true,
     registerEventHandler: true,
+    registerSlashCommand: true,
   },
   rules: {
     no-console: off,

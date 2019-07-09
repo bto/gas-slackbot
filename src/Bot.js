@@ -8,7 +8,12 @@ var Bot = function Bot(e) {
  * @return {Object} return ContentService object
  */
 Bot.prototype.execute = function execute() {
-  var output = (new EventsApi(this)).execute();
+  var output;
+  if (this.event.parameter.command) {
+    output = (new SlashCommands(this)).execute();
+  } else {
+    output = (new EventsApi(this)).execute();
+  }
 
   if (typeof output === 'string') {
     console.info('output text/plain: ' + output);

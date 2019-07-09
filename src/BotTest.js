@@ -16,6 +16,7 @@ TestRunner.functions.push(function (test, common) {
     }, params ? params : {});
 
     return {
+      parameter: {},
       postData: {
         contents: JSON.stringify(body)
       }
