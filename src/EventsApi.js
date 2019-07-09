@@ -125,7 +125,7 @@ registerEvent('app_mention', function eventAppMention(bot, params) {
   var token = bot.getBotAccessToken();
   var channelId = params.event.channel;
   var webApi = new WebApi(token);
-  webApi.callChatPostMessage(channelId, message);
+  webApi.chatPostMessage(channelId, message);
   console.info('chat.postMessage(): message: ' + message + ', channelId: ' + channelId + ', botAccessToken: ' + token);
 
   return message;
