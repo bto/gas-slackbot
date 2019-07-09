@@ -18,6 +18,7 @@
     TestCommon: true,
     TestRunner: true,
     WebApi: true,
+    WebApiFetch: true,
     registerBotCommand: true,
     registerEvent: true,
     registerSlashCommand: true,
