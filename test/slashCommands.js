@@ -8,7 +8,7 @@ function createApi() {
     .post('')
     .redirects(1)
     .type('form')
-    .field('token', config.verificationToken)
+    .field('token', config.verificationToken);
 }
 
 describe('Slash Commands', function testSlashCommands() {
