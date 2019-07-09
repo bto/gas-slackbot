@@ -98,6 +98,11 @@ EventsApi.prototype.verifyToken = function verifyToken(token) {
 };
 
 
+registerBotCommand('nop', function commandPing() {
+  console.info('nop command was called');
+  return null;
+});
+
 registerBotCommand('help', function commandPing() {
   console.info('help command was called');
   return '吾輩はBotである。ヘルプはまだない。';

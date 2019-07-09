@@ -22,6 +22,14 @@ describe('Events API', function testEventsApi() {
     });
   });
 
+  it('bot command nop', function testBotCommand() {
+    return common.createApiBotCommand('nop').then(function testResponse(res) {
+      assert(res.statusCode === 200);
+      assert(/text\/plain/.test(res.headers['content-type']));
+      assert(res.text === '');
+    });
+  });
+
   it('bot command help', function testBotCommand() {
     return common.createApiBotCommand('help').then(function testResponse(res) {
       assert(res.statusCode === 200);

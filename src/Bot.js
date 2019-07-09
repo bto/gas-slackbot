@@ -16,7 +16,9 @@ Bot.prototype.execute = function execute() {
   }
 
   if (!output) {
-    return null;
+    console.info('output empty text/plain');
+    return ContentService.createTextOutput('')
+      .setMimeType(ContentService.MimeType.TEXT);
   }
 
   if (typeof output === 'string') {
@@ -32,7 +34,9 @@ Bot.prototype.execute = function execute() {
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  return null;
+  console.info('output empty text/plain');
+  return ContentService.createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT);
 };
 
 /**
