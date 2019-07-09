@@ -42,7 +42,7 @@ SlashCommands.prototype.execute = function execute() {
   if (typeof output === 'string') {
     return {
       response_type: 'in_channel',
-      text: 'PONG'
+      text: output
     };
   }
 
