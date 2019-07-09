@@ -21,7 +21,7 @@ function createPostData(eventParams, params) {
   }, params ? params : {});
 }
 
-describe('slack Events API', function testSlackEventsApi() {
+describe('Events API', function testEventsApi() {
   it('url verification', function testUrlVerification() {
     return createApi().send(createPostData({}, {
       'type': 'url_verification',
