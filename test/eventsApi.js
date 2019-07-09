@@ -28,6 +28,7 @@ describe('Events API', function testEventsApi() {
       'challenge': 'challenge code'
     })).then(function testResponse(res) {
       assert(res.statusCode === 200);
+      assert(/text\/plain/.test(res.headers['content-type']));
       assert(res.text === 'challenge code');
     });
   });
@@ -37,6 +38,7 @@ describe('Events API', function testEventsApi() {
       'text': '<@Uxxx> foo'
     })).then(function testResponse(res) {
       assert(res.statusCode === 200);
+      assert(/text\/plain/.test(res.headers['content-type']));
       assert(res.text === 'そんなコマンドはないよ。');
     });
   });
@@ -46,6 +48,7 @@ describe('Events API', function testEventsApi() {
       'text': '<@Uxxx> help'
     })).then(function testResponse(res) {
       assert(res.statusCode === 200);
+      assert(/text\/plain/.test(res.headers['content-type']));
       assert(res.text === '吾輩はBotである。ヘルプはまだない。');
     });
   });
@@ -55,6 +58,7 @@ describe('Events API', function testEventsApi() {
       'text': '<@Uxxx> ping'
     })).then(function testResponse(res) {
       assert(res.statusCode === 200);
+      assert(/text\/plain/.test(res.headers['content-type']));
       assert(res.text === 'PONG');
     });
   });
