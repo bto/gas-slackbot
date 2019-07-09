@@ -5,7 +5,7 @@
  * @return {null} return nothing
  */
 function registerBotCommand(name, func) {
-  EventsApi.prototype.botCommands[name] = func;
+  EventsApi.prototype.commands[name] = func;
 }
 
 /**
@@ -29,7 +29,7 @@ var EventsApi = function EventsApi(bot) {
   this.params = JSON.parse(bot.event.postData.contents);
 };
 
-EventsApi.prototype.botCommands = {};
+EventsApi.prototype.commands = {};
 EventsApi.prototype.defaultMessage = 'そんなコマンドはないよ。';
 EventsApi.prototype.handlers = {};
 
@@ -113,9 +113,9 @@ registerEvent('app_mention', function eventAppMention(bot, params) {
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);
   var message;
-  if (eventsApi.botCommands.hasOwnProperty(command)) {
+  if (eventsApi.commands.hasOwnProperty(command)) {
     console.info('call command handler for ' + command);
-    message = eventsApi.botCommands[command](bot, params);
+    message = eventsApi.commands[command](bot, params);
   } else {
     console.info('does not have any command handler for ' + command);
     message = eventsApi.getDefaultMessage();

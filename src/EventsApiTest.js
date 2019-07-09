@@ -31,7 +31,7 @@ TestRunner.functions.push(function (test, common) {
   test('registerBotCommand()', function (assert) {
     var func = function () {};
     registerBotCommand('foo', func);
-    assert.equal(EventsApi.prototype.botCommands.foo, func, 'register a command function');
+    assert.equal(EventsApi.prototype.commands.foo, func, 'register a command function');
   });
 
   test('registerEvent()', function (assert) {
