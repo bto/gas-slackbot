@@ -23,7 +23,9 @@ TestRunner.functions.push(function (test, common) {
 
   test('SlashCommands.execute(): /ping', function (assert) {
     var slashCommands = createSlashCommands({command: '/ping'});
-    assert.equal(slashCommands.execute(), 'PONG', 'has a valid content');
+    var output = slashCommands.execute();
+    assert.equal(output.response_type, 'in_channel', 'output has a valid response_type');
+    assert.equal(output.text, 'PONG', 'output has a valid text PONG');
   });
 
   test('SlashCommands.verifyToken()', function (assert) {

@@ -53,5 +53,8 @@ SlashCommands.prototype.verifyToken = function verifyToken(token) {
 
 registerSlashCommand('/ping', function slashCommandPing() {
   console.info('ping slash command was called');
-  return 'PONG';
+  return {
+    response_type: 'in_channel',
+    text: 'PONG'
+  };
 });

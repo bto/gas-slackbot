@@ -15,11 +15,21 @@ Bot.prototype.execute = function execute() {
     output = (new EventsApi(this)).execute();
   }
 
+  if (!output) {
+    return null;
+  }
+
   if (typeof output === 'string') {
     console.info('output text/plain: ' + output);
-    output = ContentService.createTextOutput(output);
-    output.setMimeType(ContentService.MimeType.TEXT);
-    return output;
+    return ContentService.createTextOutput(output)
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  if (output.toString() === '[object Object]') {
+    output = JSON.stringify(output);
+    console.info('output application/json: ' + output);
+    return ContentService.createTextOutput(output)
+      .setMimeType(ContentService.MimeType.JSON);
   }
 
   return null;
