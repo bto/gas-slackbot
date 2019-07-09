@@ -2,17 +2,73 @@ var WebApi = function WebApi(token) {
   this.token = token;
 };
 
-WebApi.prototype.apiTest = function apiTest(params) {
-  return this._fetch('api.test', 'post', params);
+WebApi.prototype.call = function call(apiMethod, httpMethod, params) {
+  if (httpMethod !== 'get' && httpMethod !== 'json' && httpMethod !== 'post') {
+    throw new Error('invalid HTTP method');
+  }
+
+  var reqParams = this.createRequestParams(params);
+  var url = this.createApiUrl(apiMethod, httpMethod, reqParams);
+  var fetchOpts = this.createFetchOptions(httpMethod, reqParams);
+  return this.fetch(url, fetchOpts);
 };
 
-WebApi.prototype.chatPostMessage = function chatPostMessage(channelId, message, params) {
-  return this._fetch('chat.postMessage', 'json', Obj.merge({
-    channel: channelId,
-    text: message
-  }, params ? params : {}));
+WebApi.prototype.createApiUrl = function createApiUrl(apiMethod, httpMethod, params) {
+  var url = 'https://slack.com/api/' + apiMethod;
+
+  if (httpMethod === 'get') {
+    url = url + this.createQueryString(params);
+  }
+
+  return url;
 };
 
-WebApi.prototype._fetch = function _fetch(apiMethod, httpMethod, params) {
-  return (new WebApiFetch(this.token)).fetch(apiMethod, httpMethod, params);
+WebApi.prototype.createFetchOptions = function createFetchOptions(httpMethod, params) {
+  var options = {
+    headers: {
+      Authorization: 'Bearer ' + this.token
+    },
+    method: httpMethod === 'json' ? 'post' : httpMethod,
+    muteHttpExceptions: true
+  };
+
+  if (httpMethod === 'json') {
+    options.contentType = 'application/json; charset=utf-8';
+    options.payload = JSON.stringify(params);
+  } else if (httpMethod === 'post') {
+    options.payload = params;
+  }
+
+  return options;
+};
+
+WebApi.prototype.createRequestParams = function createRequestParams(params) {
+  return Obj.merge({
+    token: this.token
+  }, params ? params : {});
+};
+
+WebApi.prototype.createQueryString = function createQueryString(params) {
+  return Object.keys(params).reduce(function reducer(queryString, key, i) {
+    return queryString + (i === 0 ? '?' : '&') + encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+  }, '');
+};
+
+WebApi.prototype.fetch = function fetch(url, options) {
+  this.error = null;
+  this.result = null;
+
+  try {
+    this.response = UrlFetchApp.fetch(url, options);
+  } catch (error) {
+    this.error = error;
+    return false;
+  }
+
+  if (this.response.getResponseCode() !== 200) {
+    return false;
+  }
+
+  this.result = JSON.parse(this.response.getContentText());
+  return this.result;
 };
