@@ -85,6 +85,16 @@ TestRunner.functions.push(function (test, common) {
     );
   });
 
+  test('WebApiFetch.createQueryString()', function (assert) {
+    var webApiFetch = createWebApiFetch();
+
+    var queryString = webApiFetch.createQueryString({'foo': 'bar'});
+    assert.equal(queryString, '?foo=bar', 'returns a valid query string');
+
+    queryString = webApiFetch.createQueryString({foo: 'bar', 'fo=o': 'ba&r'});
+    assert.equal(queryString, '?foo=bar&fo%3Do=ba%26r', 'returns a valid query string');
+  });
+
   test('WebApiFetch.fetch()', function (assert) {
     var webApiFetch = createWebApiFetch();
 
@@ -194,6 +204,19 @@ TestRunner.functions.push(function (test, common) {
       },
       'fails api.test without an authentication token'
     );
+  });
+
+  test('WebApiFetch.fetch(): chat.postMessage', function (assert) {
+    var webApiFetch = createWebApiFetch();
+    var channelId = common.getProperty('SLACK_CHANNEL_ID');
+
+    var response = webApiFetch.fetch('chat.postMessage', 'post', {
+      channel: channelId,
+      text: 'chat.postMessage test'
+    });
+    assert.ok(response.ok, 'successes chat.postMessage method');
+    assert.equal(response.channel, channelId, 'returns a channel id');
+    assert.equal(response.message.text, 'chat.postMessage test', 'returns a text message');
   });
 });
 
