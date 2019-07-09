@@ -1,19 +1,10 @@
 var assert = require('assert');
-var supertest = require('supertest');
 
-var config = require('./config');
-
-function createApi() {
-  return supertest(config.url)
-    .post('')
-    .redirects(1)
-    .type('form')
-    .field('token', config.verificationToken);
-}
+var common = require('./common');
 
 describe('Slash Commands', function testSlashCommands() {
-  it('/ping command', function testPing() {
-    return createApi().field('command', '/ping').then(function testResponse(res) {
+  it('slash command ping', function testSLashCommand() {
+    return common.createApiSlashCommand('ping').then(function testResponse(res) {
       assert(res.statusCode === 200);
       assert(/application\/json/.test(res.headers['content-type']));
 
