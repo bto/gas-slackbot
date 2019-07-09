@@ -122,14 +122,11 @@ registerEvent('app_mention', function eventAppMention(bot, params) {
   }
   console.info('output of command handler: ' + message);
 
-  var token = bot.getBotAccessToken();
   var channelId = params.event.channel;
-  var webApi = new WebApi(token);
-  webApi.call('chat.postMessage', 'post', {
+  bot.webApi.call('chat.postMessage', 'post', {
     channel: channelId,
     text: message
   });
-  console.info('chat.postMessage: message: ' + message + ', channelId: ' + channelId + ', botAccessToken: ' + token);
 
   return message;
 });

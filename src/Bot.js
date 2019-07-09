@@ -59,6 +59,7 @@ Bot.prototype.getVerificationToken = function getVerificationToken() {
 Bot.prototype.setBotAccessToken = function setBotAccessToken(token) {
   console.info('set a bot access token: ' + token);
   this.botAccessToken = token;
+  this.webApi = new WebApi(token);
   return this;
 };
 
