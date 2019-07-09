@@ -2,6 +2,10 @@ var WebApi = function WebApi(token) {
   this.token = token;
 };
 
+WebApi.prototype.apiTest = function apiTest(params) {
+  return this._fetch('api.test', 'post', params);
+};
+
 WebApi.prototype.chatPostMessage = function chatPostMessage(channelId, message, params) {
   return this._fetch('chat.postMessage', 'json', Obj.merge({
     channel: channelId,

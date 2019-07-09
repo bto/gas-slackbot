@@ -9,6 +9,18 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(webApi.token, 'access token', 'sets an access token');
   });
 
+  test('WebApi.apiTest()', function (assert) {
+    var webApi = createWebApi();
+
+    var response = webApi.apiTest({foo: 'bar'});
+    assert.ok(response.ok, 'successes api.test method');
+    assert.equal(response.args.foo, 'bar', 'returns a passed parameter');
+
+    response = webApi.apiTest({error: 'error message'});
+    assert.notOk(response.ok, 'fails api.test method');
+    assert.equal(response.error, 'error message', 'returns a passed error message');
+  });
+
   test('WebApi.chatPostMessage()', function (assert) {
     var webApi = createWebApi();
     var channelId = common.getProperty('SLACK_CHANNEL_ID');
