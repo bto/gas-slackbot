@@ -1,19 +1,33 @@
+CONFIG_DIR=config
+DIST_DIR=dist
 NODE_DIR=node_modules
+SRC_DIR=src
 VENDOR_DIR=vendor
 GAST_DIR=$(VENDOR_DIR)/gast
 
+DIST_FILE=$(DIST_DIR)/SlackBot.min.js
+UGLIFYJS_CONFIG_FILE=$(CONFIG_DIR)/uglifyjs.json
+SRC_FILES=$(SRC_DIR)/*.js
+
 
 .PHONY: all
-all: init check
+all: init check push test build
+
+
+.PHONY: build
+build:
+	npx uglifyjs --config-file $(UGLIFYJS_CONFIG_FILE) $(SRC_FILES) --output $(DIST_FILE)
 
 
 .PHONY: clean
 clean:
+	rm $(DIST_FILE)
 
 .PHONY: distclean
 distclean: clean
 	rm -rf $(NODE_DIR)
 	rm -rf $(GAST_DIR)
+	rm -rf $(DIST_DIR)/*
 
 
 .PHONY: check
