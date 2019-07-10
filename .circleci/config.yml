@@ -69,9 +69,9 @@ jobs:
           command: |
             cp config/<< parameters.env >>/appsscript.json src/appsscript.json
             cp config/<< parameters.env >>/clasp.json      .clasp.json
-            sed s/%VERIFICATION_TOKEN%/$SLACKBOT_<< parameters.ENV >>_VERIFICATION_TOKEN/ config/<< parameters.env >>/config.js > test/config.js
-            echo $HOME_CLASPRC_JSON                          > ~/.clasprc.json
-            echo $SLACKBOT_<< parameters.ENV >>_CLASPRC_JSON > .clasprc.json
+            sed s/%VERIFICATION_TOKEN%/$<< parameters.ENV >>_VERIFICATION_TOKEN/ config/<< parameters.env >>/config.js > test/config.js
+            echo $HOME_CLASPRC_JSON                 > ~/.clasprc.json
+            echo $<< parameters.ENV >>_CLASPRC_JSON > .clasprc.json
 
       - run:
           name: Deploy
@@ -97,8 +97,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - slack-bot-stg
-                - slack-bot-prod
+                - master
       - deploy:
           name: deploy_prod
           env: prod
@@ -108,4 +107,4 @@ workflows:
           filters:
             branches:
               only:
-                - slack-bot-prod
+                - master
