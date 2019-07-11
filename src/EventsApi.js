@@ -24,77 +24,83 @@ function registerEvent(eventType, func) {
 
 
 var EventsApi = function EventsApi(controller) {
-  this.controller = controller;
-  controller.eventsApi = this;
-  this.params = JSON.parse(controller.event.postData.contents);
+  this.initialize(controller);
 };
 
-EventsApi.prototype.commands = {};
-EventsApi.prototype.defaultMessage = 'そんなコマンドはないよ。';
-EventsApi.prototype.handlers = {};
+EventsApi.prototype = {
+  commands: {},
+  defaultMessage: 'そんなコマンドはないよ。',
+  handlers: {},
 
-/**
- * Call event handlers
- * @return {Object} return output value
- */
-EventsApi.prototype.callEventHandlers = function callEventHandlers() {
-  var type = this.params.event.type;
-  var handlers = this.handlers[type];
-  if (!handlers) {
-    console.error('does not have any event handler for ' + type);
-    return null;
+  initialize: function initialize(controller) {
+    this.controller = controller;
+    controller.eventsApi = this;
+    this.params = JSON.parse(controller.event.postData.contents);
+  },
+
+  /**
+   * Call event handlers
+   * @return {Object} return output value
+   */
+  callEventHandlers: function callEventHandlers() {
+    var type = this.params.event.type;
+    var handlers = this.handlers[type];
+    if (!handlers) {
+      console.error('does not have any event handler for ' + type);
+      return null;
+    }
+
+    console.info('call event handlers for ' + type);
+    var output = null;
+    for (var i = 0; i < handlers.length; i++) {
+      output = handlers[i](this.controller, this.params);
+      console.info('output of handler: ' + output);
+    }
+
+    return output;
+  },
+
+  /**
+   * Execute Events API request
+   * @return {Object} return output value
+   */
+  execute: function execute() {
+    var token = this.controller.getVerificationToken();
+    if (!this.verifyToken(token)) {
+      var message = 'invalid verification token: ' + token;
+      console.error(message);
+      throw new Error(message);
+    }
+
+    var type = this.params.type;
+    switch (type) {
+    case 'event_callback':
+      return this.callEventHandlers();
+    case 'url_verification':
+      return this.params.challenge;
+    default:
+      message = 'not supported events api: ' + type;
+      console.error(message);
+      throw new Error(message);
+    }
+  },
+
+  /**
+   * Get a default message
+   * @return {String} return a default message
+   */
+  getDefaultMessage: function getDefaultMessage() {
+    return this.defaultMessage;
+  },
+
+  /**
+   * Verify if a token is valid
+   * @param {String} token: a verification token
+   * @return {boolean} return true or false
+   */
+  verifyToken: function verifyToken(token) {
+    return this.params.token === token;
   }
-
-  console.info('call event handlers for ' + type);
-  var output = null;
-  for (var i = 0; i < handlers.length; i++) {
-    output = handlers[i](this.controller, this.params);
-    console.info('output of handler: ' + output);
-  }
-
-  return output;
-};
-
-/**
- * Execute Events API request
- * @return {Object} return output value
- */
-EventsApi.prototype.execute = function execute() {
-  var token = this.controller.getVerificationToken();
-  if (!this.verifyToken(token)) {
-    var message = 'invalid verification token: ' + token;
-    console.error(message);
-    throw new Error(message);
-  }
-
-  var type = this.params.type;
-  switch (type) {
-  case 'event_callback':
-    return this.callEventHandlers();
-  case 'url_verification':
-    return this.params.challenge;
-  default:
-    message = 'not supported events api: ' + type;
-    console.error(message);
-    throw new Error(message);
-  }
-};
-
-/**
- * Get a default message
- * @return {String} return a default message
- */
-EventsApi.prototype.getDefaultMessage = function getDefaultMessage() {
-  return this.defaultMessage;
-};
-
-/**
- * Verify if a token is valid
- * @param {String} token: a verification token
- * @return {boolean} return true or false
- */
-EventsApi.prototype.verifyToken = function verifyToken(token) {
-  return this.params.token === token;
 };
 
 
