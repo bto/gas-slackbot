@@ -5,7 +5,7 @@ TestRunner.functions.push(function (test, common) {
 
   test('registerSlashCommand()', function (assert) {
     var func = function () {};
-    registerSlashCommand('/foo', func);
+    SlackBot.registerSlashCommand('/foo', func);
     assert.equal(SlackBot.SlashCommands.prototype.handlers['/foo'], func, 'register a slash command function');
   });
 

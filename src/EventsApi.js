@@ -4,9 +4,9 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-function registerBotCommand(name, func) {
+SlackBot.registerBotCommand = function registerBotCommand(name, func) {
   SlackBot.EventsApi.prototype.commands[name] = func;
-}
+};
 
 /**
  * Register an event handler
@@ -14,13 +14,13 @@ function registerBotCommand(name, func) {
  * @param {Function} func: an event handler
  * @return {Object} return itself
  */
-function registerEvent(eventType, func) {
+SlackBot.registerEvent = function registerEvent(eventType, func) {
   if (!SlackBot.EventsApi.prototype.handlers[eventType]) {
     SlackBot.EventsApi.prototype.handlers[eventType] = [];
   }
 
   SlackBot.EventsApi.prototype.handlers[eventType].push(func);
-}
+};
 
 
 SlackBot.EventsApi = function EventsApi(controller) {
@@ -104,22 +104,22 @@ SlackBot.EventsApi.prototype = {
 };
 
 
-registerBotCommand('nop', function commandPing() {
+SlackBot.registerBotCommand('nop', function commandPing() {
   console.info('nop command was called');
   return null;
 });
 
-registerBotCommand('help', function commandPing() {
+SlackBot.registerBotCommand('help', function commandPing() {
   console.info('help command was called');
   return '吾輩はBotである。ヘルプはまだない。';
 });
 
-registerBotCommand('ping', function commandPing() {
+SlackBot.registerBotCommand('ping', function commandPing() {
   console.info('ping command was called');
   return 'PONG';
 });
 
-registerEvent('app_mention', function eventAppMention(controller, params) {
+SlackBot.registerEvent('app_mention', function eventAppMention(controller, params) {
   var eventsApi = controller.eventsApi;
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);

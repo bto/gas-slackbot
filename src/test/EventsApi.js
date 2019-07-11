@@ -5,13 +5,13 @@ TestRunner.functions.push(function (test, common) {
 
   test('registerBotCommand()', function (assert) {
     var func = function () {};
-    registerBotCommand('foo', func);
+    SlackBot.registerBotCommand('foo', func);
     assert.equal(SlackBot.EventsApi.prototype.commands.foo, func, 'register a command function');
   });
 
   test('registerEvent()', function (assert) {
     var func = function () {};
-    registerEvent('foo', func);
+    SlackBot.registerEvent('foo', func);
     assert.equal(SlackBot.EventsApi.prototype.handlers.foo[0], func, 'register a event function');
   });
 
@@ -37,7 +37,7 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    registerEvent(
+    SlackBot.registerEvent(
       'foo_event',
       function () {
         f1Called++;
@@ -48,7 +48,7 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    registerEvent(
+    SlackBot.registerEvent(
       'foo_event',
       function () {
         f2Called++;

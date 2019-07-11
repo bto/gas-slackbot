@@ -13,9 +13,6 @@
     SlackBot: true,
     TestCommon: true,
     TestRunner: true,
-    registerBotCommand: true,
-    registerEvent: true,
-    registerSlashCommand: true,
   },
   rules: {
     no-console: off,

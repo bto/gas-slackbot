@@ -4,9 +4,9 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-function registerSlashCommand(name, func) {
+SlackBot.registerSlashCommand = function registerSlashCommand(name, func) {
   SlackBot.SlashCommands.prototype.handlers[name] = func;
-}
+};
 
 SlackBot.SlashCommands = function SlashCommands(controller) {
   this.initialize(controller);
@@ -65,7 +65,7 @@ SlackBot.SlashCommands.prototype = {
 };
 
 
-registerSlashCommand('/ping', function slashCommandPing() {
+SlackBot.registerSlashCommand('/ping', function slashCommandPing() {
   console.info('ping slash command was called');
   return 'PONG';
 });
