@@ -1,3 +1,19 @@
+# 使い方
+
+```
+eval(UrlFetchApp.fetch('https://raw.githubusercontent.com/UUUM/gas-slackbot/master/dist/SlackBot.min.js').getContentText());
+
+function doPost(e) {
+  var bot = new SlackBot.Controller(e);
+
+  var properties = PropertiesService.getScriptProperties();
+  bot.setBotAccessToken(properties.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+  bot.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
+
+  return bot.execute(e);
+}
+```
+
 # 開発環境構築
 
 ## ローカル環境の初期化
