@@ -13,7 +13,12 @@ SlackBot.SlashCommands = function SlashCommands(controller) {
 };
 
 SlackBot.SlashCommands.prototype = {
-  handlers: {},
+  handlers: {
+    '/ping': function slashCommandPing() {
+      console.info('ping slash command was called');
+      return 'PONG';
+    }
+  },
 
   initialize: function initialize(controller) {
     this.controller = controller;
@@ -63,9 +68,3 @@ SlackBot.SlashCommands.prototype = {
     return this.params.token === token;
   }
 };
-
-
-SlackBot.registerSlashCommand('/ping', function slashCommandPing() {
-  console.info('ping slash command was called');
-  return 'PONG';
-});

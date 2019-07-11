@@ -28,9 +28,49 @@ SlackBot.EventsApi = function EventsApi(controller) {
 };
 
 SlackBot.EventsApi.prototype = {
-  commands: {},
   defaultMessage: 'そんなコマンドはないよ。',
-  handlers: {},
+
+  commands: {
+    nop: function commandPing() {
+      console.info('nop command was called');
+      return null;
+    },
+
+    help: function commandPing() {
+      console.info('help command was called');
+      return '吾輩はBotである。ヘルプはまだない。';
+    },
+
+    ping: function commandPing() {
+      console.info('ping command was called');
+      return 'PONG';
+    }
+  },
+
+  handlers: {
+    app_mention: [function eventAppMention(controller, params) {
+      var eventsApi = controller.eventsApi;
+      var command = params.event.text.split(/\s+/)[1];
+      console.info('bot command: ' + command);
+      var message;
+      if (eventsApi.commands.hasOwnProperty(command)) {
+        console.info('call command handler for ' + command);
+        message = eventsApi.commands[command](controller, params);
+      } else {
+        console.info('does not have any command handler for ' + command);
+        message = eventsApi.getDefaultMessage();
+      }
+      console.info('output of command handler: ' + message);
+
+      var channelId = params.event.channel;
+      controller.webApi.call('chat.postMessage', 'post', {
+        channel: channelId,
+        text: message
+      });
+
+      return message;
+    }]
+  },
 
   initialize: function initialize(controller) {
     this.controller = controller;
@@ -102,42 +142,3 @@ SlackBot.EventsApi.prototype = {
     return this.params.token === token;
   }
 };
-
-
-SlackBot.registerBotCommand('nop', function commandPing() {
-  console.info('nop command was called');
-  return null;
-});
-
-SlackBot.registerBotCommand('help', function commandPing() {
-  console.info('help command was called');
-  return '吾輩はBotである。ヘルプはまだない。';
-});
-
-SlackBot.registerBotCommand('ping', function commandPing() {
-  console.info('ping command was called');
-  return 'PONG';
-});
-
-SlackBot.registerEvent('app_mention', function eventAppMention(controller, params) {
-  var eventsApi = controller.eventsApi;
-  var command = params.event.text.split(/\s+/)[1];
-  console.info('bot command: ' + command);
-  var message;
-  if (eventsApi.commands.hasOwnProperty(command)) {
-    console.info('call command handler for ' + command);
-    message = eventsApi.commands[command](controller, params);
-  } else {
-    console.info('does not have any command handler for ' + command);
-    message = eventsApi.getDefaultMessage();
-  }
-  console.info('output of command handler: ' + message);
-
-  var channelId = params.event.channel;
-  controller.webApi.call('chat.postMessage', 'post', {
-    channel: channelId,
-    text: message
-  });
-
-  return message;
-});
