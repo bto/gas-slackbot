@@ -1,6 +1,6 @@
 TestRunner.functions.push(function (test, common) {
   function createEventsApi(params, eventParams) {
-    return new EventsApi(common.createBot(params, eventParams));
+    return new EventsApi(common.createController(params, eventParams));
   }
 
   test('registerBotCommand()', function (assert) {
@@ -16,14 +16,14 @@ TestRunner.functions.push(function (test, common) {
   });
 
   test('new EventsApi()', function (assert) {
-    var eventsApi = new EventsApi(common.createBot());
+    var eventsApi = new EventsApi(common.createController());
     assert.ok(eventsApi instanceof EventsApi, 'creates EventsApi object');
 
     assert.throws(
       function () {
         eventsApi = new EventsApi(null);
       },
-      'throws an exception if a bot object was not provided'
+      'throws an exception if a controller object was not provided'
     );
   });
 

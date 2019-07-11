@@ -1,6 +1,6 @@
 TestRunner.functions.push(function (test, common) {
   function createSlashCommands(params) {
-    return new SlashCommands(common.createBot(params));
+    return new SlashCommands(common.createController(params));
   }
 
   test('registerSlashCommand()', function (assert) {
@@ -10,14 +10,14 @@ TestRunner.functions.push(function (test, common) {
   });
 
   test('new SlashCommands()', function (assert) {
-    var slashCommands = new SlashCommands(common.createBot());
+    var slashCommands = new SlashCommands(common.createController());
     assert.ok(slashCommands instanceof SlashCommands, 'creates SlashCommands object');
 
     assert.throws(
       function () {
         slashCommands = new SlashCommands(null);
       },
-      'throws an exception if a bot object was not provided'
+      'throws an exception if a controller object was not provided'
     );
   });
 

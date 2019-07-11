@@ -1,4 +1,4 @@
-var Bot = function Bot(e) {
+var Controller = function Controller(e) {
   console.info(JSON.stringify(e));
   this.event = e;
 };
@@ -7,7 +7,7 @@ var Bot = function Bot(e) {
  * Execute from a web request
  * @return {Object} return ContentService object
  */
-Bot.prototype.execute = function execute() {
+Controller.prototype.execute = function execute() {
   var output;
   if (this.event.parameter.command) {
     output = (new SlashCommands(this)).execute();
@@ -43,7 +43,7 @@ Bot.prototype.execute = function execute() {
  * Get a bot access token
  * @return {String} return a bot access token
  */
-Bot.prototype.getBotAccessToken = function getBotAccessToken() {
+Controller.prototype.getBotAccessToken = function getBotAccessToken() {
   return this.botAccessToken;
 };
 
@@ -51,7 +51,7 @@ Bot.prototype.getBotAccessToken = function getBotAccessToken() {
  * Get a verification token
  * @return {String} return a verification token
  */
-Bot.prototype.getVerificationToken = function getVerificationToken() {
+Controller.prototype.getVerificationToken = function getVerificationToken() {
   return this.verificationToken;
 };
 
@@ -60,7 +60,7 @@ Bot.prototype.getVerificationToken = function getVerificationToken() {
  * @param {String} token: bot access token
  * @return {Object} return itself
  */
-Bot.prototype.setBotAccessToken = function setBotAccessToken(token) {
+Controller.prototype.setBotAccessToken = function setBotAccessToken(token) {
   console.info('set a bot access token: ' + token);
   this.botAccessToken = token;
   this.webApi = new WebApi(token);
@@ -72,7 +72,7 @@ Bot.prototype.setBotAccessToken = function setBotAccessToken(token) {
  * @param {String} token: verification token
  * @return {Object} return itself
  */
-Bot.prototype.setVerificationToken = function setVerificationToken(token) {
+Controller.prototype.setVerificationToken = function setVerificationToken(token) {
   console.info('set a verification token: ' + token);
   this.verificationToken = token;
   return this;

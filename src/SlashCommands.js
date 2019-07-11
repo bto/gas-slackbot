@@ -8,10 +8,10 @@ function registerSlashCommand(name, func) {
   SlashCommands.prototype.handlers[name] = func;
 }
 
-var SlashCommands = function SlashCommands(bot) {
-  this.bot = bot;
+var SlashCommands = function SlashCommands(controller) {
+  this.controller = controller;
   this.slashCommands = this;
-  this.params = bot.event.parameter;
+  this.params = controller.event.parameter;
 };
 
 SlashCommands.prototype.handlers = {};
@@ -21,7 +21,7 @@ SlashCommands.prototype.handlers = {};
  * @return {Object} return output value
  */
 SlashCommands.prototype.execute = function execute() {
-  var token = this.bot.getVerificationToken();
+  var token = this.controller.getVerificationToken();
   if (!this.verifyToken(token)) {
     var message = 'invalid verification token: ' + token;
     console.error(message);
@@ -36,7 +36,7 @@ SlashCommands.prototype.execute = function execute() {
   }
 
   console.info('call slash command handler for ' + command);
-  var output = handler(this.bot, this.params);
+  var output = handler(this.controller, this.params);
   console.info('output of slash command handler: ' + output);
 
   if (typeof output === 'string') {

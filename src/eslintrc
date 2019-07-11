@@ -11,7 +11,7 @@
     SlackApp: true,
 
     // Our globals
-    Bot: true,
+    Controller: true,
     EventsApi: true,
     Obj: true,
     SlashCommands: true,

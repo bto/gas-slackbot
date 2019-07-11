@@ -23,10 +23,10 @@ function registerEvent(eventType, func) {
 }
 
 
-var EventsApi = function EventsApi(bot) {
-  this.bot = bot;
-  bot.eventsApi = this;
-  this.params = JSON.parse(bot.event.postData.contents);
+var EventsApi = function EventsApi(controller) {
+  this.controller = controller;
+  controller.eventsApi = this;
+  this.params = JSON.parse(controller.event.postData.contents);
 };
 
 EventsApi.prototype.commands = {};
@@ -48,7 +48,7 @@ EventsApi.prototype.callEventHandlers = function callEventHandlers() {
   console.info('call event handlers for ' + type);
   var output = null;
   for (var i = 0; i < handlers.length; i++) {
-    output = handlers[i](this.bot, this.params);
+    output = handlers[i](this.controller, this.params);
     console.info('output of handler: ' + output);
   }
 
@@ -60,7 +60,7 @@ EventsApi.prototype.callEventHandlers = function callEventHandlers() {
  * @return {Object} return output value
  */
 EventsApi.prototype.execute = function execute() {
-  var token = this.bot.getVerificationToken();
+  var token = this.controller.getVerificationToken();
   if (!this.verifyToken(token)) {
     var message = 'invalid verification token: ' + token;
     console.error(message);
@@ -113,14 +113,14 @@ registerBotCommand('ping', function commandPing() {
   return 'PONG';
 });
 
-registerEvent('app_mention', function eventAppMention(bot, params) {
-  var eventsApi = bot.eventsApi;
+registerEvent('app_mention', function eventAppMention(controller, params) {
+  var eventsApi = controller.eventsApi;
   var command = params.event.text.split(/\s+/)[1];
   console.info('bot command: ' + command);
   var message;
   if (eventsApi.commands.hasOwnProperty(command)) {
     console.info('call command handler for ' + command);
-    message = eventsApi.commands[command](bot, params);
+    message = eventsApi.commands[command](controller, params);
   } else {
     console.info('does not have any command handler for ' + command);
     message = eventsApi.getDefaultMessage();
@@ -128,7 +128,7 @@ registerEvent('app_mention', function eventAppMention(bot, params) {
   console.info('output of command handler: ' + message);
 
   var channelId = params.event.channel;
-  bot.webApi.call('chat.postMessage', 'post', {
+  controller.webApi.call('chat.postMessage', 'post', {
     channel: channelId,
     text: message
   });

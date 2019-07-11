@@ -1,11 +1,11 @@
 var TestCommon = function TestCommon() {
 };
 
-TestCommon.prototype.createBot = function createBot(params, eventParams) {
-  var bot = new Bot(this.createEvent(params, eventParams));
-  bot.setBotAccessToken(this.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-  bot.setVerificationToken(this.getProperty('SLACK_VERIFICATION_TOKEN'));
-  return bot;
+TestCommon.prototype.createController = function createController(params, eventParams) {
+  var controller = new Controller(this.createEvent(params, eventParams));
+  controller.setBotAccessToken(this.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+  controller.setVerificationToken(this.getProperty('SLACK_VERIFICATION_TOKEN'));
+  return controller;
 };
 
 TestCommon.prototype.createEvent = function createEvent(params, eventParams) {
