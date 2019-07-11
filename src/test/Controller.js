@@ -1,7 +1,7 @@
 TestRunner.functions.push(function (test, common) {
   test('new Controller()', function (assert) {
     var controller = common.createController();
-    assert.ok(controller instanceof Controller, 'creates Controller object');
+    assert.ok(controller instanceof SlackBot.Controller, 'creates Controller object');
   });
 
   test('Controller bot access token', function (assert) {

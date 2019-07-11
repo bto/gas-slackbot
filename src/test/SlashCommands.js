@@ -1,21 +1,21 @@
 TestRunner.functions.push(function (test, common) {
   function createSlashCommands(params) {
-    return new SlashCommands(common.createController(params));
+    return new SlackBot.SlashCommands(common.createController(params));
   }
 
   test('registerSlashCommand()', function (assert) {
     var func = function () {};
     registerSlashCommand('/foo', func);
-    assert.equal(SlashCommands.prototype.handlers['/foo'], func, 'register a slash command function');
+    assert.equal(SlackBot.SlashCommands.prototype.handlers['/foo'], func, 'register a slash command function');
   });
 
   test('new SlashCommands()', function (assert) {
-    var slashCommands = new SlashCommands(common.createController());
-    assert.ok(slashCommands instanceof SlashCommands, 'creates SlashCommands object');
+    var slashCommands = new SlackBot.SlashCommands(common.createController());
+    assert.ok(slashCommands instanceof SlackBot.SlashCommands, 'creates SlashCommands object');
 
     assert.throws(
       function () {
-        slashCommands = new SlashCommands(null);
+        slashCommands = new SlackBot.SlashCommands(null);
       },
       'throws an exception if a controller object was not provided'
     );

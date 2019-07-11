@@ -5,14 +5,14 @@
  * @return {null} return nothing
  */
 function registerSlashCommand(name, func) {
-  SlashCommands.prototype.handlers[name] = func;
+  SlackBot.SlashCommands.prototype.handlers[name] = func;
 }
 
-var SlashCommands = function SlashCommands(controller) {
+SlackBot.SlashCommands = function SlashCommands(controller) {
   this.initialize(controller);
 };
 
-SlashCommands.prototype = {
+SlackBot.SlashCommands.prototype = {
   handlers: {},
 
   initialize: function initialize(controller) {

@@ -8,16 +8,12 @@
 
     // External Libraries
     GasTap: true,
-    SlackApp: true,
 
     // Our globals
-    Controller: true,
-    EventsApi: true,
     Obj: true,
-    SlashCommands: true,
+    SlackBot: true,
     TestCommon: true,
     TestRunner: true,
-    WebApi: true,
     registerBotCommand: true,
     registerEvent: true,
     registerSlashCommand: true,

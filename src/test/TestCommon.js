@@ -7,7 +7,7 @@ TestCommon.prototype = {
   },
 
   createController: function createController(params, eventParams) {
-    var controller = new Controller(this.createEvent(params, eventParams));
+    var controller = new SlackBot.Controller(this.createEvent(params, eventParams));
     controller.setBotAccessToken(this.getProperty('SLACK_BOT_ACCESS_TOKEN'));
     controller.setVerificationToken(this.getProperty('SLACK_VERIFICATION_TOKEN'));
     return controller;

@@ -1,8 +1,8 @@
-var WebApi = function WebApi(token) {
+SlackBot.WebApi = function WebApi(token) {
   this.initialize(token);
 };
 
-WebApi.prototype = {
+SlackBot.WebApi.prototype = {
   initialize: function initialize(token) {
     this.token = token;
   },

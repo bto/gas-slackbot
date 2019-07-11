@@ -1,8 +1,8 @@
-var Controller = function Controller(e) {
+SlackBot.Controller = function Controller(e) {
   this.initialize(e);
 };
 
-Controller.prototype = {
+SlackBot.Controller.prototype = {
   initialize: function initialize(e) {
     console.info(JSON.stringify(e));
     this.event = e;
@@ -15,9 +15,9 @@ Controller.prototype = {
   execute: function execute() {
     var output;
     if (this.event.parameter.command) {
-      output = (new SlashCommands(this)).execute();
+      output = (new SlackBot.SlashCommands(this)).execute();
     } else {
-      output = (new EventsApi(this)).execute();
+      output = (new SlackBot.EventsApi(this)).execute();
     }
 
     if (!output) {
@@ -68,7 +68,7 @@ Controller.prototype = {
   setBotAccessToken: function setBotAccessToken(token) {
     console.info('set a bot access token: ' + token);
     this.botAccessToken = token;
-    this.webApi = new WebApi(token);
+    this.webApi = new SlackBot.WebApi(token);
     return this;
   },
 

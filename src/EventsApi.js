@@ -5,7 +5,7 @@
  * @return {null} return nothing
  */
 function registerBotCommand(name, func) {
-  EventsApi.prototype.commands[name] = func;
+  SlackBot.EventsApi.prototype.commands[name] = func;
 }
 
 /**
@@ -15,19 +15,19 @@ function registerBotCommand(name, func) {
  * @return {Object} return itself
  */
 function registerEvent(eventType, func) {
-  if (!EventsApi.prototype.handlers[eventType]) {
-    EventsApi.prototype.handlers[eventType] = [];
+  if (!SlackBot.EventsApi.prototype.handlers[eventType]) {
+    SlackBot.EventsApi.prototype.handlers[eventType] = [];
   }
 
-  EventsApi.prototype.handlers[eventType].push(func);
+  SlackBot.EventsApi.prototype.handlers[eventType].push(func);
 }
 
 
-var EventsApi = function EventsApi(controller) {
+SlackBot.EventsApi = function EventsApi(controller) {
   this.initialize(controller);
 };
 
-EventsApi.prototype = {
+SlackBot.EventsApi.prototype = {
   commands: {},
   defaultMessage: 'そんなコマンドはないよ。',
   handlers: {},

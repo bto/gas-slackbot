@@ -1,27 +1,27 @@
 TestRunner.functions.push(function (test, common) {
   function createEventsApi(params, eventParams) {
-    return new EventsApi(common.createController(params, eventParams));
+    return new SlackBot.EventsApi(common.createController(params, eventParams));
   }
 
   test('registerBotCommand()', function (assert) {
     var func = function () {};
     registerBotCommand('foo', func);
-    assert.equal(EventsApi.prototype.commands.foo, func, 'register a command function');
+    assert.equal(SlackBot.EventsApi.prototype.commands.foo, func, 'register a command function');
   });
 
   test('registerEvent()', function (assert) {
     var func = function () {};
     registerEvent('foo', func);
-    assert.equal(EventsApi.prototype.handlers.foo[0], func, 'register a event function');
+    assert.equal(SlackBot.EventsApi.prototype.handlers.foo[0], func, 'register a event function');
   });
 
   test('new EventsApi()', function (assert) {
-    var eventsApi = new EventsApi(common.createController());
-    assert.ok(eventsApi instanceof EventsApi, 'creates EventsApi object');
+    var eventsApi = new SlackBot.EventsApi(common.createController());
+    assert.ok(eventsApi instanceof SlackBot.EventsApi, 'creates EventsApi object');
 
     assert.throws(
       function () {
-        eventsApi = new EventsApi(null);
+        eventsApi = new SlackBot.EventsApi(null);
       },
       'throws an exception if a controller object was not provided'
     );
