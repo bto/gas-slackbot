@@ -10,7 +10,6 @@
     GasTap: true,
 
     // Our globals
-    Obj: true,
     SlackBot: true,
     TestCommon: true,
     TestRunner: true,

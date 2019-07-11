@@ -50,7 +50,7 @@ SlackBot.WebApi.prototype = {
   },
 
   createRequestParams: function createRequestParams(params) {
-    return Obj.merge({
+    return SlackBot.Obj.merge({
       token: this.token
     }, params ? params : {});
   },

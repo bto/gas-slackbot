@@ -17,13 +17,13 @@ TestCommon.prototype = {
     var channelId = this.getProperty('SLACK_CHANNEL_ID');
     var token = this.getProperty('SLACK_VERIFICATION_TOKEN');
 
-    var parameter = Obj.merge({
+    var parameter = SlackBot.Obj.merge({
       token: token
     }, params ? params : {});
 
-    var postData = Obj.merge({
+    var postData = SlackBot.Obj.merge({
       challenge: 'challenge code',
-      event: Obj.merge({
+      event: SlackBot.Obj.merge({
         channel: channelId,
         type: 'app_mention'
       }, eventParams ? eventParams : {}),
