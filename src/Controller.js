@@ -8,6 +8,17 @@ SlackBot.Controller.prototype = {
     this.event = e;
   },
 
+  createOutputJson: function createOutputJson(content) {
+    var output = JSON.stringify(content);
+    console.info('output application/json: ' + output);
+    return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.JSON);
+  },
+
+  createOutputText: function createOutputText(content) {
+    console.info('output text/plain: ' + content);
+    return ContentService.createTextOutput(content).setMimeType(ContentService.MimeType.TEXT);
+  },
+
   /**
    * Execute from a web request
    * @return {Object} return ContentService object
@@ -23,27 +34,18 @@ SlackBot.Controller.prototype = {
     }
 
     if (!output) {
-      console.info('output empty text/plain');
-      return ContentService.createTextOutput('')
-        .setMimeType(ContentService.MimeType.TEXT);
+      return this.createOutputText();
     }
 
     if (typeof output === 'string') {
-      console.info('output text/plain: ' + output);
-      return ContentService.createTextOutput(output)
-        .setMimeType(ContentService.MimeType.TEXT);
+      return this.createOutputText(output);
     }
 
     if (output.toString() === '[object Object]') {
-      output = JSON.stringify(output);
-      console.info('output application/json: ' + output);
-      return ContentService.createTextOutput(output)
-        .setMimeType(ContentService.MimeType.JSON);
+      return this.createOutputJson(output);
     }
 
-    console.info('output empty text/plain');
-    return ContentService.createTextOutput('')
-      .setMimeType(ContentService.MimeType.TEXT);
+    return this.createOutputText();
   },
 
   /**
