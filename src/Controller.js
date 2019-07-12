@@ -16,6 +16,8 @@ SlackBot.Controller.prototype = {
     var output;
     if (this.event.parameter.command) {
       output = (new SlackBot.SlashCommands(this)).execute();
+    } else if (this.event.parameter.text) {
+      output = (new SlackBot.OutgoingWebhook(this)).execute();
     } else {
       output = (new SlackBot.EventsApi(this)).execute();
     }

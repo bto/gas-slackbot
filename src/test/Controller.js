@@ -39,6 +39,14 @@ TestRunner.functions.push(function (test, common) {
     assert.equal(output.getContent(), 'foo', 'has a valid content');
   });
 
+  test('Controller.exeute(): Outgoing Webhook', function (assert) {
+    var controller = common.createController({text: 'foo'});
+    var output = controller.execute();
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
+    assert.equal(output.getContent(), JSON.stringify({text: 'foo'}), 'has a valid content');
+  });
+
   test('Controller.exeute(): Slash Commands /ping', function (assert) {
     var controller = common.createController({command: '/ping'});
     var output = controller.execute();

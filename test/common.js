@@ -20,6 +20,13 @@ function createApiEventsApi(params, eventParams) {
     .send(createPostData(params, eventParams));
 }
 
+function createApiOutgoingWebhook(text) {
+  return createApi()
+    .type('form')
+    .field('token', config.verificationToken)
+    .field('text', text);
+}
+
 function createApiSlashCommand(command) {
   return createApi()
     .type('form')
@@ -42,6 +49,7 @@ module.exports = {
   createApi: createApi,
   createApiBotCommand: createApiBotCommand,
   createApiEventsApi: createApiEventsApi,
+  createApiOutgoingWebhook: createApiOutgoingWebhook,
   createApiSlashCommand: createApiSlashCommand,
   createPostData: createPostData
 };
