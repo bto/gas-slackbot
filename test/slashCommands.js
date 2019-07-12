@@ -3,7 +3,7 @@ var assert = require('assert');
 var common = require('./common');
 
 describe('Slash Commands', function testSlashCommands() {
-  it('slash command ping', function testSLashCommand() {
+  it('slash command ping', function testSlashCommand() {
     return common.createApiSlashCommand('ping').then(function testResponse(res) {
       assert(res.statusCode === 200);
       assert(/application\/json/.test(res.headers['content-type']));
