@@ -14,7 +14,7 @@ SlackBot.SlashCommands = function SlashCommands(controller) {
 
 SlackBot.SlashCommands.prototype = {
   handlers: {
-    '/ping': function slashCommandPing() {
+    'ping': function slashCommandPing() {
       console.info('ping slash command was called');
       return 'PONG';
     }
@@ -38,7 +38,7 @@ SlackBot.SlashCommands.prototype = {
       throw new Error(message);
     }
 
-    var command = this.params.command;
+    var command = this.params.command.substring(1);
     var handler = this.handlers[command];
     if (!handler) {
       console.error('does not have any slash command handler for ' + command);
