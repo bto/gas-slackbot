@@ -1,3 +1,6 @@
+var SLACK_BOT_ACCESS_TOKEN;
+var SLACK_VERIFICATION_TOKEN;
+
 function doPost(e) {
   var bot = new SlackBot.Controller(e);
   var properties = PropertiesService.getScriptProperties();
@@ -10,7 +13,7 @@ function doPost(e) {
 
   if (SLACK_VERIFICATION_TOKEN) {
     bot.setVerificationToken(SLACK_VERIFICATION_TOKEN);
-  } eles {
+  } else {
     bot.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
   }
 
