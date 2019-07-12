@@ -1,9 +1,18 @@
 function doPost(e) {
   var bot = new SlackBot.Controller(e);
-
   var properties = PropertiesService.getScriptProperties();
-  bot.setBotAccessToken(properties.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-  bot.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
+
+  if (SLACK_BOT_ACCESS_TOKEN) {
+    bot.setBotAccessToken(SLACK_BOT_ACCESS_TOKEN);
+  } else {
+    bot.setBotAccessToken(properties.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+  }
+
+  if (SLACK_VERIFICATION_TOKEN) {
+    bot.setVerificationToken(SLACK_VERIFICATION_TOKEN);
+  } eles {
+    bot.setVerificationToken(properties.getProperty('SLACK_VERIFICATION_TOKEN'));
+  }
 
   return bot.execute();
 }
