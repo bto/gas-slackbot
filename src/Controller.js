@@ -15,8 +15,9 @@ SlackBot.Controller.prototype = {
   },
 
   createOutputText: function createOutputText(content) {
-    console.info('output text/plain: ' + content);
-    return ContentService.createTextOutput(content).setMimeType(ContentService.MimeType.TEXT);
+    var output = content ? content : '';
+    console.info('output text/plain: ' + output);
+    return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.TEXT);
   },
 
   /**
