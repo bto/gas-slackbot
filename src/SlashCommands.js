@@ -24,6 +24,15 @@ SlackBot.SlashCommands.prototype = {
     this.controller = controller;
     this.slashCommands = this;
     this.params = controller.event.parameter;
+    this.args = this.getArgs();
+  },
+
+  getArgs: function getArgs() {
+    if (!this.params.text) {
+      return [];
+    }
+
+    return this.params.text.trim().split(/\s+/);
   },
 
   /**

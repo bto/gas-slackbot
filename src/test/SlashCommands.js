@@ -21,6 +21,27 @@ testRunner.functions.push(function (test, common) {
     );
   });
 
+  test('SlashCommands.getArgs()', function (assert) {
+    var slashCommands = createSlashCommands();
+    var args;
+
+    slashCommands.params.text = null;
+    args = slashCommands.getArgs();
+    assert.deepEqual(args, [], 'returns an empty array');
+
+    slashCommands.params.text = '';
+    args = slashCommands.getArgs();
+    assert.deepEqual(args, [], 'returns an empty array');
+
+    slashCommands.params.text = '  foo  ';
+    args = slashCommands.getArgs();
+    assert.deepEqual(args, ['foo'], 'returns a valid array');
+
+    slashCommands.params.text = '  foo  bar  ';
+    args = slashCommands.getArgs();
+    assert.deepEqual(args, ['foo', 'bar'], 'returns a valid array');
+  });
+
   test('SlashCommands.execute(): /ping', function (assert) {
     var slashCommands = createSlashCommands({command: '/ping'});
     var output = slashCommands.execute();
