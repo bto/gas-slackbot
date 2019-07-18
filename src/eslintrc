@@ -12,7 +12,7 @@
     // Our globals
     SlackBot: true,
     TestCommon: true,
-    TestRunner: true,
+    testRunner: true,
   },
   rules: {
     no-console: off,

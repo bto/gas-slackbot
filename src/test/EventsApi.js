@@ -1,4 +1,4 @@
-TestRunner.functions.push(function (test, common) {
+testRunner.functions.push(function (test, common) {
   function createEventsApi(params, eventParams) {
     return new SlackBot.EventsApi(common.createController(params, eventParams));
   }

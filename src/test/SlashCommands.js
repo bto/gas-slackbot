@@ -1,4 +1,4 @@
-TestRunner.functions.push(function (test, common) {
+testRunner.functions.push(function (test, common) {
   function createSlashCommands(params) {
     return new SlackBot.SlashCommands(common.createController(params));
   }

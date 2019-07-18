@@ -1,4 +1,4 @@
-TestRunner.functions.push(function (test, common) {
+testRunner.functions.push(function (test, common) {
   function createOutgoingWebhook(params) {
     return new SlackBot.OutgoingWebhook(common.createController(params));
   }

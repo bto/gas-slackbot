@@ -1,4 +1,4 @@
-TestRunner.functions.push(function (test, common) {
+testRunner.functions.push(function (test, common) {
   function createWebApi() {
     return new SlackBot.WebApi(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
   }

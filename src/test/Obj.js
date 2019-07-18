@@ -1,4 +1,4 @@
-TestRunner.functions.push(function (test) {
+testRunner.functions.push(function (test) {
   test('Obj.isArray()', function (assert) {
     assert.ok(SlackBot.Obj.isArray([]), 'returns true if an argument is an array');
     assert.notOk(SlackBot.Obj.isArray(1), 'returns false if an argument is a number');
