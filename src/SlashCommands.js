@@ -41,7 +41,7 @@ SlackBot.SlashCommands.prototype = {
    */
   execute: function execute() {
     var token = this.params.token;
-    if (!this.verifyToken(token)) {
+    if (!this.controller.verifyToken(token)) {
       var message = 'invalid verification token: ' + token;
       console.error(message);
       throw new Error(message);
@@ -66,14 +66,5 @@ SlackBot.SlashCommands.prototype = {
     }
 
     return output;
-  },
-
-  /**
-   * Verify if a token is valid
-   * @param {String} token: a verification token
-   * @return {boolean} return true or false
-   */
-  verifyToken: function verifyToken(token) {
-    return this.controller.getVerificationToken() === token;
   }
 };

@@ -86,6 +86,15 @@ SlackBot.Controller.prototype = {
     console.info('set a verification token: ' + token);
     this.verificationToken = token;
     return this;
+  },
+
+  /**
+   * Verify if a token is valid
+   * @param {String} token: a verification token
+   * @return {boolean} return true or false
+   */
+  verifyToken: function verifyToken(token) {
+    return this.getVerificationToken() === token;
   }
 };
 

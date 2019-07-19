@@ -48,15 +48,6 @@ testRunner.functions.push(function (test, common) {
     assert.equal(output.response_type, 'in_channel', 'output has a valid response_type');
     assert.equal(output.text, 'PONG', 'output has a valid text PONG');
   });
-
-  test('SlashCommands.verifyToken()', function (assert) {
-    var slashCommands = createSlashCommands();
-
-    assert.notOk(slashCommands.verifyToken('token'), 'returns false for an invalid verification token');
-
-    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(slashCommands.verifyToken(token), 'returns true for a valid verification token');
-  });
 });
 
 /* eslint func-names: ["error", "never"] */

@@ -28,15 +28,6 @@ testRunner.functions.push(function (test, common) {
     var output = outgoingWebhook.execute();
     assert.equal(output.text, 'foo', 'output has a valid text');
   });
-
-  test('OutgoingWebhook.verifyToken()', function (assert) {
-    var outgoingWebhook = createOutgoingWebhook();
-
-    assert.notOk(outgoingWebhook.verifyToken('token'), 'returns false for an invalid verification token');
-
-    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(outgoingWebhook.verifyToken(token), 'returns true for a valid verification token');
-  });
 });
 
 /* eslint func-names: ["error", "never"] */

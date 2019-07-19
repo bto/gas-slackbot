@@ -89,15 +89,6 @@ testRunner.functions.push(function (test, common) {
     var eventsApi = createEventsApi({challenge: 'foo', type: 'url_verification'});
     assert.equal(eventsApi.execute(), 'foo', 'has a valid content');
   });
-
-  test('EventsApi.verifyToken()', function (assert) {
-    var eventsApi = createEventsApi();
-
-    assert.notOk(eventsApi.verifyToken('token'), 'returns false for an invalid verification token');
-
-    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(eventsApi.verifyToken(token), 'returns true for a valid verification token');
-  });
 });
 
 /* eslint func-names: ["error", "never"] */

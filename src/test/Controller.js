@@ -61,6 +61,15 @@ testRunner.functions.push(function (test, common) {
       'has a valid content'
     );
   });
+
+  test('Controller.verifyToken()', function (assert) {
+    var controller = common.createController({command: '/ping'});
+
+    assert.notOk(controller.verifyToken('token'), 'returns false for an invalid verification token');
+
+    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
+    assert.ok(controller.verifyToken(token), 'returns true for a valid verification token');
+  });
 });
 
 /* eslint func-names: ["error", "never"] */
