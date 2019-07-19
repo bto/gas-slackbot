@@ -8,6 +8,22 @@ SlackBot.Controller.prototype = {
     this.event = e;
   },
 
+  createOutput: function createOutput(content) {
+    if (!content) {
+      return this.createOutputText();
+    }
+
+    if (typeof content === 'string') {
+      return this.createOutputText(content);
+    }
+
+    if (content.toString() === '[object Object]') {
+      return this.createOutputJson(content);
+    }
+
+    return this.createOutputText();
+  },
+
   createOutputJson: function createOutputJson(content) {
     var output = JSON.stringify(content);
     console.info('output application/json: ' + output);
@@ -26,27 +42,22 @@ SlackBot.Controller.prototype = {
    */
   execute: function execute() {
     var output;
+    try {
+      output = this.fire();
+    } catch (e) {
+      output = e.errorMessage;
+    }
+
+    return this.createOutput(output);
+  },
+
+  fire: function fire() {
     if (this.event.parameter.command) {
-      output = (new SlackBot.SlashCommands(this)).execute();
+      return (new SlackBot.SlashCommands(this)).execute();
     } else if (this.event.parameter.text) {
-      output = (new SlackBot.OutgoingWebhook(this)).execute();
-    } else {
-      output = (new SlackBot.EventsApi(this)).execute();
+      return (new SlackBot.OutgoingWebhook(this)).execute();
     }
-
-    if (!output) {
-      return this.createOutputText();
-    }
-
-    if (typeof output === 'string') {
-      return this.createOutputText(output);
-    }
-
-    if (output.toString() === '[object Object]') {
-      return this.createOutputJson(output);
-    }
-
-    return this.createOutputText();
+    return (new SlackBot.EventsApi(this)).execute();
   },
 
   /**
