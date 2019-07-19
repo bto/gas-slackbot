@@ -105,12 +105,7 @@ SlackBot.EventsApi.prototype = {
    * @return {Object} return output value
    */
   execute: function execute() {
-    var token = this.params.token;
-    if (!this.controller.verifyToken(token)) {
-      var message = 'invalid verification token: ' + token;
-      console.error(message);
-      throw new Error(message);
-    }
+    this.controller.verifyToken(this.params.token);
 
     var type = this.params.type;
     switch (type) {
@@ -119,7 +114,7 @@ SlackBot.EventsApi.prototype = {
     case 'url_verification':
       return this.params.challenge;
     default:
-      message = 'not supported events api: ' + type;
+      var message = 'not supported events api: ' + type;
       console.error(message);
       throw new Error(message);
     }

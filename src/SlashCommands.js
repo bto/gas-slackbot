@@ -40,12 +40,7 @@ SlackBot.SlashCommands.prototype = {
    * @return {Object} return output value
    */
   execute: function execute() {
-    var token = this.params.token;
-    if (!this.controller.verifyToken(token)) {
-      var message = 'invalid verification token: ' + token;
-      console.error(message);
-      throw new Error(message);
-    }
+    this.controller.verifyToken(this.params.token);
 
     var command = this.params.command.substring(1);
     var handler = this.handlers[command];

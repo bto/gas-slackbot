@@ -63,12 +63,21 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.verifyToken()', function (assert) {
-    var controller = common.createController({command: '/ping'});
+    var controller = common.createController();
 
-    assert.notOk(controller.verifyToken('token'), 'returns false for an invalid verification token');
+    assert.throws(
+      function () {
+        controller.verifyToken('token');
+      },
+      'throws an error for an invalid verification token'
+    );
 
-    var token = common.getProperty('SLACK_VERIFICATION_TOKEN');
-    assert.ok(controller.verifyToken(token), 'returns true for a valid verification token');
+    assert.notThrow(
+      function () {
+        controller.verifyToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
+      },
+      'not throw any exception'
+    );
   });
 });
 

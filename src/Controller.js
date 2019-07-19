@@ -91,10 +91,16 @@ SlackBot.Controller.prototype = {
   /**
    * Verify if a token is valid
    * @param {String} token: a verification token
-   * @return {boolean} return true or false
+   * @return {null} return null
    */
   verifyToken: function verifyToken(token) {
-    return this.getVerificationToken() === token;
+    if (this.getVerificationToken() === token) {
+      return null;
+    }
+
+    var message = 'invalid verification token: ' + token;
+    console.error(message);
+    throw new Error(message);
   }
 };
 

@@ -23,12 +23,7 @@ SlackBot.OutgoingWebhook.prototype = {
   },
 
   execute: function execute() {
-    var token = this.params.token;
-    if (!this.controller.verifyToken(token)) {
-      var message = 'invalid verification token: ' + token;
-      console.error(message);
-      throw new Error(message);
-    }
+    this.controller.verifyToken(this.params.token);
 
     console.info('call outgoing webhook handler');
     var output = this.handler(this.controller, this.params);
