@@ -15,5 +15,8 @@
     TestCommon: true,
     testRunner: true,
   },
+  rules: {
+    no-console: off,
+  },
   extends: 'airbnb-es5',
 }
