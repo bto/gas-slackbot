@@ -95,8 +95,10 @@ testRunner.functions.push(function (test, common) {
     );
 
     response = webApi.call('api.test', 'post', {error: 'error message'});
+    assert.notOk(response, 'fails api.test with an error arugment');
+    assert.equal(webApi.errorMessage, 'error message', 'set proper error message');
     assert.deepEqual(
-      response,
+      webApi.result,
       {
         ok: false,
         error: 'error message',
@@ -105,18 +107,20 @@ testRunner.functions.push(function (test, common) {
           token: webApi.token
         }
       },
-      'fails api.test with an error arugment'
+      'set proper result'
     );
 
     webApi.token = null;
     response = webApi.call('api.test', 'get');
+    assert.notOk(response, 'fails api.test without an authentication token');
+    assert.equal(webApi.errorMessage, 'invalid_auth', 'set proper error message');
     assert.deepEqual(
-      response,
+      webApi.result,
       {
         ok: false,
         error: 'invalid_auth'
       },
-      'fails api.test without an authentication token'
+      'set proper result'
     );
   });
 

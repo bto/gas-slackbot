@@ -61,20 +61,29 @@ SlackBot.WebApi.prototype = {
 
   fetch: function fetch(url, options) {
     this.error = null;
+    this.errorMessage = null;
+    this.response = null;
     this.result = null;
 
     try {
       this.response = UrlFetchApp.fetch(url, options);
-    } catch (error) {
-      this.error = error;
+    } catch (e) {
+      this.error = e;
+      this.errorMessage = e.errorMessage;
       return false;
     }
 
     if (this.response.getResponseCode() !== 200) {
+      this.errorMessage = this.response.getContentText();
       return false;
     }
 
     this.result = JSON.parse(this.response.getContentText());
+    if (!this.result.ok) {
+      this.errorMessage = this.result.error;
+      return false;
+    }
+
     return this.result;
   }
 };
