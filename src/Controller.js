@@ -101,10 +101,15 @@ SlackBot.Controller.prototype = {
    * @return {String} return a channel id
    */
   getChannelId: function getChannelId() {
+    if (!this.module) {
+      return this.channelId;
+    }
+
     var channelId = this.module.getChannelId();
     if (channelId) {
       return channelId;
     }
+
     return this.channelId;
   },
 
