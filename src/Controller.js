@@ -156,7 +156,7 @@ SlackBot.Controller.prototype = {
       console.error(content);
       return false;
     } catch (e) {
-      console.error(e.errorMessage);
+      console.error(e.message);
       return false;
     }
   },

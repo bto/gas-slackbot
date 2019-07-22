@@ -109,6 +109,45 @@ testRunner.functions.push(function (test, common) {
     );
   });
 
+  test('Controller.finish()', function (assert) {
+    var controller = common.createController();
+
+    var output = controller.finish();
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), '', 'has a valid content');
+
+    output = controller.finish('foo');
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), '', 'has a valid content');
+
+    var webApi = controller.webApi;
+    controller.webApi = null;
+    output = controller.finish('foo');
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'foo', 'has a valid content');
+    controller.webApi = webApi;
+
+    var token = controller.botAccessToken;
+    controller.setBotAccessToken('token');
+    output = controller.finish('foo');
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'invalid_auth', 'has a valid content');
+    controller.setBotAccessToken(token);
+
+    output = controller.finish({text: 'foo'});
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
+    assert.equal(output.getContent(), JSON.stringify({text: 'foo'}), 'has a valid content');
+
+    var content = ContentService.createTextOutput('foo').setMimeType(ContentService.MimeType.TEXT);
+    output = controller.finish(content);
+    assert.equal(output, content, 'returns a same object');
+  });
+
   test('Controller.send()', function (assert) {
     var controller = common.createController();
 
