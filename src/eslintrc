@@ -5,6 +5,7 @@
     Logger: true,
     PropertiesService: true,
     UrlFetchApp: true,
+    Utilities: true,
 
     // External Libraries
     GasTap: true,

@@ -1,5 +1,5 @@
-SlackBot.Log = function Log() {
-  this.initialize();
+SlackBot.Log = function Log(level) {
+  this.initialize(level);
 };
 
 SlackBot.Log.DEBUG = 0;
@@ -11,62 +11,55 @@ SlackBot.Log.FATAL = 4;
 SlackBot.Log.prototype = {
   messages: [],
 
-  initialize: function initialize() {
+  initialize: function initialize(level) {
+    this.level = typeof level === 'undefined' ? SlackBot.Log.WARN : level;
+    this.messages = [];
   },
 
-  debug: function debug(message) {
-    this.write(SlackBot.Log.DEBUG, message);
+  debug: function debug() {
+    return this.write(SlackBot.Log.DEBUG, arguments);
   },
 
-  info: function info(message) {
-    this.write(SlackBot.Log.INFO, message);
+  info: function info() {
+    return this.write(SlackBot.Log.INFO, arguments);
   },
 
-  warn: function warn(message) {
-    this.write(SlackBot.Log.WARN, message);
+  warn: function warn() {
+    return this.write(SlackBot.Log.WARN, arguments);
   },
 
-  error: function error(message) {
-    this.write(SlackBot.Log.ERROR, message);
+  error: function error() {
+    return this.write(SlackBot.Log.ERROR, arguments);
   },
 
-  fatal: function fatal(message) {
-    this.write(SlackBot.Log.FATAL, message);
+  fatal: function fatal() {
+    return this.write(SlackBot.Log.FATAL, arguments);
   },
 
-  debugString: function debugString() {
-    this.toString(SlackBot.Log.DEBUG);
-  },
+  toString: function toString() {
+    var levels = [];
+    levels[SlackBot.Log.DEBUG] = 'DEBUG';
+    levels[SlackBot.Log.INFO]  = 'INFO';
+    levels[SlackBot.Log.WARN]  = 'WARN';
+    levels[SlackBot.Log.ERROR] = 'ERROR';
+    levels[SlackBot.Log.FATAL] = 'FATAL';
 
-  infoString: function infoString() {
-    this.toString(SlackBot.Log.INFO);
-  },
-
-  warnString: function warnString() {
-    this.toString(SlackBot.Log.WARN);
-  },
-
-  errorString: function errorString() {
-    this.toString(SlackBot.Log.ERROR);
-  },
-
-  fatalString: function fatalString() {
-    this.toString(SlackBot.Log.FATAL);
-  },
-
-  toString: function toString(level) {
     return this.messages.reduce(function reducer(message, v) {
-      if (v.level < level) {
-        return message;
-      }
-      return message + v.message;
+      return message + v.time + ': ' + levels[v.level] + ': ' + v.message + '\n';
     }, '');
   },
 
-  write: function write(level, message) {
+  write: function write(level, args) {
+    if (level < this.level) {
+      return this;
+    }
+
     this.messages.push({
       level: level,
-      message: message
+      message: Utilities.formatString.apply(null, args),
+      time: new Date()
     });
+
+    return this;
   }
 };
