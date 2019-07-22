@@ -87,7 +87,10 @@ testRunner.functions.push(function (test, common) {
 
   test('EventsApi.execute(): url_verification', function (assert) {
     var eventsApi = createEventsApi({challenge: 'foo', type: 'url_verification'});
-    assert.equal(eventsApi.execute(), 'foo', 'has a valid content');
+    var output = eventsApi.execute();
+    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
+    assert.equal(output.getContent(), 'foo', 'has a valid content');
   });
 });
 

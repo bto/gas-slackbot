@@ -112,7 +112,7 @@ SlackBot.EventsApi.prototype = {
     case 'event_callback':
       return this.callEventHandlers();
     case 'url_verification':
-      return this.params.challenge;
+      return this.controller.createOutputText(this.params.challenge);
     default:
       var message = 'not supported events api: ' + type;
       this.controller.log.error(message);

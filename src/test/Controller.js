@@ -28,7 +28,7 @@ testRunner.functions.push(function (test, common) {
     var output = controller.execute();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'PONG', 'has a valid content');
+    assert.equal(output.getContent(), '', 'has a valid content');
   });
 
   test('Controller.exeute(): Events API url_verification', function (assert) {

@@ -12,6 +12,16 @@ SlackBot.Controller.prototype = {
     this.log.info(JSON.stringify(e));
   },
 
+  check: function check() {
+    if (!this.botAccessToken) {
+      this.log.error('bot access token is not set');
+    }
+
+    if (!this.verificationToken) {
+      this.log.error('verification token is not set');
+    }
+  },
+
   createModule: function createModule() {
     if (this.event.parameter.command) {
       return new SlackBot.SlashCommands(this);
@@ -19,22 +29,6 @@ SlackBot.Controller.prototype = {
       return new SlackBot.OutgoingWebhook(this);
     }
     return new SlackBot.EventsApi(this);
-  },
-
-  createOutput: function createOutput(content) {
-    if (!content) {
-      return this.createOutputText();
-    }
-
-    if (typeof content === 'string') {
-      return this.createOutputText(content);
-    }
-
-    if (content.toString() === '[object Object]') {
-      return this.createOutputJson(content);
-    }
-
-    return this.createOutputText();
   },
 
   createOutputJson: function createOutputJson(content) {
@@ -54,14 +48,41 @@ SlackBot.Controller.prototype = {
    * @return {Object} return ContentService object
    */
   execute: function execute() {
-    var module = this.createModule();
-    var output = this.fire(module);
-    return this.createOutput(output);
+    this.check();
+    this.module = this.createModule();
+    var content = this.fire();
+    var output = this.finish(content);
+    this.sendLog();
+    return output;
   },
 
-  fire: function fire(module) {
+  finish: function finish(content) {
+    if (!content) {
+      return this.createOutputText();
+    }
+
+    if (SlackBot.Obj.isString(content)) {
+      if (this.send(content)) {
+        return this.createOutputText();
+      }
+      return this.createOutputText(content);
+    }
+
+    if (SlackBot.Obj.isObject(content)) {
+      return this.createOutputJson(content);
+    }
+
+    if (SlackBot.Obj.isGASObject(content)) {
+      return content;
+    }
+
+    this.log.error('invalid output content: ' + content);
+    return this.createOutputText();
+  },
+
+  fire: function fire() {
     try {
-      return module.execute();
+      return this.module.execute();
     } catch (e) {
       return e.errorMessage;
     }
@@ -76,11 +97,46 @@ SlackBot.Controller.prototype = {
   },
 
   /**
+   * Get a channel id
+   * @return {String} return a channel id
+   */
+  getChannelId: function getChannelId() {
+    var channelId = this.module.getChannelId();
+    if (channelId) {
+      return channelId;
+    }
+    return this.channelId;
+  },
+
+  /**
    * Get a verification token
    * @return {String} return a verification token
    */
   getVerificationToken: function getVerificationToken() {
     return this.verificationToken;
+  },
+
+  send: function send(message) {
+    var channelId = this.getChannelId();
+    if (!this.webApi || !channelId) {
+      console.error(message);
+      return false;
+    }
+
+    var params = {
+      channel: channelId,
+      text: message
+    };
+    if (this.webApi.call('chat.postMessage', 'post', params)) {
+      return true;
+    }
+
+    console.error(this.webApi.errorMessage);
+    return false;
+  },
+
+  sendLog: function sendLog() {
+    this.send(this.log.toString());
   },
 
   /**
@@ -101,7 +157,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setChannelId: function setChannelId(channelId) {
-    this.log.debug('set a bot access token: ' + channelId);
+    this.log.debug('set a channel id: ' + channelId);
     this.channelId = channelId;
     return this;
   },
