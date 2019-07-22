@@ -33,5 +33,9 @@ SlackBot.OutgoingWebhook.prototype = {
     }
 
     return output;
+  },
+
+  getChannelId: function getChannelId() {
+    return this.params.channel_id;
   }
 };

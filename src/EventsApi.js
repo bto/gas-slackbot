@@ -120,6 +120,10 @@ SlackBot.EventsApi.prototype = {
     }
   },
 
+  getChannelId: function getChannelId() {
+    return this.params.event.channel;
+  },
+
   /**
    * Get a default message
    * @return {String} return a default message

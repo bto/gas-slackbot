@@ -61,5 +61,9 @@ SlackBot.SlashCommands.prototype = {
     }
 
     return this.params.text.trim().split(/\s+/);
+  },
+
+  getChannelId: function getChannelId() {
+    return this.params.channel_id;
   }
 };

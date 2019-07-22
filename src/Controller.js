@@ -12,6 +12,15 @@ SlackBot.Controller.prototype = {
     this.log.info(JSON.stringify(e));
   },
 
+  createModule: function createModule() {
+    if (this.event.parameter.command) {
+      return new SlackBot.SlashCommands(this);
+    } else if (this.event.parameter.text) {
+      return new SlackBot.OutgoingWebhook(this);
+    }
+    return new SlackBot.EventsApi(this);
+  },
+
   createOutput: function createOutput(content) {
     if (!content) {
       return this.createOutputText();
@@ -45,23 +54,17 @@ SlackBot.Controller.prototype = {
    * @return {Object} return ContentService object
    */
   execute: function execute() {
-    var output;
-    try {
-      output = this.fire();
-    } catch (e) {
-      output = e.errorMessage;
-    }
-
+    var module = this.createModule();
+    var output = this.fire(module);
     return this.createOutput(output);
   },
 
-  fire: function fire() {
-    if (this.event.parameter.command) {
-      return (new SlackBot.SlashCommands(this)).execute();
-    } else if (this.event.parameter.text) {
-      return (new SlackBot.OutgoingWebhook(this)).execute();
+  fire: function fire(module) {
+    try {
+      return module.execute();
+    } catch (e) {
+      return e.errorMessage;
     }
-    return (new SlackBot.EventsApi(this)).execute();
   },
 
   /**
@@ -89,6 +92,17 @@ SlackBot.Controller.prototype = {
     this.log.debug('set a bot access token: ' + token);
     this.botAccessToken = token;
     this.webApi = new SlackBot.WebApi(token);
+    return this;
+  },
+
+  /**
+   * Set a channel id
+   * @param {String} channelId: channel id
+   * @return {Object} return itself
+   */
+  setChannelId: function setChannelId(channelId) {
+    this.log.debug('set a bot access token: ' + channelId);
+    this.channelId = channelId;
     return this;
   },
 
