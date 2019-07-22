@@ -31,24 +31,24 @@ SlackBot.EventsApi.prototype = {
   defaultMessage: 'そんなコマンドはないよ。',
 
   commands: {
-    nop: function commandPing(controller) {
+    nop: function command(controller) {
       controller.log.info('nop command was called');
       return null;
     },
 
-    help: function commandPing(controller) {
+    help: function command(controller) {
       controller.log.info('help command was called');
       return '吾輩はBotである。ヘルプはまだない。';
     },
 
-    ping: function commandPing(controller) {
+    ping: function command(controller) {
       controller.log.info('ping command was called');
       return 'PONG';
     }
   },
 
   handlers: {
-    app_mention: [function eventAppMention(controller, params) {
+    app_mention: [function handler(controller, params) {
       var eventsApi = controller.eventsApi;
       var command = params.event.text.split(/\s+/)[1];
       controller.log.info('bot command: ' + command);

@@ -21,6 +21,13 @@ testRunner.functions.push(function (test, common) {
     );
   });
 
+  test('SlashCommands.execute(): /ping', function (assert) {
+    var slashCommands = createSlashCommands({command: '/ping'});
+    var output = slashCommands.execute();
+    assert.equal(output.response_type, 'in_channel', 'output has a valid response_type');
+    assert.equal(output.text, 'PONG', 'output has a valid text PONG');
+  });
+
   test('SlashCommands.getArgs()', function (assert) {
     var slashCommands = createSlashCommands();
     var args;
@@ -40,13 +47,6 @@ testRunner.functions.push(function (test, common) {
     slashCommands.params.text = '  foo  bar  ';
     args = slashCommands.getArgs();
     assert.deepEqual(args, ['foo', 'bar'], 'returns a valid array');
-  });
-
-  test('SlashCommands.execute(): /ping', function (assert) {
-    var slashCommands = createSlashCommands({command: '/ping'});
-    var output = slashCommands.execute();
-    assert.equal(output.response_type, 'in_channel', 'output has a valid response_type');
-    assert.equal(output.text, 'PONG', 'output has a valid text PONG');
   });
 });
 
