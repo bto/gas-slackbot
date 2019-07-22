@@ -62,10 +62,15 @@ SlackBot.Controller.prototype = {
     }
 
     if (SlackBot.Obj.isString(content)) {
-      if (this.send(content)) {
-        return this.createOutputText();
+      try {
+        if (this.send(content)) {
+          return this.createOutputText();
+        }
+        return this.createOutputText(content);
+      } catch (e) {
+        console.error(e.errorMessage);
+        return this.createOutputText(e.errorMessage);
       }
-      return this.createOutputText(content);
     }
 
     if (SlackBot.Obj.isObject(content)) {
@@ -122,9 +127,12 @@ SlackBot.Controller.prototype = {
   },
 
   send: function send(message) {
+    if (!message) {
+      return true;
+    }
+
     var channelId = this.getChannelId();
     if (!this.webApi || !channelId) {
-      console.error(message);
       return false;
     }
 
@@ -132,16 +140,25 @@ SlackBot.Controller.prototype = {
       channel: channelId,
       text: message
     };
-    if (this.webApi.call('chat.postMessage', 'post', params)) {
-      return true;
+    if (!this.webApi.call('chat.postMessage', 'post', params)) {
+      throw new Error(this.webApi.errorMessage);
     }
 
-    console.error(this.webApi.errorMessage);
-    return false;
+    return true;
   },
 
   sendLog: function sendLog() {
-    this.send(this.log.toString());
+    var content = this.log.toString();
+    try {
+      if (this.send(content)) {
+        return true;
+      }
+      console.error(content);
+      return false;
+    } catch (e) {
+      console.error(e.errorMessage);
+      return false;
+    }
   },
 
   /**
