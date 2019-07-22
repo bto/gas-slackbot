@@ -12,8 +12,6 @@ SlackBot.WebApi.prototype = {
       throw new Error('invalid HTTP method');
     }
 
-    console.info('WebApi ' + httpMethod + ' ' + apiMethod + ': ' + JSON.stringify(params));
-
     var reqParams = this.createRequestParams(params);
     var url = this.createApiUrl(apiMethod, httpMethod, reqParams);
     var fetchOpts = this.createFetchOptions(httpMethod, reqParams);

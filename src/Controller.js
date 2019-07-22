@@ -1,11 +1,15 @@
-SlackBot.Controller = function Controller(e) {
-  this.initialize(e);
+SlackBot.Controller = function Controller(e, opts) {
+  this.initialize(e, opts);
 };
 
 SlackBot.Controller.prototype = {
-  initialize: function initialize(e) {
-    console.info(JSON.stringify(e));
+  initialize: function initialize(e, options) {
     this.event = e;
+
+    var opts = options ? options : {};
+    this.log = new SlackBot.Log(opts.logLevel);
+
+    this.log.info(JSON.stringify(e));
   },
 
   createOutput: function createOutput(content) {
@@ -26,13 +30,13 @@ SlackBot.Controller.prototype = {
 
   createOutputJson: function createOutputJson(content) {
     var output = JSON.stringify(content);
-    console.info('output application/json: ' + output);
+    this.log.info('output application/json: ' + output);
     return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.JSON);
   },
 
   createOutputText: function createOutputText(content) {
     var output = content ? content : '';
-    console.info('output text/plain: ' + output);
+    this.log.info('output text/plain: ' + output);
     return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.TEXT);
   },
 
@@ -82,7 +86,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setBotAccessToken: function setBotAccessToken(token) {
-    console.info('set a bot access token: ' + token);
+    this.log.debug('set a bot access token: ' + token);
     this.botAccessToken = token;
     this.webApi = new SlackBot.WebApi(token);
     return this;
@@ -94,7 +98,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setVerificationToken: function setVerificationToken(token) {
-    console.info('set a verification token: ' + token);
+    this.log.debug('set a verification token: ' + token);
     this.verificationToken = token;
     return this;
   },
@@ -110,7 +114,7 @@ SlackBot.Controller.prototype = {
     }
 
     var message = 'invalid verification token: ' + token;
-    console.error(message);
+    this.log.warn(message);
     throw new Error(message);
   }
 };

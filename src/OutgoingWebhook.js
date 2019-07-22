@@ -25,9 +25,9 @@ SlackBot.OutgoingWebhook.prototype = {
   execute: function execute() {
     this.controller.verifyToken(this.params.token);
 
-    console.info('call outgoing webhook handler');
+    this.controller.log.info('call outgoing webhook handler');
     var output = this.handler(this.controller, this.params);
-    console.info('output of outgoing webhook handler: ' + output);
+    this.controller.log.info('output of outgoing webhook handler: ' + output);
     if (typeof output === 'string') {
       return {text: output};
     }
