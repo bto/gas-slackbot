@@ -109,6 +109,28 @@ testRunner.functions.push(function (test, common) {
     );
   });
 
+  test('Controller.send()', function (assert) {
+    var controller = common.createController();
+
+    assert.ok(controller.send(), 'returns true');
+    assert.ok(controller.send('foo'), 'returns true');
+
+    var webApi = controller.webApi;
+    controller.webApi = null;
+    assert.notOk(controller.send('foo'), 'returns false');
+    controller.webApi = webApi;
+
+    var token = controller.botAccessToken;
+    controller.setBotAccessToken('token');
+    try {
+      controller.send('foo');
+      assert.fail('exception wanted');
+    } catch (e) {
+      assert.equal(e.message, 'invalid_auth', 'exception has a proper error message');
+    }
+    controller.setBotAccessToken(token);
+  });
+
   test('Controller.verifyToken()', function (assert) {
     var controller = common.createController();
 

@@ -68,8 +68,8 @@ SlackBot.Controller.prototype = {
         }
         return this.createOutputText(content);
       } catch (e) {
-        console.error(e.errorMessage);
-        return this.createOutputText(e.errorMessage);
+        console.error(e.message);
+        return this.createOutputText(e.message);
       }
     }
 
