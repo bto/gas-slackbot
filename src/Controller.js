@@ -89,7 +89,7 @@ SlackBot.Controller.prototype = {
     try {
       return this.module.execute();
     } catch (e) {
-      return e.errorMessage;
+      return e.message;
     }
   },
 
