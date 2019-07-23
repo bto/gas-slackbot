@@ -11,7 +11,7 @@ SRC_FILES=$(SRC_DIR)/*.js
 
 
 .PHONY: all
-all: init check push test build
+all: init check push test-gas build
 
 
 .PHONY: build
