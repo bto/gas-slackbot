@@ -65,6 +65,9 @@ testRunner.functions.push(function (test) {
     assert.ok(foo instanceof SlackBot.Config, 'returns a Config object');
     assert.ok(bar instanceof SlackBot.Config, 'returns a Config object');
     assert.notEqual(foo, bar, 'not same object');
+
+    var config = di.getShared('config');
+    assert.equal(config.getCommon('di'), di, 'set di object in common config');
   });
 });
 

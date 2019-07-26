@@ -51,5 +51,7 @@ SlackBot.DI.prototype = {
     if (!this.services.config) {
       this.services.config = new SlackBot.Config();
     }
+
+    this.services.config.setCommon('di', this);
   }
 };
