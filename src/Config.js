@@ -8,7 +8,7 @@ SlackBot.Config.prototype = {
   },
 
   get: function get(name) {
-    return this.config[name];
+    return this.config[name] ? this.config[name] : {};
   },
 
   getAll: function getAll() {

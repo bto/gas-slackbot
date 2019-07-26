@@ -11,7 +11,7 @@ testRunner.functions.push(function (test) {
   test('Config: get(), set()', function (assert) {
     var config = new SlackBot.Config();
 
-    assert.notOk(config.get('foo'), 'returns nothing');
+    assert.deepEqual(config.get('foo'), {}, 'returns empty hash table');
 
     config.set('foo', {bar: 'baz'});
     var value = config.get('foo');
