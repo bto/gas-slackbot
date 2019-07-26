@@ -27,6 +27,12 @@ testRunner.functions.push(function (test) {
     di.getShared('config').set('foo', {foo: 'bar'});
     var obj = di.get('foo');
     assert.ok(obj instanceof SlackBot.Config, 'returns a Config object');
+
+    var obj1 = new SlackBot.Config();
+    di.set('bar', obj1);
+    var obj2 = di.get('bar');
+    assert.ok(obj2 instanceof SlackBot.Config, 'returns a Config object');
+    assert.equal(obj2, obj1, 'same object');
   });
 
   test('DI.getShared()', function (assert) {

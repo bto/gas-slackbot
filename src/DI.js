@@ -8,12 +8,21 @@ SlackBot.DI.prototype = {
   },
 
   get: function get(name) {
-    if (!this.services[name]) {
+    var service = this.services[name];
+    if (!service) {
       return null;
     }
 
-    var config = name === 'config' ? null : this.getShared('config').get(name);
-    return this.services[name](config);
+    if (service.toString() === '[object Object]') {
+      return service;
+    }
+
+    if (typeof service === 'function') {
+      var config = name === 'config' ? null : this.getShared('config').get(name);
+      return this.services[name](config);
+    }
+
+    throw new Error('not supported service value');
   },
 
   getShared: function getShared(name) {
@@ -40,9 +49,7 @@ SlackBot.DI.prototype = {
     this.services = services ? services : {};
 
     if (!this.services.config) {
-      this.services.config = function config() {
-        return new SlackBot.Config();
-      };
+      this.services.config = new SlackBot.Config();
     }
   }
 };
