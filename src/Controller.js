@@ -7,10 +7,7 @@ SlackBot.Controller.prototype = {
     this.event = e;
 
     var di = this.di = diObj ? diObj : this.createDI();
-
-    var config = di.getShared('config');
-    config.setAll(opts);
-    config.setCommon('controller', this);
+    di.getShared('config').setAll(opts);
 
     this.log = di.get('logger');
 
@@ -29,17 +26,18 @@ SlackBot.Controller.prototype = {
 
   createDI: function createDI() {
     return new SlackBot.DI({
+      controller: this,
+      eventsApi: function eventsApi(config) {
+        return new SlackBot.EventsApi(config.di.get('controller'));
+      },
       logger: function logger(config) {
         return new SlackBot.Log(config.level);
       },
-      eventsApi: function eventsApi(config) {
-        return new SlackBot.EventsApi(config.controller);
-      },
       outgoingWebhook: function outgoingWebhook(config) {
-        return new SlackBot.OutgoingWebhook(config.controller);
+        return new SlackBot.OutgoingWebhook(config.di.get('controller'));
       },
       slashCommands: function slashCommands(config) {
-        return new SlackBot.SlashCommands(config.controller);
+        return new SlackBot.SlashCommands(config.di.get('controller'));
       }
     });
   },
