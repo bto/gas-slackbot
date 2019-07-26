@@ -7,7 +7,10 @@ SlackBot.Controller.prototype = {
     this.event = e;
 
     var di = this.di = diObj ? diObj : this.createDI();
-    di.getShared('config').setAll(opts);
+
+    var config = di.getShared('config');
+    config.setAll(opts);
+    config.setCommon('di', di);
 
     this.logger = di.get('logger');
 

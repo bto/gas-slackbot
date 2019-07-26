@@ -28,7 +28,7 @@ testRunner.functions.push(function (test) {
     assert.deepEqual(value, {foo: 'baz'}, 'returns a valid value');
 
     value = config.getAll();
-    assert.deepEqual(value, {foo: {bar: 'baz'}, bar: {foo: 'baz'}}, 'returns a valid value');
+    assert.deepEqual(value, {foo: {bar: 'baz'}, bar: {foo: 'baz'}, common: {}}, 'returns a valid value');
   });
 
   test('Config: getCommon(), setCommon()', function (assert) {

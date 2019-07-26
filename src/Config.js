@@ -4,12 +4,11 @@ SlackBot.Config = function Config(config) {
 
 SlackBot.Config.prototype = {
   initialize: function initialize(config) {
-    this.common = {};
     this.setAll(config);
   },
 
   get: function get(name) {
-    return SlackBot.Obj.merge(this.common, this.config[name]);
+    return SlackBot.Obj.merge(this.config.common, this.config[name]);
   },
 
   getAll: function getAll() {
@@ -17,11 +16,11 @@ SlackBot.Config.prototype = {
   },
 
   getCommon: function getCommon(name) {
-    return this.common[name];
+    return this.config.common[name];
   },
 
   getCommonAll: function getCommonAll() {
-    return this.common;
+    return this.config.common;
   },
 
   set: function set(name, value) {
@@ -30,13 +29,17 @@ SlackBot.Config.prototype = {
 
   setAll: function setAll(config) {
     this.config = config ? config : {};
+
+    if (!this.config.common) {
+      this.config.common = {};
+    }
   },
 
   setCommon: function setCommon(name, value) {
-    this.common[name] = value;
+    this.config.common[name] = value;
   },
 
   setCommonAll: function setCommonAll(values) {
-    this.common = values;
+    this.config.common = values;
   }
 };
