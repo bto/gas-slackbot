@@ -41,6 +41,19 @@ testRunner.functions.push(function (test) {
     config.setCommon('baz', 'foo');
     assert.deepEqual(config.get('foo'), {bar: 'baz', baz: 'foo'}, 'returns a valid value');
   });
+
+  test('Config: getCommonAll(), setCommonAll()', function (assert) {
+    var config = new SlackBot.Config();
+
+    config.setCommonAll({foo: {bar: 'baz'}, bar: {foo: 'baz'}});
+    var value = config.getCommon('foo');
+    assert.deepEqual(value, {bar: 'baz'}, 'returns a valid value');
+    value = config.getCommon('bar');
+    assert.deepEqual(value, {foo: 'baz'}, 'returns a valid value');
+
+    value = config.getCommonAll();
+    assert.deepEqual(value, {foo: {bar: 'baz'}, bar: {foo: 'baz'}}, 'returns a valid value');
+  });
 });
 
 /* eslint func-names: ["error", "never"] */

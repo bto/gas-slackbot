@@ -20,6 +20,10 @@ SlackBot.Config.prototype = {
     return this.common[name];
   },
 
+  getCommonAll: function getCommonAll() {
+    return this.common;
+  },
+
   set: function set(name, value) {
     this.config[name] = value;
   },
@@ -30,5 +34,9 @@ SlackBot.Config.prototype = {
 
   setCommon: function setCommon(name, value) {
     this.common[name] = value;
+  },
+
+  setCommonAll: function setCommonAll(values) {
+    this.common = values;
   }
 };
