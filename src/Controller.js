@@ -1,13 +1,16 @@
-SlackBot.Controller = function Controller(e, opts) {
-  this.initialize(e, opts);
+SlackBot.Controller = function Controller(e, opts, di) {
+  this.initialize(e, opts, di);
 };
 
 SlackBot.Controller.prototype = {
-  initialize: function initialize(e, options) {
+  initialize: function initialize(e, opts, diObj) {
     this.event = e;
 
-    var opts = options ? options : {};
-    this.log = new SlackBot.Log(opts.logLevel);
+    var di = diObj ? diObj : this.createDI();
+    di.getShared('config').setAll(opts);
+
+    this.di = di;
+    this.log = di.get('logger');
 
     this.log.info(JSON.stringify(e));
   },
@@ -20,6 +23,14 @@ SlackBot.Controller.prototype = {
     if (!this.verificationToken) {
       this.log.error('verification token is not set');
     }
+  },
+
+  createDI: function createDI() {
+    return new SlackBot.DI({
+      logger: function logger(config) {
+        return new SlackBot.Log(config.level);
+      }
+    });
   },
 
   createModule: function createModule() {
