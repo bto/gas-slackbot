@@ -9,18 +9,18 @@ SlackBot.Controller.prototype = {
     var di = this.di = diObj ? diObj : this.createDI();
     di.getShared('config').setAll(opts);
 
-    this.log = di.get('logger');
+    this.logger = di.get('logger');
 
-    this.log.info(JSON.stringify(e));
+    this.logger.info(JSON.stringify(e));
   },
 
   check: function check() {
     if (!this.botAccessToken) {
-      this.log.error('bot access token is not set');
+      this.logger.error('bot access token is not set');
     }
 
     if (!this.verificationToken) {
-      this.log.error('verification token is not set');
+      this.logger.error('verification token is not set');
     }
   },
 
@@ -53,13 +53,13 @@ SlackBot.Controller.prototype = {
 
   createOutputJson: function createOutputJson(content) {
     var output = JSON.stringify(content);
-    this.log.info('output application/json: ' + output);
+    this.logger.info('output application/json: ' + output);
     return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.JSON);
   },
 
   createOutputText: function createOutputText(content) {
     var output = content ? content : '';
-    this.log.info('output text/plain: ' + output);
+    this.logger.info('output text/plain: ' + output);
     return ContentService.createTextOutput(output).setMimeType(ContentService.MimeType.TEXT);
   },
 
@@ -101,7 +101,7 @@ SlackBot.Controller.prototype = {
       return content;
     }
 
-    this.log.error('invalid output content: ' + content);
+    this.logger.error('invalid output content: ' + content);
     return this.createOutputText();
   },
 
@@ -168,7 +168,7 @@ SlackBot.Controller.prototype = {
   },
 
   sendLog: function sendLog() {
-    var content = this.log.toString();
+    var content = this.logger.toString();
     try {
       if (this.send(content)) {
         return true;
@@ -187,7 +187,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setBotAccessToken: function setBotAccessToken(token) {
-    this.log.debug('set a bot access token: ' + token);
+    this.logger.debug('set a bot access token: ' + token);
     this.botAccessToken = token;
     this.webApi = new SlackBot.WebApi(token);
     return this;
@@ -199,7 +199,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setChannelId: function setChannelId(channelId) {
-    this.log.debug('set a channel id: ' + channelId);
+    this.logger.debug('set a channel id: ' + channelId);
     this.channelId = channelId;
     return this;
   },
@@ -210,7 +210,7 @@ SlackBot.Controller.prototype = {
    * @return {Object} return itself
    */
   setVerificationToken: function setVerificationToken(token) {
-    this.log.debug('set a verification token: ' + token);
+    this.logger.debug('set a verification token: ' + token);
     this.verificationToken = token;
     return this;
   },
@@ -226,7 +226,7 @@ SlackBot.Controller.prototype = {
     }
 
     var message = 'invalid verification token: ' + token;
-    this.log.warn(message);
+    this.logger.warn(message);
     throw new Error(message);
   }
 };

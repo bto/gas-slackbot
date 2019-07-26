@@ -32,17 +32,17 @@ SlackBot.EventsApi.prototype = {
 
   commands: {
     nop: function command(controller) {
-      controller.log.info('nop command was called');
+      controller.logger.info('nop command was called');
       return null;
     },
 
     help: function command(controller) {
-      controller.log.info('help command was called');
+      controller.logger.info('help command was called');
       return '吾輩はBotである。ヘルプはまだない。';
     },
 
     ping: function command(controller) {
-      controller.log.info('ping command was called');
+      controller.logger.info('ping command was called');
       return 'PONG';
     }
   },
@@ -51,16 +51,16 @@ SlackBot.EventsApi.prototype = {
     app_mention: [function handler(controller, params) {
       var eventsApi = controller.eventsApi;
       var command = params.event.text.split(/\s+/)[1];
-      controller.log.info('bot command: ' + command);
+      controller.logger.info('bot command: ' + command);
       var message;
       if (eventsApi.commands.hasOwnProperty(command)) {
-        controller.log.info('call command handler for ' + command);
+        controller.logger.info('call command handler for ' + command);
         message = eventsApi.commands[command](controller, params);
       } else {
-        controller.log.info('does not have any command handler for ' + command);
+        controller.logger.info('does not have any command handler for ' + command);
         message = eventsApi.getDefaultMessage();
       }
-      controller.log.info('output of command handler: ' + message);
+      controller.logger.info('output of command handler: ' + message);
 
       var channelId = params.event.channel;
       controller.webApi.call('chat.postMessage', 'post', {
@@ -86,15 +86,15 @@ SlackBot.EventsApi.prototype = {
     var type = this.params.event.type;
     var handlers = this.handlers[type];
     if (!handlers) {
-      this.controller.log.error('does not have any event handler for ' + type);
+      this.controller.logger.error('does not have any event handler for ' + type);
       return null;
     }
 
-    this.controller.log.info('call event handlers for ' + type);
+    this.controller.logger.info('call event handlers for ' + type);
     var output = null;
     for (var i = 0; i < handlers.length; i++) {
       output = handlers[i](this.controller, this.params);
-      this.controller.log.info('output of handler: ' + output);
+      this.controller.logger.info('output of handler: ' + output);
     }
 
     return output;
@@ -115,7 +115,7 @@ SlackBot.EventsApi.prototype = {
       return this.controller.createOutputText(this.params.challenge);
     default:
       var message = 'not supported events api: ' + type;
-      this.controller.log.error(message);
+      this.controller.logger.error(message);
       throw new Error(message);
     }
   },
