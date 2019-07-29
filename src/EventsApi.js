@@ -31,24 +31,24 @@ SlackBot.EventsApi.prototype = {
   defaultMessage: 'そんなコマンドはないよ。',
 
   commands: {
-    nop: function command(params, di) {
+    nop: function command(di) {
       di.getShared('logger').info('nop command was called');
       return null;
     },
 
-    help: function command(params, di) {
+    help: function command(di) {
       di.getShared('logger').info('help command was called');
       return '吾輩はBotである。ヘルプはまだない。';
     },
 
-    ping: function command(params, di) {
+    ping: function command(di) {
       di.getShared('logger').info('ping command was called');
       return 'PONG';
     }
   },
 
   handlers: {
-    app_mention: [function handler(params, di) {
+    app_mention: [function handler(di, params) {
       var eventsApi = di.getShared('eventsApi');
       var logger = di.getShared('logger');
 
@@ -57,7 +57,7 @@ SlackBot.EventsApi.prototype = {
       var message;
       if (eventsApi.commands.hasOwnProperty(command)) {
         logger.info('call command handler for ' + command);
-        message = eventsApi.commands[command](params, di);
+        message = eventsApi.commands[command](di, params);
       } else {
         logger.info('does not have any command handler for ' + command);
         message = eventsApi.getDefaultMessage();
@@ -99,7 +99,7 @@ SlackBot.EventsApi.prototype = {
     this.logger.info('call event handlers for ' + type);
     var output = null;
     for (var i = 0; i < handlers.length; i++) {
-      output = handlers[i](this.params, this.di);
+      output = handlers[i](this.di, this.params);
       this.logger.info('output of handler: ' + output);
     }
 
