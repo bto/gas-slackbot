@@ -1,20 +1,16 @@
-SlackBot.Controller = function Controller(e, opts, di) {
-  this.initialize(e, opts, di);
+SlackBot.Controller = function Controller(e, config, di) {
+  this.initialize(e, config, di);
 };
 
 SlackBot.Controller.prototype = {
-  initialize: function initialize(e, opts, diObj) {
+  initialize: function initialize(e, config, diObj) {
     this.event = e;
 
     var di = this.di = diObj ? diObj : this.createDI();
+    di.set('config', config ? config : {});
     di.set('controller', this);
 
-    var config = di.getShared('config');
-    config.setAll(opts);
-    config.setCommon('di', di);
-
     this.logger = di.get('logger');
-
     this.logger.info(JSON.stringify(e));
   },
 
