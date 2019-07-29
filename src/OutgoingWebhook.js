@@ -17,6 +17,10 @@ SlackBot.OutgoingWebhook.prototype = {
   },
 
   initialize: function initialize(di) {
+    if (!di || !(di instanceof SlackBot.DI)) {
+      throw new Error('SlackBot.DI object must be passed');
+    }
+
     var controller = di.get('controller');
     this.controller = controller;
     this.outgoingWebhook = this;
