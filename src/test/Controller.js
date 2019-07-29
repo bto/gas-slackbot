@@ -17,17 +17,6 @@ testRunner.functions.push(function (test, common) {
     assert.equal(controller.getBotAccessToken(), 'bot access token', 'set a bot access token');
   });
 
-  test('Controller channel id', function (assert) {
-    var controller = createController();
-
-    var obj = controller.setChannelId('channel id');
-    assert.equal(controller, obj, 'returns itself');
-    assert.equal(controller.getChannelId(), 'channel id', 'returns a channel id');
-
-    controller.module = controller.createModule();
-    assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
-  });
-
   test('Controller.createModule()', function (assert) {
     var controller = createController();
     var module = controller.createModule();
@@ -143,6 +132,14 @@ testRunner.functions.push(function (test, common) {
     var content = ContentService.createTextOutput('foo').setMimeType(ContentService.MimeType.TEXT);
     output = controller.finish(content);
     assert.equal(output, content, 'returns a same object');
+  });
+
+  test('Controller.getChannelId()', function (assert) {
+    var controller = createController();
+    assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
+
+    controller.module = controller.createModule();
+    assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
   });
 
   test('Controller.send()', function (assert) {

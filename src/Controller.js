@@ -132,16 +132,18 @@ SlackBot.Controller.prototype = {
    * @return {String} return a channel id
    */
   getChannelId: function getChannelId() {
-    if (!this.module) {
-      return this.channelId;
-    }
+    var channelId = this.di.getShared('config').channelId;
 
-    var channelId = this.module.getChannelId();
-    if (channelId) {
+    if (!this.module) {
       return channelId;
     }
 
-    return this.channelId;
+    var moduleChannelId = this.module.getChannelId();
+    if (moduleChannelId) {
+      return moduleChannelId;
+    }
+
+    return channelId;
   },
 
   send: function send(message) {
@@ -188,17 +190,6 @@ SlackBot.Controller.prototype = {
     this.logger.debug('set a bot access token: ' + token);
     this.botAccessToken = token;
     this.webApi = new SlackBot.WebApi(token);
-    return this;
-  },
-
-  /**
-   * Set a channel id
-   * @param {String} channelId: channel id
-   * @return {Object} return itself
-   */
-  setChannelId: function setChannelId(channelId) {
-    this.logger.debug('set a channel id: ' + channelId);
-    this.channelId = channelId;
     return this;
   },
 

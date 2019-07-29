@@ -13,11 +13,11 @@ TestCommon.prototype = {
       var common = new TestCommon();
       var controller = new SlackBot.Controller(diObj);
       controller.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-      controller.setChannelId(common.getProperty('SLACK_CHANNEL_ID'));
       return controller;
     });
 
     di.setShared('config', {
+      channelId: this.getProperty('SLACK_CHANNEL_ID'),
       verificationToken: this.getProperty('SLACK_VERIFICATION_TOKEN')
     });
     di.setShared('event', this.createEvent(params, eventParams));
