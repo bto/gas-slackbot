@@ -31,7 +31,7 @@ testRunner.functions.push(function (test) {
     assert.equal(obj2, obj1, 'same object');
   });
 
-  test('DI.getShared()', function (assert) {
+  test('DI: getShared(), setShared()', function (assert) {
     var di = new SlackBot.DI({
       foo: function () {
         return new SlackBot.Config();
@@ -43,6 +43,11 @@ testRunner.functions.push(function (test) {
     assert.ok(foo1 instanceof SlackBot.Config, 'returns a Config object');
     assert.ok(foo2 instanceof SlackBot.Config, 'returns a Config object');
     assert.equal(foo1, foo2, 'same object');
+
+    var bar = {};
+    assert.notOk(di.getShared('bar'), 'returns nothing');
+    di.setShared('bar', bar);
+    assert.equal(di.getShared('bar'), bar, 'returns a same object');
   });
 
   test('DI.setAll()', function (assert) {

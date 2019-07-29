@@ -5,6 +5,7 @@ SlackBot.DI = function DI(services) {
 SlackBot.DI.prototype = {
   initialize: function initialize(services) {
     this.setAll(services);
+    return this;
   },
 
   get: function get(name) {
@@ -41,10 +42,17 @@ SlackBot.DI.prototype = {
   set: function set(name, func) {
     this.objects[name] = null;
     this.services[name] = func;
+    return this;
   },
 
   setAll: function setAll(services) {
     this.objects = {};
     this.services = services ? services : {};
+    return this;
+  },
+
+  setShared: function setShared(name, object) {
+    this.objects[name] = object;
+    return this;
   }
 };
