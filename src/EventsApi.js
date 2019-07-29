@@ -63,7 +63,7 @@ SlackBot.EventsApi.prototype = {
       controller.logger.info('output of command handler: ' + message);
 
       var channelId = params.event.channel;
-      controller.webApi.call('chat.postMessage', 'post', {
+      controller.di.get('webApi').call('chat.postMessage', 'post', {
         channel: channelId,
         text: message
       });

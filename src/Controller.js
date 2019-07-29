@@ -21,7 +21,7 @@ SlackBot.Controller.prototype = {
   check: function check() {
     var config = this.di.getShared('config');
 
-    if (!this.botAccessToken) {
+    if (!config.botAccessToken) {
       this.logger.error('bot access token is not set');
     }
 
@@ -43,6 +43,9 @@ SlackBot.Controller.prototype = {
       },
       slashCommands: function service(di) {
         return new SlackBot.SlashCommands(di);
+      },
+      webApi: function service(di) {
+        return new SlackBot.WebApi(di.getShared('config').botAccessToken);
       }
     });
   },
@@ -120,14 +123,6 @@ SlackBot.Controller.prototype = {
   },
 
   /**
-   * Get a bot access token
-   * @return {String} return a bot access token
-   */
-  getBotAccessToken: function getBotAccessToken() {
-    return this.botAccessToken;
-  },
-
-  /**
    * Get a channel id
    * @return {String} return a channel id
    */
@@ -152,16 +147,17 @@ SlackBot.Controller.prototype = {
     }
 
     var channelId = this.getChannelId();
-    if (!this.webApi || !channelId) {
+    if (!channelId) {
       return false;
     }
 
+    var webApi = this.di.get('webApi');
     var params = {
       channel: channelId,
       text: message
     };
-    if (!this.webApi.call('chat.postMessage', 'post', params)) {
-      throw new Error(this.webApi.errorMessage);
+    if (!webApi.call('chat.postMessage', 'post', params)) {
+      throw new Error(webApi.errorMessage);
     }
 
     return true;
@@ -179,18 +175,6 @@ SlackBot.Controller.prototype = {
       console.error(e.message);
       return false;
     }
-  },
-
-  /**
-   * Set a bot access token
-   * @param {String} token: bot access token
-   * @return {Object} return itself
-   */
-  setBotAccessToken: function setBotAccessToken(token) {
-    this.logger.debug('set a bot access token: ' + token);
-    this.botAccessToken = token;
-    this.webApi = new SlackBot.WebApi(token);
-    return this;
   },
 
   /**

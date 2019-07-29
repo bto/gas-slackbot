@@ -10,13 +10,11 @@ TestCommon.prototype = {
     var di = SlackBot.Controller.prototype.createDI();
 
     di.set('controller', function service(diObj) {
-      var common = new TestCommon();
-      var controller = new SlackBot.Controller(diObj);
-      controller.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-      return controller;
+      return new SlackBot.Controller(diObj);
     });
 
     di.setShared('config', {
+      botAccessToken: this.getProperty('SLACK_BOT_ACCESS_TOKEN'),
       channelId: this.getProperty('SLACK_CHANNEL_ID'),
       verificationToken: this.getProperty('SLACK_VERIFICATION_TOKEN')
     });

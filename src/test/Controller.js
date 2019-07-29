@@ -9,14 +9,6 @@ testRunner.functions.push(function (test, common) {
     assert.ok(controller instanceof SlackBot.Controller, 'creates Controller object');
   });
 
-  test('Controller bot access token', function (assert) {
-    var controller = createController();
-
-    var obj = controller.setBotAccessToken('bot access token');
-    assert.equal(controller, obj, 'returns itself');
-    assert.equal(controller.getBotAccessToken(), 'bot access token', 'set a bot access token');
-  });
-
   test('Controller.createModule()', function (assert) {
     var controller = createController();
     var module = controller.createModule();
@@ -108,22 +100,6 @@ testRunner.functions.push(function (test, common) {
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), '', 'has a valid content');
 
-    var webApi = controller.webApi;
-    controller.webApi = null;
-    output = controller.finish('foo');
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'foo', 'has a valid content');
-    controller.webApi = webApi;
-
-    var token = controller.botAccessToken;
-    controller.setBotAccessToken('token');
-    output = controller.finish('foo');
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
-    assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
-    assert.equal(output.getContent(), 'invalid_auth', 'has a valid content');
-    controller.setBotAccessToken(token);
-
     output = controller.finish({text: 'foo'});
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
@@ -147,21 +123,6 @@ testRunner.functions.push(function (test, common) {
 
     assert.ok(controller.send(), 'returns true');
     assert.ok(controller.send('foo'), 'returns true');
-
-    var webApi = controller.webApi;
-    controller.webApi = null;
-    assert.notOk(controller.send('foo'), 'returns false');
-    controller.webApi = webApi;
-
-    var token = controller.botAccessToken;
-    controller.setBotAccessToken('token');
-    try {
-      controller.send('foo');
-      assert.fail('exception wanted');
-    } catch (e) {
-      assert.equal(e.message, 'invalid_auth', 'exception has a proper error message');
-    }
-    controller.setBotAccessToken(token);
   });
 
   test('Controller.verifyToken()', function (assert) {
