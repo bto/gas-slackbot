@@ -77,7 +77,7 @@ SlackBot.EventsApi.prototype = {
       throw new Error('SlackBot.DI object must be passed');
     }
 
-    var controller = di.get('controller');
+    var controller = di.getShared('controller');
     this.controller = controller;
     controller.eventsApi = this;
     this.params = JSON.parse(di.getShared('event').postData.contents);

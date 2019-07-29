@@ -1,7 +1,7 @@
 testRunner.functions.push(function (test, common) {
   function createController(params, eventParams) {
     var di = common.createDI(params, eventParams);
-    return di.get('controller');
+    return di.getShared('controller');
   }
 
   test('new Controller()', function (assert) {

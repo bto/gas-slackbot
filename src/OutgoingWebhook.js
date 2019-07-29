@@ -23,18 +23,16 @@ SlackBot.OutgoingWebhook.prototype = {
 
     this.di = di;
     this.logger = di.getShared('logger');
-
-    var controller = di.get('controller');
-    this.controller = controller;
-    this.outgoingWebhook = this;
     this.params = di.getShared('event').parameter;
   },
 
   execute: function execute() {
-    this.controller.verifyToken(this.params.token);
+    var controller = this.di.getShared('controller');
+
+    controller.verifyToken(this.params.token);
 
     this.logger.info('call outgoing webhook handler');
-    var output = this.handler(this.controller, this.params);
+    var output = this.handler(controller, this.params);
     this.logger.info('output of outgoing webhook handler: ' + output);
     if (typeof output === 'string') {
       return {text: output};

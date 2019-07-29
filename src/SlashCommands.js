@@ -25,7 +25,7 @@ SlackBot.SlashCommands.prototype = {
       throw new Error('SlackBot.DI object must be passed');
     }
 
-    var controller = di.get('controller');
+    var controller = di.getShared('controller');
     this.controller = controller;
     this.slashCommands = this;
     this.params = di.getShared('event').parameter;
