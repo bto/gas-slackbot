@@ -7,13 +7,11 @@ SlackBot.Controller.prototype = {
     var di;
     if (e instanceof SlackBot.DI) {
       di = this.di = e;
-      this.event = di.getShared('event');
     } else {
-      this.event = e;
-
       di = this.di = this.createDI();
       di.setShared('config', config ? config : {});
       di.setShared('controller', this);
+      di.setShared('event', e);
     }
 
     this.logger = di.get('logger');
@@ -48,9 +46,10 @@ SlackBot.Controller.prototype = {
   },
 
   createModule: function createModule() {
-    if (this.event.parameter.command) {
+    var e = this.di.getShared('event');
+    if (e.parameter.command) {
       return this.di.getShared('slashCommands');
-    } else if (this.event.parameter.text) {
+    } else if (e.parameter.text) {
       return this.di.getShared('outgoingWebhook');
     }
     return this.di.getShared('eventsApi');

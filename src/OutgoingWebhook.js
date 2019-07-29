@@ -24,7 +24,7 @@ SlackBot.OutgoingWebhook.prototype = {
     var controller = di.get('controller');
     this.controller = controller;
     this.outgoingWebhook = this;
-    this.params = controller.event.parameter;
+    this.params = di.getShared('event').parameter;
   },
 
   execute: function execute() {

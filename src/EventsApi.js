@@ -80,7 +80,7 @@ SlackBot.EventsApi.prototype = {
     var controller = di.get('controller');
     this.controller = controller;
     controller.eventsApi = this;
-    this.params = JSON.parse(controller.event.postData.contents);
+    this.params = JSON.parse(di.getShared('event').postData.contents);
   },
 
   /**
