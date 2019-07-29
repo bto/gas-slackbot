@@ -14,7 +14,7 @@ SlackBot.Controller.prototype = {
       di.setShared('event', e);
     }
 
-    this.logger = di.get('logger');
+    this.logger = di.getShared('logger');
     this.logger.info(JSON.stringify(e));
   },
 
