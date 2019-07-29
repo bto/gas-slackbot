@@ -6,18 +6,22 @@ TestCommon.prototype = {
   initialize: function initialize() {
   },
 
-  createController: function createController(params, eventParams) {
-    var controller = new SlackBot.Controller(this.createEvent(params, eventParams));
-    controller.setBotAccessToken(this.getProperty('SLACK_BOT_ACCESS_TOKEN'));
-    controller.setChannelId(this.getProperty('SLACK_CHANNEL_ID'));
-    controller.setVerificationToken(this.getProperty('SLACK_VERIFICATION_TOKEN'));
-    return controller;
-  },
-
   createDI: function createDI(params, eventParams) {
-    return new SlackBot.DI({
-      controller: TestCommon.prototype.createController(params, eventParams)
+    var di = SlackBot.Controller.prototype.createDI();
+
+    di.set('controller', function service(diObj) {
+      var common = new TestCommon();
+      var controller = new SlackBot.Controller(diObj);
+      controller.setBotAccessToken(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+      controller.setChannelId(common.getProperty('SLACK_CHANNEL_ID'));
+      controller.setVerificationToken(common.getProperty('SLACK_VERIFICATION_TOKEN'));
+      return controller;
     });
+
+    di.setShared('config', {});
+    di.setShared('event', this.createEvent(params, eventParams));
+
+    return di;
   },
 
   createEvent: function createEvent(params, eventParams) {

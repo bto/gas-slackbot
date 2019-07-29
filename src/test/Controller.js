@@ -1,11 +1,16 @@
 testRunner.functions.push(function (test, common) {
+  function createController(params, eventParams) {
+    var di = common.createDI(params, eventParams);
+    return di.get('controller');
+  }
+
   test('new Controller()', function (assert) {
-    var controller = common.createController();
+    var controller = new SlackBot.Controller();
     assert.ok(controller instanceof SlackBot.Controller, 'creates Controller object');
   });
 
   test('Controller bot access token', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     var obj = controller.setBotAccessToken('bot access token');
     assert.equal(controller, obj, 'returns itself');
@@ -13,7 +18,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller channel id', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     var obj = controller.setChannelId('channel id');
     assert.equal(controller, obj, 'returns itself');
@@ -24,7 +29,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller verification token', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     var obj = controller.setVerificationToken('verification token');
     assert.equal(controller, obj, 'returns itself');
@@ -32,21 +37,21 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.createModule()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
     var module = controller.createModule();
     assert.ok(module instanceof SlackBot.EventsApi, 'creates EventsApi object');
 
-    controller = common.createController({text: 'foo'});
+    controller = createController({text: 'foo'});
     module = controller.createModule();
     assert.ok(module instanceof SlackBot.OutgoingWebhook, 'creates OutgoingWebhook object');
 
-    controller = common.createController({command: '/foo'});
+    controller = createController({command: '/foo'});
     module = controller.createModule();
     assert.ok(module instanceof SlackBot.SlashCommands, 'creates SlashCommands object');
   });
 
   test('Controller.createOutputJson()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
     var output = controller.createOutputJson({text: 'foo'});
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
@@ -54,7 +59,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.createOutputText()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     var output = controller.createOutputText();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
@@ -68,7 +73,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.exeute(): Events API command ping', function (assert) {
-    var controller = common.createController(null, {
+    var controller = createController(null, {
       type: 'app_mention',
       text: '<@Uxxx> ping'
     });
@@ -79,7 +84,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.exeute(): Events API url_verification', function (assert) {
-    var controller = common.createController({challenge: 'foo', type: 'url_verification'});
+    var controller = createController({challenge: 'foo', type: 'url_verification'});
     var output = controller.execute();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
@@ -87,7 +92,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.exeute(): Outgoing Webhook', function (assert) {
-    var controller = common.createController({text: 'foo'});
+    var controller = createController({text: 'foo'});
     var output = controller.execute();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
@@ -95,7 +100,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.exeute(): Slash Commands /ping', function (assert) {
-    var controller = common.createController({command: '/ping'});
+    var controller = createController({command: '/ping'});
     var output = controller.execute();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
@@ -110,7 +115,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.finish()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     var output = controller.finish();
     assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
@@ -149,7 +154,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.send()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     assert.ok(controller.send(), 'returns true');
     assert.ok(controller.send('foo'), 'returns true');
@@ -171,7 +176,7 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('Controller.verifyToken()', function (assert) {
-    var controller = common.createController();
+    var controller = createController();
 
     assert.throws(
       function () {
