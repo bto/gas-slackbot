@@ -7,8 +7,8 @@ SlackBot.registerOutgoingWebhook = function registerOutgoingWebhook(func) {
   SlackBot.OutgoingWebhook.prototype.handler = func;
 };
 
-SlackBot.OutgoingWebhook = function OutgoingWebhook(controller) {
-  this.initialize(controller);
+SlackBot.OutgoingWebhook = function OutgoingWebhook(di) {
+  this.initialize(di);
 };
 
 SlackBot.OutgoingWebhook.prototype = {
@@ -16,7 +16,8 @@ SlackBot.OutgoingWebhook.prototype = {
     return params.text;
   },
 
-  initialize: function initialize(controller) {
+  initialize: function initialize(di) {
+    var controller = di.get('controller');
     this.controller = controller;
     this.outgoingWebhook = this;
     this.params = controller.event.parameter;

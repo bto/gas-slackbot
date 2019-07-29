@@ -33,10 +33,10 @@ SlackBot.Controller.prototype = {
         return new SlackBot.Log(di.getShared('config').logLevel);
       },
       outgoingWebhook: function service(di) {
-        return new SlackBot.OutgoingWebhook(di.get('controller'));
+        return new SlackBot.OutgoingWebhook(di);
       },
       slashCommands: function service(di) {
-        return new SlackBot.SlashCommands(di.get('controller'));
+        return new SlackBot.SlashCommands(di);
       }
     });
   },

@@ -20,7 +20,8 @@ SlackBot.SlashCommands.prototype = {
     }
   },
 
-  initialize: function initialize(controller) {
+  initialize: function initialize(di) {
+    var controller = di.get('controller');
     this.controller = controller;
     this.slashCommands = this;
     this.params = controller.event.parameter;

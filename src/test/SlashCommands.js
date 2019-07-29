@@ -1,6 +1,6 @@
 testRunner.functions.push(function (test, common) {
   function createSlashCommands(params) {
-    return new SlackBot.SlashCommands(common.createController(params));
+    return new SlackBot.SlashCommands(common.createDI(params));
   }
 
   test('registerSlashCommand()', function (assert) {
@@ -10,14 +10,14 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('new SlashCommands()', function (assert) {
-    var slashCommands = new SlackBot.SlashCommands(common.createController());
+    var slashCommands = new SlackBot.SlashCommands(common.createDI());
     assert.ok(slashCommands instanceof SlackBot.SlashCommands, 'creates SlashCommands object');
 
     assert.throws(
       function () {
-        slashCommands = new SlackBot.SlashCommands(null);
+        slashCommands = new SlackBot.SlashCommands();
       },
-      'throws an exception if a controller object was not provided'
+      'throws an exception if a DI object was not provided'
     );
   });
 

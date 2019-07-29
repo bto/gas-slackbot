@@ -1,6 +1,6 @@
 testRunner.functions.push(function (test, common) {
   function createOutgoingWebhook(params) {
-    return new SlackBot.OutgoingWebhook(common.createController(params));
+    return new SlackBot.OutgoingWebhook(common.createDI(params));
   }
 
   test('registerOutgoingWebhook()', function (assert) {
@@ -12,14 +12,14 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('new OutgoingWebhook()', function (assert) {
-    var outgoingWebhook = new SlackBot.OutgoingWebhook(common.createController());
+    var outgoingWebhook = new SlackBot.OutgoingWebhook(common.createDI());
     assert.ok(outgoingWebhook instanceof SlackBot.OutgoingWebhook, 'creates OutgoingWebhook object');
 
     assert.throws(
       function () {
-        outgoingWebhook = new SlackBot.OutgoingWebhook(null);
+        outgoingWebhook = new SlackBot.OutgoingWebhook();
       },
-      'throws an exception if a controller object was not provided'
+      'throws an exception if a DI object was not provided'
     );
   });
 
