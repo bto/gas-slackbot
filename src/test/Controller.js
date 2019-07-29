@@ -28,14 +28,6 @@ testRunner.functions.push(function (test, common) {
     assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
   });
 
-  test('Controller verification token', function (assert) {
-    var controller = createController();
-
-    var obj = controller.setVerificationToken('verification token');
-    assert.equal(controller, obj, 'returns itself');
-    assert.equal(controller.getVerificationToken(), 'verification token', 'set a verification token');
-  });
-
   test('Controller.createModule()', function (assert) {
     var controller = createController();
     var module = controller.createModule();

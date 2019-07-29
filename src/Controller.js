@@ -19,11 +19,13 @@ SlackBot.Controller.prototype = {
   },
 
   check: function check() {
+    var config = this.di.getShared('config');
+
     if (!this.botAccessToken) {
       this.logger.error('bot access token is not set');
     }
 
-    if (!this.verificationToken) {
+    if (!config.verificationToken) {
       this.logger.error('verification token is not set');
     }
   },
@@ -142,14 +144,6 @@ SlackBot.Controller.prototype = {
     return this.channelId;
   },
 
-  /**
-   * Get a verification token
-   * @return {String} return a verification token
-   */
-  getVerificationToken: function getVerificationToken() {
-    return this.verificationToken;
-  },
-
   send: function send(message) {
     if (!message) {
       return true;
@@ -209,23 +203,13 @@ SlackBot.Controller.prototype = {
   },
 
   /**
-   * Set a verification token
-   * @param {String} token: verification token
-   * @return {Object} return itself
-   */
-  setVerificationToken: function setVerificationToken(token) {
-    this.logger.debug('set a verification token: ' + token);
-    this.verificationToken = token;
-    return this;
-  },
-
-  /**
    * Verify if a token is valid
    * @param {String} token: a verification token
    * @return {null} return null
    */
   verifyToken: function verifyToken(token) {
-    if (this.getVerificationToken() === token) {
+    var verificationToken = this.di.getShared('config').verificationToken;
+    if (verificationToken === token) {
       return null;
     }
 
