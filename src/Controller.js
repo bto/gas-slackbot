@@ -43,11 +43,11 @@ SlackBot.Controller.prototype = {
 
   createModule: function createModule() {
     if (this.event.parameter.command) {
-      return this.di.get('slashCommands');
+      return this.di.getShared('slashCommands');
     } else if (this.event.parameter.text) {
-      return this.di.get('outgoingWebhook');
+      return this.di.getShared('outgoingWebhook');
     }
-    return this.di.get('eventsApi');
+    return this.di.getShared('eventsApi');
   },
 
   createOutputJson: function createOutputJson(content) {
