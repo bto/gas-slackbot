@@ -18,8 +18,7 @@ SlackBot.DI.prototype = {
     }
 
     if (typeof service === 'function') {
-      var config = name === 'config' ? null : this.getShared('config').get(name);
-      return this.services[name](config);
+      return this.services[name](this);
     }
 
     throw new Error('not supported service value');
@@ -47,11 +46,5 @@ SlackBot.DI.prototype = {
   setAll: function setAll(services) {
     this.objects = {};
     this.services = services ? services : {};
-
-    if (!this.services.config) {
-      this.services.config = new SlackBot.Config();
-    }
-
-    this.services.config.setCommon('di', this);
   }
 };

@@ -3,9 +3,6 @@ testRunner.functions.push(function (test) {
     var di = new SlackBot.DI();
     assert.ok(di instanceof SlackBot.DI, 'creates DI object');
 
-    var config = di.get('config');
-    assert.ok(config instanceof SlackBot.Config, 'Config object was set by default');
-
     di = new SlackBot.DI({
       foo: function () {
         return new SlackBot.Config();
@@ -20,11 +17,10 @@ testRunner.functions.push(function (test) {
 
     assert.notOk(di.get('foo'), 'returns nothing');
 
-    di.set('foo', function (config) {
-      assert.equal(config.foo, 'bar', 'passes config values');
+    di.set('foo', function (diObj) {
+      assert.equal(diObj, di, 'passes di object');
       return new SlackBot.Config();
     });
-    di.getShared('config').set('foo', {foo: 'bar'});
     var obj = di.get('foo');
     assert.ok(obj instanceof SlackBot.Config, 'returns a Config object');
 
@@ -65,9 +61,6 @@ testRunner.functions.push(function (test) {
     assert.ok(foo instanceof SlackBot.Config, 'returns a Config object');
     assert.ok(bar instanceof SlackBot.Config, 'returns a Config object');
     assert.notEqual(foo, bar, 'not same object');
-
-    var config = di.getShared('config');
-    assert.equal(config.getCommon('di'), di, 'set di object in common config');
   });
 });
 
