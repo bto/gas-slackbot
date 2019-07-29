@@ -8,14 +8,14 @@ SlackBot.registerSlashCommand = function registerSlashCommand(name, func) {
   SlackBot.SlashCommands.prototype.handlers[name] = func;
 };
 
-SlackBot.SlashCommands = function SlashCommands(controller) {
-  this.initialize(controller);
+SlackBot.SlashCommands = function SlashCommands(di) {
+  this.initialize(di);
 };
 
 SlackBot.SlashCommands.prototype = {
   handlers: {
-    ping: function handler(controller) {
-      controller.logger.info('ping slash command was called');
+    ping: function handler(di) {
+      di.getShared('logger').info('ping slash command was called');
       return 'PONG';
     }
   },
@@ -25,11 +25,9 @@ SlackBot.SlashCommands.prototype = {
       throw new Error('SlackBot.DI object must be passed');
     }
 
-    var controller = di.getShared('controller');
-    this.controller = controller;
-    this.slashCommands = this;
+    this.di = di;
+    this.logger = di.getShared('logger');
     this.params = di.getShared('event').parameter;
-    this.args = this.getArgs();
   },
 
   /**
@@ -37,18 +35,18 @@ SlackBot.SlashCommands.prototype = {
    * @return {Object} return output value
    */
   execute: function execute() {
-    this.controller.verifyToken(this.params.token);
+    this.di.getShared('controller').verifyToken(this.params.token);
 
     var command = this.params.command.substring(1);
     var handler = this.handlers[command];
     if (!handler) {
-      this.controller.logger.error('does not have any slash command handler for ' + command);
+      this.logger.error('does not have any slash command handler for ' + command);
       return null;
     }
 
-    this.controller.logger.info('call slash command handler for ' + command);
-    var output = handler(this.controller, this.params);
-    this.controller.logger.info('output of slash command handler: ' + output);
+    this.logger.info('call slash command handler for ' + command);
+    var output = handler(this.di, this.params);
+    this.logger.info('output of slash command handler: ' + output);
 
     if (typeof output === 'string') {
       return {
