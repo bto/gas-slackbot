@@ -23,8 +23,8 @@ SlackBot.registerEvent = function registerEvent(eventType, func) {
 };
 
 
-SlackBot.EventsApi = function EventsApi(controller) {
-  this.initialize(controller);
+SlackBot.EventsApi = function EventsApi(di) {
+  this.initialize(di);
 };
 
 SlackBot.EventsApi.prototype = {
@@ -72,7 +72,12 @@ SlackBot.EventsApi.prototype = {
     }]
   },
 
-  initialize: function initialize(controller) {
+  initialize: function initialize(di) {
+    if (!di || !(di instanceof SlackBot.DI)) {
+      throw new Error('SlackBot.DI object must be passed');
+    }
+
+    var controller = di.get('controller');
     this.controller = controller;
     controller.eventsApi = this;
     this.params = JSON.parse(controller.event.postData.contents);

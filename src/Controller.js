@@ -26,11 +26,8 @@ SlackBot.Controller.prototype = {
 
   createDI: function createDI() {
     return new SlackBot.DI({
-      config: function service() {
-        return new SlackBot.Config();
-      },
       eventsApi: function service(di) {
-        return new SlackBot.EventsApi(di.get('controller'));
+        return new SlackBot.EventsApi(di);
       },
       logger: function service(di) {
         return new SlackBot.Log(di.getShared('config').logLevel);

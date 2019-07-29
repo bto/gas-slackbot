@@ -14,6 +14,12 @@ TestCommon.prototype = {
     return controller;
   },
 
+  createDI: function createDI(params, eventParams) {
+    return new SlackBot.DI({
+      controller: TestCommon.prototype.createController(params, eventParams)
+    });
+  },
+
   createEvent: function createEvent(params, eventParams) {
     var channelId = this.getProperty('SLACK_CHANNEL_ID');
     var token = this.getProperty('SLACK_VERIFICATION_TOKEN');

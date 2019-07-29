@@ -1,6 +1,6 @@
 testRunner.functions.push(function (test, common) {
   function createEventsApi(params, eventParams) {
-    return new SlackBot.EventsApi(common.createController(params, eventParams));
+    return new SlackBot.EventsApi(common.createDI(params, eventParams));
   }
 
   test('registerBotCommand()', function (assert) {
@@ -16,14 +16,14 @@ testRunner.functions.push(function (test, common) {
   });
 
   test('new EventsApi()', function (assert) {
-    var eventsApi = new SlackBot.EventsApi(common.createController());
+    var eventsApi = new SlackBot.EventsApi(common.createDI());
     assert.ok(eventsApi instanceof SlackBot.EventsApi, 'creates EventsApi object');
 
     assert.throws(
       function () {
-        eventsApi = new SlackBot.EventsApi(null);
+        eventsApi = new SlackBot.EventsApi();
       },
-      'throws an exception if a controller object was not provided'
+      'throws an exception if a DI object was not provided'
     );
   });
 
