@@ -1,31 +1,34 @@
-SlackBot.Controller = function Controller(e, config) {
-  this.initialize(e, config);
+SlackBot.Controller = function Controller(e, opts) {
+  this.initialize(e, opts);
 };
 
 SlackBot.Controller.prototype = {
-  initialize: function initialize(e, config) {
-    var di;
+  initialize: function initialize(e, opts) {
     if (e instanceof SlackBot.DI) {
-      di = this.di = e;
-    } else {
-      di = this.di = this.createDI();
-      di.setShared('config', config ? config : {});
-      di.setShared('controller', this);
-      di.setShared('event', e);
+      this.di = e;
+      this.config = this.di.getShared('config');
+      this.logger = this.di.getShared('logger');
+      return;
     }
 
-    this.logger = di.getShared('logger');
-    this.logger.info(JSON.stringify(e));
+    var config = this.config = opts ? opts : {};
+    var logger = this.logger = new SlackBot.Log(config.logLevel);
+
+    var di = this.di = this.createDI();
+    di.setShared('config', config);
+    di.setShared('controller', this);
+    di.setShared('event', e);
+    di.setShared('logger', new SlackBot.Log(config.logLevel));
+
+    logger.info(JSON.stringify(e));
   },
 
   check: function check() {
-    var config = this.di.getShared('config');
-
-    if (!config.botAccessToken) {
+    if (!this.config.botAccessToken) {
       this.logger.error('bot access token is not set');
     }
 
-    if (!config.verificationToken) {
+    if (!this.config.verificationToken) {
       this.logger.error('verification token is not set');
     }
   },
@@ -34,9 +37,6 @@ SlackBot.Controller.prototype = {
     return new SlackBot.DI({
       eventsApi: function service(di) {
         return new SlackBot.EventsApi(di);
-      },
-      logger: function service(di) {
-        return new SlackBot.Log(di.getShared('config').logLevel);
       },
       outgoingWebhook: function service(di) {
         return new SlackBot.OutgoingWebhook(di);
@@ -127,18 +127,16 @@ SlackBot.Controller.prototype = {
    * @return {String} return a channel id
    */
   getChannelId: function getChannelId() {
-    var channelId = this.di.getShared('config').channelId;
-
     if (!this.module) {
+      return this.config.channelId;
+    }
+
+    var channelId = this.module.getChannelId();
+    if (channelId) {
       return channelId;
     }
 
-    var moduleChannelId = this.module.getChannelId();
-    if (moduleChannelId) {
-      return moduleChannelId;
-    }
-
-    return channelId;
+    return this.config.channelId;
   },
 
   send: function send(message) {
@@ -183,8 +181,7 @@ SlackBot.Controller.prototype = {
    * @return {null} return null
    */
   verifyToken: function verifyToken(token) {
-    var verificationToken = this.di.getShared('config').verificationToken;
-    if (verificationToken === token) {
+    if (this.config.verificationToken === token) {
       return null;
     }
 
