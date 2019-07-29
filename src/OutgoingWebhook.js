@@ -21,6 +21,9 @@ SlackBot.OutgoingWebhook.prototype = {
       throw new Error('SlackBot.DI object must be passed');
     }
 
+    this.di = di;
+    this.logger = di.getShared('logger');
+
     var controller = di.get('controller');
     this.controller = controller;
     this.outgoingWebhook = this;
@@ -30,9 +33,9 @@ SlackBot.OutgoingWebhook.prototype = {
   execute: function execute() {
     this.controller.verifyToken(this.params.token);
 
-    this.controller.logger.info('call outgoing webhook handler');
+    this.logger.info('call outgoing webhook handler');
     var output = this.handler(this.controller, this.params);
-    this.controller.logger.info('output of outgoing webhook handler: ' + output);
+    this.logger.info('output of outgoing webhook handler: ' + output);
     if (typeof output === 'string') {
       return {text: output};
     }
