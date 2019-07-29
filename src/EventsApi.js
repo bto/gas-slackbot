@@ -31,39 +31,41 @@ SlackBot.EventsApi.prototype = {
   defaultMessage: 'そんなコマンドはないよ。',
 
   commands: {
-    nop: function command(controller) {
-      controller.logger.info('nop command was called');
+    nop: function command(params, di) {
+      di.getShared('logger').info('nop command was called');
       return null;
     },
 
-    help: function command(controller) {
-      controller.logger.info('help command was called');
+    help: function command(params, di) {
+      di.getShared('logger').info('help command was called');
       return '吾輩はBotである。ヘルプはまだない。';
     },
 
-    ping: function command(controller) {
-      controller.logger.info('ping command was called');
+    ping: function command(params, di) {
+      di.getShared('logger').info('ping command was called');
       return 'PONG';
     }
   },
 
   handlers: {
-    app_mention: [function handler(controller, params) {
-      var eventsApi = controller.eventsApi;
+    app_mention: [function handler(params, di) {
+      var eventsApi = di.getShared('eventsApi');
+      var logger = di.getShared('logger');
+
       var command = params.event.text.split(/\s+/)[1];
-      controller.logger.info('bot command: ' + command);
+      logger.info('bot command: ' + command);
       var message;
       if (eventsApi.commands.hasOwnProperty(command)) {
-        controller.logger.info('call command handler for ' + command);
-        message = eventsApi.commands[command](controller, params);
+        logger.info('call command handler for ' + command);
+        message = eventsApi.commands[command](params, di);
       } else {
-        controller.logger.info('does not have any command handler for ' + command);
+        logger.info('does not have any command handler for ' + command);
         message = eventsApi.getDefaultMessage();
       }
-      controller.logger.info('output of command handler: ' + message);
+      logger.info('output of command handler: ' + message);
 
       var channelId = params.event.channel;
-      controller.di.get('webApi').call('chat.postMessage', 'post', {
+      di.get('webApi').call('chat.postMessage', 'post', {
         channel: channelId,
         text: message
       });
@@ -77,9 +79,8 @@ SlackBot.EventsApi.prototype = {
       throw new Error('SlackBot.DI object must be passed');
     }
 
-    var controller = di.getShared('controller');
-    this.controller = controller;
-    controller.eventsApi = this;
+    this.di = di;
+    this.logger = di.getShared('logger');
     this.params = JSON.parse(di.getShared('event').postData.contents);
   },
 
@@ -91,15 +92,15 @@ SlackBot.EventsApi.prototype = {
     var type = this.params.event.type;
     var handlers = this.handlers[type];
     if (!handlers) {
-      this.controller.logger.error('does not have any event handler for ' + type);
+      this.logger.error('does not have any event handler for ' + type);
       return null;
     }
 
-    this.controller.logger.info('call event handlers for ' + type);
+    this.logger.info('call event handlers for ' + type);
     var output = null;
     for (var i = 0; i < handlers.length; i++) {
-      output = handlers[i](this.controller, this.params);
-      this.controller.logger.info('output of handler: ' + output);
+      output = handlers[i](this.params, this.di);
+      this.logger.info('output of handler: ' + output);
     }
 
     return output;
@@ -110,17 +111,19 @@ SlackBot.EventsApi.prototype = {
    * @return {Object} return output value
    */
   execute: function execute() {
-    this.controller.verifyToken(this.params.token);
+    var controller = this.di.getShared('controller');
+
+    controller.verifyToken(this.params.token);
 
     var type = this.params.type;
     switch (type) {
     case 'event_callback':
       return this.callEventHandlers();
     case 'url_verification':
-      return this.controller.createOutputText(this.params.challenge);
+      return controller.createOutputText(this.params.challenge);
     default:
       var message = 'not supported events api: ' + type;
-      this.controller.logger.error(message);
+      this.logger.error(message);
       throw new Error(message);
     }
   },
