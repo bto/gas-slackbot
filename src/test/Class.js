@@ -14,22 +14,22 @@ testRunner.functions.push(function t1(test) {
       foo: 'bar',
       f1: function f1() {
         this.bar = 'baz';
-        Child._super(this, arguments);
+        Child._super(arguments).call(this);
       }
     });
 
     var pObj = new Parent();
-    assert.equal(pObj.foo, 'foo');
-    assert.equal(pObj.bar, 'foo');
+    assert.equal(pObj.foo, 'foo', 'has a valid value');
+    assert.equal(pObj.bar, 'foo', 'has a valid value');
     pObj.f1();
-    assert.equal(pObj.foo, 'baz');
-    assert.equal(pObj.bar, 'foo');
+    assert.equal(pObj.foo, 'baz', 'has a valid value');
+    assert.equal(pObj.bar, 'foo', 'has a valid value');
 
     var cObj = new Child();
-    assert.equal(cObj.foo, 'bar');
-    assert.equal(cObj.bar, 'foo');
+    assert.equal(cObj.foo, 'bar', 'has a valid value');
+    assert.equal(cObj.bar, 'foo', 'has a valid value');
     cObj.f1();
-    assert.equal(cObj.foo, 'baz');
-    assert.equal(cObj.bar, 'baz');
+    assert.equal(cObj.foo, 'baz', 'has a valid value');
+    assert.equal(cObj.bar, 'baz', 'has a valid value');
   });
 });

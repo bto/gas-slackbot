@@ -1,7 +1,7 @@
 SlackBot.Class = {
   extend: function extend(childClass, parentClass, proto) {
-    childClass._super = function _super(obj, args) {
-      return parentClass.prototype[args.callee.name].apply(obj, args);
+    childClass._super = function _super(args) {
+      return parentClass.prototype[args.callee.name];
     };
 
     childClass.prototype = Object.create(parentClass.prototype);

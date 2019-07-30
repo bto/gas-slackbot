@@ -9,6 +9,10 @@ TestCommon.prototype = {
   createDI: function createDI(params, eventParams) {
     var di = SlackBot.Controller.prototype.createDI();
 
+    di.set('webApi', function service(diObj) {
+      return new SlackBot.MockWebApi(diObj.getShared('config').botAccessToken);
+    });
+
     di.setShared('config', {
       botAccessToken: this.getProperty('SLACK_BOT_ACCESS_TOKEN'),
       channelId: this.getProperty('SLACK_CHANNEL_ID'),
