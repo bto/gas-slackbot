@@ -1,6 +1,7 @@
-exports.Controller = function Controller(e, opts) {
+function Controller(e, opts) {
   this.initialize(e, opts);
-};
+}
+exports.Controller = Controller;
 
 Controller.prototype = {
   initialize: function initialize(e, opts) {

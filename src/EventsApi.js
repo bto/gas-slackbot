@@ -4,9 +4,10 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-exports.registerBotCommand = function registerBotCommand(name, func) {
+function registerBotCommand(name, func) {
   EventsApi.prototype.commands[name] = func;
-};
+}
+exports.registerBotCommand = registerBotCommand;
 
 /**
  * Register an event handler
@@ -14,13 +15,14 @@ exports.registerBotCommand = function registerBotCommand(name, func) {
  * @param {Function} func: an event handler
  * @return {Object} return itself
  */
-exports.registerEvent = function registerEvent(eventType, func) {
+function registerEvent(eventType, func) {
   if (!EventsApi.prototype.handlers[eventType]) {
     EventsApi.prototype.handlers[eventType] = [];
   }
 
   EventsApi.prototype.handlers[eventType].push(func);
-};
+}
+exports.registerEvent = registerEvent;
 
 
 function EventsApi(di) {

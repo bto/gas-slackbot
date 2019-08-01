@@ -4,9 +4,10 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-exports.registerSlashCommand = function registerSlashCommand(name, func) {
+function registerSlashCommand(name, func) {
   SlashCommands.prototype.handlers[name] = func;
-};
+}
+exports.registerSlashCommand = registerSlashCommand;
 
 function SlashCommands(di) {
   this.initialize(di);

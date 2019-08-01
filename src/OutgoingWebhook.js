@@ -3,9 +3,10 @@
  * @param {Object} func: a function object
  * @return {null} return nothing
  */
-exports.registerOutgoingWebhook = function registerOutgoingWebhook(func) {
+function registerOutgoingWebhook(func) {
   OutgoingWebhook.prototype.handler = func;
-};
+}
+exports.registerOutgoingWebhook = registerOutgoingWebhook;
 
 function OutgoingWebhook(di) {
   this.initialize(di);
