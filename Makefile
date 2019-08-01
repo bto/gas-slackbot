@@ -5,8 +5,6 @@ SRC_DIR=src
 VENDOR_DIR=vendor
 GAST_DIR=$(VENDOR_DIR)/gast
 
-DIST_FILE=$(DIST_DIR)/SlackBot.min.js
-UGLIFYJS_CONFIG_FILE=$(CONFIG_DIR)/uglifyjs.json
 SRC_FILES=$(SRC_DIR)/*.js
 
 
@@ -16,7 +14,8 @@ all: init check push test-gas build
 
 .PHONY: build
 build:
-	npx uglifyjs --config-file $(UGLIFYJS_CONFIG_FILE) $(SRC_FILES) --output $(DIST_FILE)
+	npx uglifyjs --config-file $(CONFIG_DIR)/uglifyjs.json --beautify beautify $(SRC_FILES) --output $(DIST_DIR)/SlackBot.js
+	npx uglifyjs --config-file $(CONFIG_DIR)/uglifyjs.min.json $(SRC_FILES) --output $(DIST_DIR)/SlackBot.min.js
 
 
 .PHONY: clean
