@@ -9,17 +9,14 @@ testRunner.functions.push(function (test, common) {
     assert.ok(controller instanceof Controller, 'creates Controller object');
   });
 
-  test('Controller.createModule()', function (assert) {
-    var controller = createController();
-    var module = controller.createModule();
+  test('Controller.createDI()', function (assert) {
+    var module = common.createDI().get('module');
     assert.ok(module instanceof EventsApi, 'creates EventsApi object');
 
-    controller = createController({text: 'foo'});
-    module = controller.createModule();
+    module = common.createDI({text: 'foo'}).get('module');
     assert.ok(module instanceof OutgoingWebhook, 'creates OutgoingWebhook object');
 
-    controller = createController({command: '/foo'});
-    module = controller.createModule();
+    module = common.createDI({command: '/foo'}).get('module');
     assert.ok(module instanceof SlashCommands, 'creates SlashCommands object');
   });
 
@@ -108,14 +105,6 @@ testRunner.functions.push(function (test, common) {
     var content = ContentService.createTextOutput('foo').setMimeType(ContentService.MimeType.TEXT);
     output = controller.finish(content);
     assert.equal(output, content, 'returns a same object');
-  });
-
-  test('Controller.getChannelId()', function (assert) {
-    var controller = createController();
-    assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
-
-    controller.module = controller.createModule();
-    assert.equal(controller.getChannelId(), common.getProperty('SLACK_CHANNEL_ID'), 'returns a channel id');
   });
 
   test('Controller.send()', function (assert) {

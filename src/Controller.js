@@ -29,6 +29,10 @@ Controller.prototype = {
       this.logger.error('bot access token is not set');
     }
 
+    if (!this.config.channelId) {
+      this.logger.error('channel id is not set');
+    }
+
     if (!this.config.verificationToken) {
       this.logger.error('verification token is not set');
     }
@@ -38,6 +42,15 @@ Controller.prototype = {
     return new DI({
       eventsApi: function service(di) {
         return new EventsApi(di);
+      },
+      module: function service(di) {
+        var e = di.getShared('event');
+        if (e.parameter.command) {
+          return di.get('slashCommands');
+        } else if (e.parameter.text) {
+          return di.get('outgoingWebhook');
+        }
+        return di.get('eventsApi');
       },
       outgoingWebhook: function service(di) {
         return new OutgoingWebhook(di);
@@ -49,16 +62,6 @@ Controller.prototype = {
         return new WebApi(di.getShared('config').botAccessToken);
       }
     });
-  },
-
-  createModule: function createModule() {
-    var e = this.di.getShared('event');
-    if (e.parameter.command) {
-      return this.di.getShared('slashCommands');
-    } else if (e.parameter.text) {
-      return this.di.getShared('outgoingWebhook');
-    }
-    return this.di.getShared('eventsApi');
   },
 
   createOutputJson: function createOutputJson(content) {
@@ -79,7 +82,6 @@ Controller.prototype = {
    */
   execute: function execute() {
     this.check();
-    this.module = this.createModule();
     var content = this.fire();
     var output = this.finish(content);
     this.sendLog();
@@ -87,93 +89,72 @@ Controller.prototype = {
   },
 
   finish: function finish(content) {
-    if (!content) {
+    var value = content;
+
+    if (!value) {
       return this.createOutputText();
     }
 
-    if (Obj.isString(content)) {
-      try {
-        if (this.send(content)) {
-          return this.createOutputText();
-        }
-        return this.createOutputText(content);
-      } catch (e) {
-        console.error(e.message);
-        return this.createOutputText(e.message);
-      }
+    if (Obj.isObject(value)) {
+      return this.createOutputJson(value);
     }
 
-    if (Obj.isObject(content)) {
-      return this.createOutputJson(content);
+    if (Obj.isGASObject(value)) {
+      return value;
     }
 
-    if (Obj.isGASObject(content)) {
-      return content;
+    if (!Obj.isString(value)) {
+      value = 'invalid output value: ' + value;
+      this.logger.error('invalid output value: ' + value);
     }
 
-    this.logger.error('invalid output content: ' + content);
-    return this.createOutputText();
+    var channelId = this.di.getShared('module').getChannelId();
+    if (!channelId) {
+      return this.createOutputText(value);
+    }
+
+    if (this.send(value, channelId)) {
+      return this.createOutputText();
+    }
+
+    var message = this.di.getShared('webApi').errorMessage;
+    console.error(message);
+    return this.createOutputText(value + '\n' + message);
   },
 
   fire: function fire() {
     try {
-      return this.module.execute();
+      return this.di.getShared('module').execute();
     } catch (e) {
       return e.message;
     }
   },
 
-  /**
-   * Get a channel id
-   * @return {String} return a channel id
-   */
-  getChannelId: function getChannelId() {
-    if (!this.module) {
-      return this.config.channelId;
-    }
-
-    var channelId = this.module.getChannelId();
-    if (channelId) {
-      return channelId;
-    }
-
-    return this.config.channelId;
-  },
-
-  send: function send(message) {
-    if (!message) {
-      return true;
-    }
-
-    var channelId = this.getChannelId();
-    if (!channelId) {
-      return false;
-    }
-
-    var webApi = this.di.get('webApi');
-    var params = {
+  send: function send(message, channelId) {
+    return this.di.getShared('webApi').call('chat.postMessage', 'post', {
       channel: channelId,
       text: message
-    };
-    if (!webApi.call('chat.postMessage', 'post', params)) {
-      throw new Error(webApi.errorMessage);
-    }
-
-    return true;
+    });
   },
 
   sendLog: function sendLog() {
-    var content = this.logger.toString();
-    try {
-      if (this.send(content)) {
-        return true;
-      }
-      console.error(content);
-      return false;
-    } catch (e) {
-      console.error(e.message);
-      return false;
+    var value = this.logger.toString();
+    if (!value) {
+      return;
     }
+
+    console.log(value);
+
+    var channelId = this.config.channelId;
+    if (!channelId) {
+      return;
+    }
+
+    if (this.send(value, channelId)) {
+      return;
+    }
+
+    console.error(this.di.getShared('webApi').errorMessage);
   },
 
   /**
