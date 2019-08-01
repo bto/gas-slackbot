@@ -18,7 +18,7 @@ describe('Events API', function testEventsApi() {
     return common.createApiBotCommand('foo').then(function testResponse(res) {
       assert(res.statusCode === 200);
       assert(/text\/plain/.test(res.headers['content-type']));
-      assert(res.text === 'そんなコマンドはないよ。');
+      assert(res.text === '');
     });
   });
 
@@ -34,7 +34,7 @@ describe('Events API', function testEventsApi() {
     return common.createApiBotCommand('help').then(function testResponse(res) {
       assert(res.statusCode === 200);
       assert(/text\/plain/.test(res.headers['content-type']));
-      assert(res.text === '吾輩はBotである。ヘルプはまだない。');
+      assert(res.text === '');
     });
   });
 
@@ -42,7 +42,7 @@ describe('Events API', function testEventsApi() {
     return common.createApiBotCommand('ping').then(function testResponse(res) {
       assert(res.statusCode === 200);
       assert(/text\/plain/.test(res.headers['content-type']));
-      assert(res.text === 'PONG');
+      assert(res.text === '');
     });
   });
 });
