@@ -21,7 +21,7 @@ function doPost(e) {
   }
 
   if (typeof SlackBot === 'undefined') {
-    var SlackBot = {
+    var SlackBot = this.SlackBot ? this.SlackBot : {
       Controller: Controller
     };
   }

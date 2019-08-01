@@ -1,1 +1,0 @@
-../src/zzGlobal/global.js
