@@ -1,10 +1,10 @@
-SlackBot.Controller = function Controller(e, opts) {
+exports.Controller = function Controller(e, opts) {
   this.initialize(e, opts);
 };
 
-SlackBot.Controller.prototype = {
+Controller.prototype = {
   initialize: function initialize(e, opts) {
-    if (e instanceof SlackBot.DI) {
+    if (e instanceof DI) {
       this.di = e;
       this.config = this.di.getShared('config');
       this.logger = this.di.getShared('logger');
@@ -12,13 +12,13 @@ SlackBot.Controller.prototype = {
     }
 
     var config = this.config = opts ? opts : {};
-    var logger = this.logger = new SlackBot.Log(config.logLevel);
+    var logger = this.logger = new Log(config.logLevel);
 
     var di = this.di = this.createDI();
     di.setShared('config', config);
     di.setShared('controller', this);
     di.setShared('event', e);
-    di.setShared('logger', new SlackBot.Log(config.logLevel));
+    di.setShared('logger', new Log(config.logLevel));
 
     logger.info(JSON.stringify(e));
   },
@@ -34,18 +34,18 @@ SlackBot.Controller.prototype = {
   },
 
   createDI: function createDI() {
-    return new SlackBot.DI({
+    return new DI({
       eventsApi: function service(di) {
-        return new SlackBot.EventsApi(di);
+        return new EventsApi(di);
       },
       outgoingWebhook: function service(di) {
-        return new SlackBot.OutgoingWebhook(di);
+        return new OutgoingWebhook(di);
       },
       slashCommands: function service(di) {
-        return new SlackBot.SlashCommands(di);
+        return new SlashCommands(di);
       },
       webApi: function service(di) {
-        return new SlackBot.WebApi(di.getShared('config').botAccessToken);
+        return new WebApi(di.getShared('config').botAccessToken);
       }
     });
   },
@@ -90,7 +90,7 @@ SlackBot.Controller.prototype = {
       return this.createOutputText();
     }
 
-    if (SlackBot.Obj.isString(content)) {
+    if (Obj.isString(content)) {
       try {
         if (this.send(content)) {
           return this.createOutputText();
@@ -102,11 +102,11 @@ SlackBot.Controller.prototype = {
       }
     }
 
-    if (SlackBot.Obj.isObject(content)) {
+    if (Obj.isObject(content)) {
       return this.createOutputJson(content);
     }
 
-    if (SlackBot.Obj.isGASObject(content)) {
+    if (Obj.isGASObject(content)) {
       return content;
     }
 

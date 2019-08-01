@@ -3,22 +3,22 @@
  * @param {Object} func: a function object
  * @return {null} return nothing
  */
-SlackBot.registerOutgoingWebhook = function registerOutgoingWebhook(func) {
-  SlackBot.OutgoingWebhook.prototype.handler = func;
+exports.registerOutgoingWebhook = function registerOutgoingWebhook(func) {
+  OutgoingWebhook.prototype.handler = func;
 };
 
-SlackBot.OutgoingWebhook = function OutgoingWebhook(di) {
+function OutgoingWebhook(di) {
   this.initialize(di);
-};
+}
 
-SlackBot.OutgoingWebhook.prototype = {
+OutgoingWebhook.prototype = {
   handler: function echo(di, params) {
     return params.text;
   },
 
   initialize: function initialize(di) {
-    if (!di || !(di instanceof SlackBot.DI)) {
-      throw new Error('SlackBot.DI object must be passed');
+    if (!di || !(di instanceof DI)) {
+      throw new Error('DI object must be passed');
     }
 
     this.di = di;
@@ -43,3 +43,5 @@ SlackBot.OutgoingWebhook.prototype = {
     return this.params.channel_id;
   }
 };
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^registerOutgoingWebhook$" }] */

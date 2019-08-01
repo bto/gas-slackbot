@@ -1,14 +1,14 @@
-SlackBot.Config = function Config(config) {
+function Config(config) {
   this.initialize(config);
-};
+}
 
-SlackBot.Config.prototype = {
+Config.prototype = {
   initialize: function initialize(config) {
     this.setAll(config);
   },
 
   get: function get(name) {
-    return SlackBot.Obj.merge(this.config.common, this.config[name]);
+    return Obj.merge(this.config.common, this.config[name]);
   },
 
   getAll: function getAll() {

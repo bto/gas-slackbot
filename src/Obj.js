@@ -1,4 +1,4 @@
-SlackBot.Obj = {
+var Obj = {
   isArray: function isArray(x) {
     return Object.prototype.toString.call(x) === '[object Array]';
   },
@@ -45,3 +45,5 @@ SlackBot.Obj = {
     return obj;
   }
 };
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Obj$" }] */

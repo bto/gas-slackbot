@@ -1,15 +1,15 @@
 testRunner.functions.push(function (test) {
   test('new Config()', function (assert) {
-    var config = new SlackBot.Config();
-    assert.ok(config instanceof SlackBot.Config, 'creates Config object');
+    var config = new Config();
+    assert.ok(config instanceof Config, 'creates Config object');
 
-    config = new SlackBot.Config({foo: {bar: 'baz'}});
-    assert.ok(config instanceof SlackBot.Config, 'creates Config object');
+    config = new Config({foo: {bar: 'baz'}});
+    assert.ok(config instanceof Config, 'creates Config object');
     assert.deepEqual(config.get('foo'), {bar: 'baz'}, 'returns a valid value');
   });
 
   test('Config: get(), set()', function (assert) {
-    var config = new SlackBot.Config();
+    var config = new Config();
 
     assert.deepEqual(config.get('foo'), {}, 'returns empty hash table');
 
@@ -19,7 +19,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('Config: getAll(), setAll()', function (assert) {
-    var config = new SlackBot.Config();
+    var config = new Config();
 
     config.setAll({foo: {bar: 'baz'}, bar: {foo: 'baz'}});
     var value = config.get('foo');
@@ -32,7 +32,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('Config: getCommon(), setCommon()', function (assert) {
-    var config = new SlackBot.Config();
+    var config = new Config();
     config.set('foo', {bar: 'baz'});
 
     assert.notOk(config.getCommon('baz'), 'returns nothing');
@@ -43,7 +43,7 @@ testRunner.functions.push(function (test) {
   });
 
   test('Config: getCommonAll(), setCommonAll()', function (assert) {
-    var config = new SlackBot.Config();
+    var config = new Config();
 
     config.setCommonAll({foo: {bar: 'baz'}, bar: {foo: 'baz'}});
     var value = config.getCommon('foo');

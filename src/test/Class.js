@@ -10,7 +10,7 @@ testRunner.functions.push(function t1(test) {
     };
 
     function Child() {}
-    SlackBot.Class.extend(Child, Parent, {
+    Class.extend(Child, Parent, {
       foo: 'bar',
       f1: function f1() {
         this.bar = 'baz';

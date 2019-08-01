@@ -4,8 +4,8 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-SlackBot.registerBotCommand = function registerBotCommand(name, func) {
-  SlackBot.EventsApi.prototype.commands[name] = func;
+exports.registerBotCommand = function registerBotCommand(name, func) {
+  EventsApi.prototype.commands[name] = func;
 };
 
 /**
@@ -14,20 +14,20 @@ SlackBot.registerBotCommand = function registerBotCommand(name, func) {
  * @param {Function} func: an event handler
  * @return {Object} return itself
  */
-SlackBot.registerEvent = function registerEvent(eventType, func) {
-  if (!SlackBot.EventsApi.prototype.handlers[eventType]) {
-    SlackBot.EventsApi.prototype.handlers[eventType] = [];
+exports.registerEvent = function registerEvent(eventType, func) {
+  if (!EventsApi.prototype.handlers[eventType]) {
+    EventsApi.prototype.handlers[eventType] = [];
   }
 
-  SlackBot.EventsApi.prototype.handlers[eventType].push(func);
+  EventsApi.prototype.handlers[eventType].push(func);
 };
 
 
-SlackBot.EventsApi = function EventsApi(di) {
+function EventsApi(di) {
   this.initialize(di);
-};
+}
 
-SlackBot.EventsApi.prototype = {
+EventsApi.prototype = {
   defaultMessage: 'そんなコマンドはないよ。',
 
   commands: {
@@ -75,8 +75,8 @@ SlackBot.EventsApi.prototype = {
   },
 
   initialize: function initialize(di) {
-    if (!di || !(di instanceof SlackBot.DI)) {
-      throw new Error('SlackBot.DI object must be passed');
+    if (!di || !(di instanceof DI)) {
+      throw new Error('DI object must be passed');
     }
 
     this.di = di;
@@ -140,3 +140,5 @@ SlackBot.EventsApi.prototype = {
     return this.defaultMessage;
   }
 };
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^registerBotCommand|registerEvent$" }] */

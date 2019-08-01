@@ -1,8 +1,8 @@
-SlackBot.WebApi = function WebApi(token) {
+function WebApi(token) {
   this.initialize(token);
-};
+}
 
-SlackBot.WebApi.prototype = {
+WebApi.prototype = {
   initialize: function initialize(token) {
     this.token = token;
   },
@@ -48,7 +48,7 @@ SlackBot.WebApi.prototype = {
   },
 
   createRequestParams: function createRequestParams(params) {
-    return SlackBot.Obj.merge({
+    return Obj.merge({
       token: this.token
     }, params ? params : {});
   },

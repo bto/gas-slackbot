@@ -1,8 +1,8 @@
-SlackBot.DI = function DI(services) {
+function DI(services) {
   this.initialize(services);
-};
+}
 
-SlackBot.DI.prototype = {
+DI.prototype = {
   initialize: function initialize(services) {
     this.setAll(services);
     return this;

@@ -1,27 +1,27 @@
 testRunner.functions.push(function (test, common) {
   function createEventsApi(params, eventParams) {
-    return new SlackBot.EventsApi(common.createDI(params, eventParams));
+    return new EventsApi(common.createDI(params, eventParams));
   }
 
   test('registerBotCommand()', function (assert) {
     var func = function () {};
-    SlackBot.registerBotCommand('foo', func);
-    assert.equal(SlackBot.EventsApi.prototype.commands.foo, func, 'register a command function');
+    registerBotCommand('foo', func);
+    assert.equal(EventsApi.prototype.commands.foo, func, 'register a command function');
   });
 
   test('registerEvent()', function (assert) {
     var func = function () {};
-    SlackBot.registerEvent('foo', func);
-    assert.equal(SlackBot.EventsApi.prototype.handlers.foo[0], func, 'register a event function');
+    registerEvent('foo', func);
+    assert.equal(EventsApi.prototype.handlers.foo[0], func, 'register a event function');
   });
 
   test('new EventsApi()', function (assert) {
-    var eventsApi = new SlackBot.EventsApi(common.createDI());
-    assert.ok(eventsApi instanceof SlackBot.EventsApi, 'creates EventsApi object');
+    var eventsApi = new EventsApi(common.createDI());
+    assert.ok(eventsApi instanceof EventsApi, 'creates EventsApi object');
 
     assert.throws(
       function () {
-        eventsApi = new SlackBot.EventsApi();
+        eventsApi = new EventsApi();
       },
       'throws an exception if a DI object was not provided'
     );
@@ -37,7 +37,7 @@ testRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 0, 'first function was not called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    SlackBot.registerEvent(
+    registerEvent(
       'foo_event',
       function () {
         f1Called++;
@@ -48,7 +48,7 @@ testRunner.functions.push(function (test, common) {
     assert.equal(f1Called, 1, 'first function was called');
     assert.equal(f2Called, 0, 'second function was not called');
 
-    SlackBot.registerEvent(
+    registerEvent(
       'foo_event',
       function () {
         f2Called++;
@@ -88,7 +88,7 @@ testRunner.functions.push(function (test, common) {
   test('EventsApi.execute(): url_verification', function (assert) {
     var eventsApi = createEventsApi({challenge: 'foo', type: 'url_verification'});
     var output = eventsApi.execute();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), 'foo', 'has a valid content');
   });

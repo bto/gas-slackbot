@@ -1,21 +1,21 @@
 testRunner.functions.push(function (test, common) {
   function createSlashCommands(params) {
-    return new SlackBot.SlashCommands(common.createDI(params));
+    return new SlashCommands(common.createDI(params));
   }
 
   test('registerSlashCommand()', function (assert) {
     var func = function () {};
-    SlackBot.registerSlashCommand('/foo', func);
-    assert.equal(SlackBot.SlashCommands.prototype.handlers['/foo'], func, 'register a slash command function');
+    registerSlashCommand('/foo', func);
+    assert.equal(SlashCommands.prototype.handlers['/foo'], func, 'register a slash command function');
   });
 
   test('new SlashCommands()', function (assert) {
-    var slashCommands = new SlackBot.SlashCommands(common.createDI());
-    assert.ok(slashCommands instanceof SlackBot.SlashCommands, 'creates SlashCommands object');
+    var slashCommands = new SlashCommands(common.createDI());
+    assert.ok(slashCommands instanceof SlashCommands, 'creates SlashCommands object');
 
     assert.throws(
       function () {
-        slashCommands = new SlackBot.SlashCommands();
+        slashCommands = new SlashCommands();
       },
       'throws an exception if a DI object was not provided'
     );

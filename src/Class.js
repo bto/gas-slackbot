@@ -1,4 +1,4 @@
-SlackBot.Class = {
+var Class = {
   extend: function extend(childClass, parentClass, proto) {
     childClass._super = function _super(args) {
       return parentClass.prototype[args.callee.name];
@@ -15,3 +15,5 @@ SlackBot.Class = {
     }
   }
 };
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Class$" }] */

@@ -7,10 +7,10 @@ TestCommon.prototype = {
   },
 
   createDI: function createDI(params, eventParams) {
-    var di = SlackBot.Controller.prototype.createDI();
+    var di = Controller.prototype.createDI();
 
     di.set('webApi', function service(diObj) {
-      return new SlackBot.MockWebApi(diObj.getShared('config').botAccessToken);
+      return new MockWebApi(diObj.getShared('config').botAccessToken);
     });
 
     di.setShared('config', {
@@ -19,9 +19,9 @@ TestCommon.prototype = {
       verificationToken: this.getProperty('SLACK_VERIFICATION_TOKEN')
     });
     di.setShared('event', this.createEvent(params, eventParams));
-    di.setShared('logger', new SlackBot.Log());
+    di.setShared('logger', new Log());
 
-    di.setShared('controller', new SlackBot.Controller(di));
+    di.setShared('controller', new Controller(di));
 
     return di;
   },
@@ -30,13 +30,13 @@ TestCommon.prototype = {
     var channelId = this.getProperty('SLACK_CHANNEL_ID');
     var token = this.getProperty('SLACK_VERIFICATION_TOKEN');
 
-    var parameter = SlackBot.Obj.merge({
+    var parameter = Obj.merge({
       token: token
     }, params ? params : {});
 
-    var postData = SlackBot.Obj.merge({
+    var postData = Obj.merge({
       challenge: 'challenge code',
-      event: SlackBot.Obj.merge({
+      event: Obj.merge({
         channel: channelId,
         type: 'app_mention'
       }, eventParams ? eventParams : {}),

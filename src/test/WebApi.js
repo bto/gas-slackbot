@@ -1,11 +1,11 @@
 testRunner.functions.push(function (test, common) {
   function createWebApi() {
-    return new SlackBot.WebApi(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
+    return new WebApi(common.getProperty('SLACK_BOT_ACCESS_TOKEN'));
   }
 
   test('new WebApi()', function (assert) {
-    var webApi = new SlackBot.WebApi('access token');
-    assert.ok(webApi instanceof SlackBot.WebApi, 'creates WebApi object');
+    var webApi = new WebApi('access token');
+    assert.ok(webApi instanceof WebApi, 'creates WebApi object');
     assert.equal(webApi.token, 'access token', 'sets an access token');
   });
 

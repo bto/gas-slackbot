@@ -4,15 +4,15 @@
  * @param {Object} func: a function object to process a command
  * @return {null} return nothing
  */
-SlackBot.registerSlashCommand = function registerSlashCommand(name, func) {
-  SlackBot.SlashCommands.prototype.handlers[name] = func;
+exports.registerSlashCommand = function registerSlashCommand(name, func) {
+  SlashCommands.prototype.handlers[name] = func;
 };
 
-SlackBot.SlashCommands = function SlashCommands(di) {
+function SlashCommands(di) {
   this.initialize(di);
-};
+}
 
-SlackBot.SlashCommands.prototype = {
+SlashCommands.prototype = {
   handlers: {
     ping: function handler(di) {
       di.getShared('logger').info('ping slash command was called');
@@ -21,8 +21,8 @@ SlackBot.SlashCommands.prototype = {
   },
 
   initialize: function initialize(di) {
-    if (!di || !(di instanceof SlackBot.DI)) {
-      throw new Error('SlackBot.DI object must be passed');
+    if (!di || !(di instanceof DI)) {
+      throw new Error('DI object must be passed');
     }
 
     this.di = di;
@@ -70,3 +70,5 @@ SlackBot.SlashCommands.prototype = {
     return this.params.channel_id;
   }
 };
+
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^registerSlashCommand$" }] */

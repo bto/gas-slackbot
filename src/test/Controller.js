@@ -5,28 +5,28 @@ testRunner.functions.push(function (test, common) {
   }
 
   test('new Controller()', function (assert) {
-    var controller = new SlackBot.Controller();
-    assert.ok(controller instanceof SlackBot.Controller, 'creates Controller object');
+    var controller = new Controller();
+    assert.ok(controller instanceof Controller, 'creates Controller object');
   });
 
   test('Controller.createModule()', function (assert) {
     var controller = createController();
     var module = controller.createModule();
-    assert.ok(module instanceof SlackBot.EventsApi, 'creates EventsApi object');
+    assert.ok(module instanceof EventsApi, 'creates EventsApi object');
 
     controller = createController({text: 'foo'});
     module = controller.createModule();
-    assert.ok(module instanceof SlackBot.OutgoingWebhook, 'creates OutgoingWebhook object');
+    assert.ok(module instanceof OutgoingWebhook, 'creates OutgoingWebhook object');
 
     controller = createController({command: '/foo'});
     module = controller.createModule();
-    assert.ok(module instanceof SlackBot.SlashCommands, 'creates SlashCommands object');
+    assert.ok(module instanceof SlashCommands, 'creates SlashCommands object');
   });
 
   test('Controller.createOutputJson()', function (assert) {
     var controller = createController();
     var output = controller.createOutputJson({text: 'foo'});
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
     assert.equal(output.getContent(), JSON.stringify({text: 'foo'}), 'has a valid content');
   });
@@ -35,12 +35,12 @@ testRunner.functions.push(function (test, common) {
     var controller = createController();
 
     var output = controller.createOutputText();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), '', 'has a valid content');
 
     output = controller.createOutputText('foo');
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), 'foo', 'has a valid content');
   });
@@ -51,7 +51,7 @@ testRunner.functions.push(function (test, common) {
       text: '<@Uxxx> ping'
     });
     var output = controller.execute();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), '', 'has a valid content');
   });
@@ -59,7 +59,7 @@ testRunner.functions.push(function (test, common) {
   test('Controller.exeute(): Events API url_verification', function (assert) {
     var controller = createController({challenge: 'foo', type: 'url_verification'});
     var output = controller.execute();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), 'foo', 'has a valid content');
   });
@@ -67,7 +67,7 @@ testRunner.functions.push(function (test, common) {
   test('Controller.exeute(): Outgoing Webhook', function (assert) {
     var controller = createController({text: 'foo'});
     var output = controller.execute();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
     assert.equal(output.getContent(), JSON.stringify({text: 'foo'}), 'has a valid content');
   });
@@ -75,7 +75,7 @@ testRunner.functions.push(function (test, common) {
   test('Controller.exeute(): Slash Commands /ping', function (assert) {
     var controller = createController({command: '/ping'});
     var output = controller.execute();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
     assert.equal(
       output.getContent(),
@@ -91,17 +91,17 @@ testRunner.functions.push(function (test, common) {
     var controller = createController();
 
     var output = controller.finish();
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), '', 'has a valid content');
 
     output = controller.finish('foo');
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.TEXT, 'MimeType is TEXT');
     assert.equal(output.getContent(), '', 'has a valid content');
 
     output = controller.finish({text: 'foo'});
-    assert.ok(SlackBot.Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
+    assert.ok(Obj.isGASObject(output, 'TextOutput'), 'returns a TextOutput object');
     assert.equal(output.getMimeType(), ContentService.MimeType.JSON, 'MimeType is JSON');
     assert.equal(output.getContent(), JSON.stringify({text: 'foo'}), 'has a valid content');
 

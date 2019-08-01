@@ -1,23 +1,23 @@
 testRunner.functions.push(function (test, common) {
   function createOutgoingWebhook(params) {
-    return new SlackBot.OutgoingWebhook(common.createDI(params));
+    return new OutgoingWebhook(common.createDI(params));
   }
 
   test('registerOutgoingWebhook()', function (assert) {
-    var funcOrg = SlackBot.OutgoingWebhook.prototype.handler;
+    var funcOrg = OutgoingWebhook.prototype.handler;
     var func = function () {};
-    SlackBot.registerOutgoingWebhook(func);
-    assert.equal(SlackBot.OutgoingWebhook.prototype.handler, func, 'register an outgoing webhook function');
-    SlackBot.registerOutgoingWebhook(funcOrg);
+    registerOutgoingWebhook(func);
+    assert.equal(OutgoingWebhook.prototype.handler, func, 'register an outgoing webhook function');
+    registerOutgoingWebhook(funcOrg);
   });
 
   test('new OutgoingWebhook()', function (assert) {
-    var outgoingWebhook = new SlackBot.OutgoingWebhook(common.createDI());
-    assert.ok(outgoingWebhook instanceof SlackBot.OutgoingWebhook, 'creates OutgoingWebhook object');
+    var outgoingWebhook = new OutgoingWebhook(common.createDI());
+    assert.ok(outgoingWebhook instanceof OutgoingWebhook, 'creates OutgoingWebhook object');
 
     assert.throws(
       function () {
-        outgoingWebhook = new SlackBot.OutgoingWebhook();
+        outgoingWebhook = new OutgoingWebhook();
       },
       'throws an exception if a DI object was not provided'
     );

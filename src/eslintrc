@@ -11,8 +11,22 @@
     GasTap: true,
 
     // Our globals
-    SlackBot: true,
+    Class: true,
+    Config: true,
+    Controller: true,
+    DI: true,
+    EventsApi: true,
+    Log: true,
+    MockWebApi: true,
+    Obj: true,
+    OutgoingWebhook: true,
+    SlashCommands: true,
     TestCommon: true,
+    WebApi: true,
+    registerSlashCommand: true,
+    registerOutgoingWebhook: true,
+    registerEvent: true,
+    registerBotCommand: true,
     testRunner: true,
   },
   rules: {
